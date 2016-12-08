@@ -1,0 +1,66 @@
+
+@import "../variables";
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+* {
+  outline: none;
+}
+
+::-webkit-scrollbar{
+  width: 0;
+}
+
+@mt-px: 15;
+@mt-step: 5;
+.m(@index) when (@index <= @mt-px) { // terminal
+  .mt-@{index} {
+    margin-top: unit(@index,px);
+  }
+  .mr-@{index} {
+    margin-right: unit(@index,px);
+  }
+
+  .mb-@{index} {
+    margin-bottom: unit(@index,px);
+  }
+
+  .ml-@{index} {
+    margin-left: unit(@index,px);
+  }
+  .m((@index + @mt-step));
+}
+.m(5);
+
+.@{prefix}-main {
+  position: absolute;
+  width: 100%;
+  top: 50px;
+  bottom: 0;
+  overflow-x:hidden;
+  /*  background-color: @bg;*/
+}
+
+.@{prefix}-body {
+  width: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+}
+
+.sidebar-@{full} {
+  & ~ .@{prefix}-body {
+    left: @sidebar-width-full;
+  }
+}
+
+.sidebar-@{mini} {
+  & ~ .@{prefix}-body {
+    left: @sidebar-width-mini;
+  }
+}
