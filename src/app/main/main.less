@@ -10,9 +10,9 @@ html {
   outline: none;
 }
 
-::-webkit-scrollbar{
-  width: 0;
-}
+//::-webkit-scrollbar{
+//  width: 0;
+//}
 
 @mt-px: 15;
 @mt-step: 5;
@@ -63,4 +63,27 @@ html {
   & ~ .@{prefix}-body {
     left: @sidebar-width-mini;
   }
+}
+
+@sidebar-transition-duration: 300ms;
+
+.sidebar {
+  transition: width @sidebar-transition-duration;
+  .sidebar-wrapper {
+    transition: width @sidebar-transition-duration;
+  }
+
+  .sidebar-fold {
+    transition: width @sidebar-transition-duration;
+  }
+
+  .sidebar-accordion {
+    .panel-group {
+      transition: width @sidebar-transition-duration;
+    }
+  }
+}
+
+.@{prefix}-body {
+  transition: left @sidebar-transition-duration;
 }
