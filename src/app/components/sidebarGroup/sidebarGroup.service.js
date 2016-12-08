@@ -105,7 +105,11 @@ export class SidebarGroupService {
           ]
         }
       ];
-      resolve(data);
+      if(data) {
+        resolve(data);
+      } else {
+        reject(data);
+      }
     });
   }
 }

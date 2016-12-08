@@ -54,7 +54,6 @@ class SidebarController {
     'ngInject';
 
     this.addGroup = function(groupScope) {
-      console.log(groupScope);
       var that = this;
       $scope.groups.push(groupScope);
 
