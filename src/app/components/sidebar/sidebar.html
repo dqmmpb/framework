@@ -29,8 +29,8 @@
         <div ng-if="group.items && group.items.length != 0" class="panel-default" ng-repeat="item in group.items" uib-accordion-group is-open="true" template-url="group-template.html">
           <uib-accordion-heading>
             <div class="panel-heading" uib-tooltip="{{item.title}}" tooltip-enable="{{tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right">
-              <h4 class="panel-title">
-                <a href tabindex="0" class="accordion-toggle" >
+              <h4 class="panel-title" ng-click="itemClick($event, item)">
+                <a href tabindex="0" class="accordion-toggle">
                   <span ng-class="{'text-muted': isDisabled}">
                     <i class="fa fa-fw {{item.icon}}"></i><span class="nav-title"> {{item.title}}</span>
                   </span>

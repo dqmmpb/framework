@@ -1,6 +1,8 @@
 export class MainController {
-  constructor ($timeout, webDevTec, toastr, sidebarGroup) {
+  constructor ($scope, $timeout, webDevTec, toastr, sidebarGroup) {
     'ngInject';
+
+    var self = this;
 
     this.awesomeThings = [];
     this.classAnimation = '';
@@ -10,6 +12,10 @@ export class MainController {
 
     this.getSidebarGroups(sidebarGroup);
     this.activate($timeout, webDevTec);
+
+    $scope.$on('sidebar-item-click', function(e, item) {
+      self.activateSidebarItemClick($scope, sidebarGroup, item);
+    });
   }
 
   activate($timeout, webDevTec) {
@@ -30,8 +36,14 @@ export class MainController {
     });
   }
 
+  activateSidebarItemClick($scope, sidebarGroup, item) {
+    var data = sidebarGroup.getGroupsItems(item);
+    $scope.$broadcast('breadcrumb-change', data);
+  }
+
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
     this.classAnimation = '';
   }
+
 }

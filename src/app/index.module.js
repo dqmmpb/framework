@@ -9,14 +9,18 @@ import { SidebarGroupService } from '../app/components/sidebarGroup/sidebarGroup
 import { WebDevTecService } from '../app/components/webDevTec/webDevTec.service';
 import { NavbarDirective } from '../app/components/navbar/navbar.directive';
 import { SidebarDirective } from '../app/components/sidebar/sidebar.directive';
+import { BreadcrumbDirective } from '../app/components/breadcrumb/breadcrumb.directive';
 
-angular.module("ui.framework",[ "ui.framework.navbar", "ui.framework.sidebar"]);
+angular.module('ui.framework',[ 'ui.framework.navbar', 'ui.framework.sidebar', 'ui.framework.breadcrumb']);
 
 angular.module('ui.framework.navbar', [])
   .directive('uibNavbar', NavbarDirective);
 
 angular.module('ui.framework.sidebar', [])
   .directive('uibSidebar', SidebarDirective);
+
+angular.module('ui.framework.breadcrumb', [])
+  .directive('uibBreadcrumb', BreadcrumbDirective);
 
 angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr', 'ui.framework'])
   .constant('malarkey', malarkey)

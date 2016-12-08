@@ -53,14 +53,9 @@ class SidebarController {
   constructor ($scope) {
     'ngInject';
 
-    this.addGroup = function(groupScope) {
-      var that = this;
-      $scope.groups.push(groupScope);
-
-      groupScope.$on('$destroy', function() {
-        that.removeGroup(groupScope);
-      });
+    $scope.itemClick = function($event, item) {
+      $event.preventDefault();
+      $scope.$emit('sidebar-item-click', item);
     };
   }
-
 }

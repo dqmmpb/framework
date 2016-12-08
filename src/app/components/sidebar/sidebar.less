@@ -78,7 +78,7 @@
         border: none;
         background-color: @sidebar-default-bg;
         color: @sidebar-default-color;
-        padding: 10px 0 10px 15px;
+        padding: 0;
 
         &.main {
           background-color: darken(@sidebar-default-bg, 10%);
@@ -93,9 +93,10 @@
         .panel-title {
           font-size: 14px;
           line-height: 20px;
-          height: 20px;
+          height: 40px;
           white-space: nowrap;
           overflow: hidden;
+          padding: 10px 0 10px 15px;
 
           a {
             outline: none;
