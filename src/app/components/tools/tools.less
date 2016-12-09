@@ -1,0 +1,70 @@
+
+@import "../../variables";
+
+//
+// Tools
+// --------------------------------------------------
+
+
+// Base styles
+// --------------------------------------------------
+
+//** Tools color
+@tools-default-color:         @navbar-default-color;
+@tools-default-bg:            @navbar-default-bg;
+@tools-default-hover-color:   darken(@tools-default-color, 10%);
+
+@tools-inverse-color:         @navbar-inverse-color;
+@tools-inverse-bg:            @navbar-inverse-bg;
+@tools-inverse-hover-color:   lighten(@tools-inverse-color, 10%);
+
+.tools {
+  .clearfix();
+  .btn-link {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.tools-default {
+  background: @tools-default-bg;
+  color: @tools-default-color;
+
+  .btn-link {
+    color: @tools-default-color;
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+      &:hover,
+      &:focus,
+      &.focus {
+        color: @tools-default-hover-color;
+      }
+    }
+  }
+}
+
+.tools-inverse {
+  background: @tools-inverse-bg;
+  color: @tools-inverse-color;
+
+  .btn-link {
+    color: @tools-inverse-color;
+    &:hover,
+    &:focus,
+    &.focus,
+    &:active,
+    &.active {
+      &:hover,
+      &:focus,
+      &.focus {
+        color: @tools-inverse-hover-color;
+      }
+    }
+  }
+}
+
+

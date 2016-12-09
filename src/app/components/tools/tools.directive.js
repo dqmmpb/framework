@@ -2,16 +2,16 @@
  * Created by dengqiming on 06/12/2016.
  */
 
-export function BreadcrumbDirective() {
+export function ToolsDirective() {
   'ngInject';
 
   let directive = {
-    templateUrl: 'app/components/breadcrumb/breadcrumb.html',
+    templateUrl: 'app/components/tools/tools.html',
     scope: {
-      breads: '='
+      groups: '='
     },
-    controller: BreadcrumbController,
-    controllerAs: 'breadcrumb',
+    controller: ToolsController,
+    controllerAs: 'tools',
     transclude: true
   };
 
@@ -19,7 +19,7 @@ export function BreadcrumbDirective() {
 
 }
 
-class BreadcrumbController {
+class ToolsController {
   constructor (/*$scope*/) {
     'ngInject';
 

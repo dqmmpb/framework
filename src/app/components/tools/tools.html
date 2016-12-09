@@ -1,0 +1,5 @@
+<div class="tools" ng-transclude>
+  <div class="btn-group {{group.cssClass}}" role="group" aria-label="" ng-repeat="group in groups">
+    <a class="btn btn-default {{btn.cssClass}}" ng-repeat="btn in group.btns" uib-tooltip="{{btn.title}}" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw {{btn.icon}}"></i><span class="hidden-xs"> {{btn.title}}</span></a>
+  </div>
+</div>

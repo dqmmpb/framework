@@ -10,6 +10,10 @@ html {
   outline: none;
 }
 
+[ng\:cloak],[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak{
+  display:none ! important;
+}
+
 //::-webkit-scrollbar{
 //  width: 0;
 //}
@@ -87,3 +91,28 @@ html {
 .@{prefix}-body {
   transition: left @sidebar-transition-duration;
 }
+
+.navbar-text {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.form-control {
+  border-radius: 0;
+}
+
+.input-group-addon {
+  border-radius: 0;
+}
+
+// Main html style
+
+.breadcrumb-wrapper {
+  height: @line-height-computed * 3 / 2  + 2 * @breadcrumb-padding-vertical;
+  display: block;
+}
+
+.tools {
+  height: 34px;
+}
+

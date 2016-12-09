@@ -8,9 +8,10 @@
 // Basics of a sidebar
 @sidebar-width: 180px;
 @sidebar-width-mini: 50px;
-@sidebar-width-full: 180px;
+@sidebar-width-full: @sidebar-width;
 @sidebar-scroller-width: 20px;
 @sidebar-fold-height: 30px;
+@sidebar-padding-left: 15px;
 
 //** Navbar Tools color
 @sidebar-default-color:             @gray-dark;
@@ -20,9 +21,12 @@
 @sidebar-inverse-color:             @gray-light;
 @sidebar-inverse-bg:                @gray-darker;
 @sidebar-inverse-border:            darken(@sidebar-inverse-bg, 10%);
-@sidebar-transition-duration: 300ms;
+
 
 .sidebar {
+
+  @sidebar-transition-duration: 300ms;
+
   width: 0;
   display: none;
   position: fixed;
@@ -96,16 +100,18 @@
           height: 40px;
           white-space: nowrap;
           overflow: hidden;
-          padding: 10px 0 10px 15px;
+          padding: 10px 0 10px @sidebar-padding-left;
 
           a {
             outline: none;
             text-decoration: none;
+            display: block;
+            width: @sidebar-width-full - @sidebar-padding-left;
           }
         }
 
         .config {
-          padding-right: 15px;
+          padding-right: @sidebar-padding-left;
           cursor: pointer;
           text-align: center;
         }

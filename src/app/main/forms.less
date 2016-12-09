@@ -1,0 +1,108 @@
+
+@import "../variables";
+
+//
+// Forms
+// --------------------------------------------------
+
+
+// Base styles
+// --------------------------------------------------
+
+
+// Span
+
+.span-variant(@color) {
+  color: @color;
+}
+
+.span-primary {
+  .span-variant(@brand-primary);
+}
+
+.span-success {
+  .span-variant(@brand-success);
+}
+
+.span-info {
+  .span-variant(@brand-info);
+}
+
+.span-warning {
+  .span-variant(@brand-warning);
+}
+
+.span-danger {
+  .span-variant(@brand-danger);
+}
+
+// Input group
+.input-group {
+  & .input-group-addon {
+    .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border);
+  }
+}
+
+.input-group-primary {
+  & .input-group-addon {
+    .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border);
+  }
+}
+
+// Success appears as green
+.input-group-success {
+  & .input-group-addon {
+    .button-variant(@btn-success-color; @btn-success-bg; @btn-success-border);
+  }
+}
+// Info appears as blue
+.input-group-info {
+  & .input-group-addon {
+    .button-variant(@btn-info-color; @btn-info-bg; @btn-info-border);
+  }
+}
+// Warning appears as orange
+.input-group-warning {
+  & .input-group-addon {
+    .button-variant(@btn-warning-color; @btn-warning-bg; @btn-warning-border);
+  }
+}
+// Danger and error appear as red
+.input-group-danger {
+  & .input-group-addon {
+    .button-variant(@btn-danger-color; @btn-danger-bg; @btn-danger-border);
+  }
+}
+
+
+// Selectize
+
+.selectize-input {
+  & .item {
+    font-size: @font-size-base;
+  }
+  & input {
+    font-size: @font-size-base;
+  }
+}
+
+.selectize-dropdown {
+  font-size: @font-size-base;
+  .item {
+    font-size: @font-size-base;
+  }
+}
+
+
+
+.form-horizontal {
+  font-size: @font-size-small;
+
+  @media (min-width: @screen-sm-min) {
+    .control-label {
+      font-size: @font-size-small;
+      padding-top: (@padding-base-vertical + 2); // Default padding plus a border
+    }
+  }
+
+}
