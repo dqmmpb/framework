@@ -33,8 +33,6 @@ export class CityService {
       }
       province.c.push(prov);
     }
-    //angular.copy(data, provinces);
-    console.log(province);
     return province;
   }
 }
