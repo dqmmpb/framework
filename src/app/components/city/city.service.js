@@ -4,7 +4,7 @@ export class CityService {
 
     this.$log = $log;
     this.$http = $http;
-    this.apiHost = "http://localhost:3000";
+    this.apiHost = location.protocol + '//' + location.host;
   }
 
   getCities(filter) {

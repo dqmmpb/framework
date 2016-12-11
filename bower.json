@@ -34,6 +34,17 @@
         "dist/fonts/glyphicons-halflings-regular.woff",
         "dist/fonts/glyphicons-halflings-regular.woff2"
       ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css",
+        "fonts/*"
+      ]
+    },
+    "tkJSPinyin": {
+      "main": [
+        "src/pinyin_es5.js"
+      ]
     }
   },
   "resolutions": {
