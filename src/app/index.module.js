@@ -27,7 +27,7 @@ angular.module('ui.framework.breadcrumb', [])
 angular.module('ui.framework.tools', [])
   .directive('uibTools', ToolsDirective);
 
-angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr', 'ui.framework'])
+angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr', 'ngFileUpload', 'ui.framework'])
   .constant('malarkey', malarkey)
   .constant('moment', moment)
   .config(config)

@@ -1,5 +1,5 @@
 export class MainController {
-  constructor ($scope, $log, $timeout, webDevTec, toastr, sidebarGroup, city) {
+  constructor ($scope, $log, $timeout, webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
 
     this.awesomeThings = [];
@@ -7,6 +7,7 @@ export class MainController {
     this.creationDate = 1480995513875;
     this.toastr = toastr;
     this.isCollapse = true;
+    this.apiHost = location.protocol + '//' + location.host;
 
     this.getSidebarGroups($scope, sidebarGroup);
     this.activate($timeout, webDevTec);
@@ -55,7 +56,56 @@ export class MainController {
     ];
 
     this.getCities($log, city);
+    this.upload($scope, $log, Upload);
 
+  }
+
+  upload($scope, $log, Upload) {
+    var self = this;
+    // upload on file select or drop
+    $scope.upload = function (file) {
+      Upload.upload({
+        url: self.apiHost + '/app/components/upload/url.json',
+        data: {file: file, 'username': $scope.username}
+      }).then(function (resp) {
+        $log.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      }, function (resp) {
+        $log.log('Error status: ' + resp.status);
+      }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        $log.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
+    };
+
+    $scope.uploadFiles = function (files) {
+      if (files && files.length) {
+        for (var i = 0; i < files.length; i++) {
+          $scope.upload(files[i]);
+        }
+      }
+    };
+
+    $scope.removeFile = function (key, files, index) {
+      if(files) {
+        if(angular.isArray(files)) {
+          files.splice(index, 1);
+        } else if(angular.isObject(files)) {
+          if($scope[key]) {
+            $scope[key] = undefined;
+          }
+        }
+      }
+    };
+
+    $scope.viewFile = function (key, file) {
+      if(file) {
+        if(angular.isObject(file)) {
+          if($scope[key]) {
+            $log.log($scope[key]);
+          }
+        }
+      }
+    };
   }
 
   activate($timeout, webDevTec) {
