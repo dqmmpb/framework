@@ -151,6 +151,8 @@
       padding: 1px 0;
       color: @brand-danger;
       .fa {
+        font-size: @font-size-base;
+        width: @font-size-base + 2px;
         &:hover, &:focus {
           cursor: pointer;
         }
@@ -185,7 +187,7 @@
     }
   }
 
-  .image-wrapper {
+  .image-thumbnail {
     width: @input-image;
     height: @input-image;
     display: flex;
@@ -195,7 +197,14 @@
     overflow: hidden;
 
     img {
-      width: 100%;
+      max-width: @input-image;
+      max-height: @input-image;
+      overflow:hidden;
+
+      &.loading {
+        width: 32px;
+        height: 32px;
+      }
     }
     img.img-horizontal {
       width: 100%;
@@ -212,6 +221,7 @@
       bottom: auto;
       width: @font-size-base + 2px;
       height: @font-size-base + 2x;
+      background-color: @brand-danger;
 
       //border: 16px solid fade(@black, 70%);
       //border-left-color: transparent;
@@ -221,13 +231,9 @@
         height: @font-size-base + 2px;
         width: @font-size-base + 2px;
         font-size: 0;
+        color: @white;
         .fa {
           //margin-top: -@font-size-base;
-          font-size: @font-size-base;
-          width: @font-size-base + 2px;
-          &:hover, &:focus {
-            cursor: pointer;
-          }
         }
       }
     }
@@ -236,6 +242,23 @@
       background-color: darken(@gray-lighter, 5%);
     }
 
+  }
+
+  .image-upload {
+    width: @input-image;
+    height: @input-image;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: @gray-lighter;
+    overflow: hidden;
+  }
+
+  .image-wrapper {
+    width: @input-image;
+    height: @input-image;
+    background-color: @gray-lighter;
+    overflow: hidden;
   }
 
   &:hover, &:focus {
@@ -250,6 +273,7 @@
   .caption {
     font-size: @font-size-small;
     line-height: @font-size-small;
+    height: @line-height-computed;
     padding-top: 8px;
     text-align: center;
   }
@@ -261,11 +285,12 @@
 
 .input-image-add {
 
-  @input-image-fa: @font-size-base;
 
-  .image-wrapper {
+  .image-upload {
     color: @brand-success;
   }
+
+  @input-image-fa: @font-size-base;
 
   .fa {
     font-size: @input-image-fa;
@@ -273,10 +298,12 @@
     height: @input-image-fa;
   }
 
-  &:hover, &:focus {
-    .image-wrapper {
-      background-color: darken(@gray-lighter, 5%);
-      cursor: pointer;
+  .image-wrapper {
+    &:hover, &:focus {
+      .image-upload {
+        background-color: darken(@gray-lighter, 5%);
+        cursor: pointer;
+      }
     }
   }
 }
