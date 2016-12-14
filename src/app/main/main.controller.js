@@ -160,7 +160,7 @@ export class MainController {
             var selectedObject = $self.selectedObject();
             var selectedLabel = $self.selectedLabel();
             var selectedValue= $self.selectedValue();
-            //$log.log(selectedObject, selectedLabel, selectedValue);
+            $log.log(selectedObject, selectedLabel, selectedValue);
             $scope.info.company_area = selectedValue;
           }
         });
@@ -176,7 +176,7 @@ export class MainController {
             var selectedObject = $self.selectedObject();
             var selectedLabel = $self.selectedLabel();
             var selectedValue= $self.selectedValue();
-            //$log.log(selectedObject, selectedLabel, selectedValue);
+            $log.log(selectedObject, selectedLabel, selectedValue);
             $scope.info.business_area = selectedValue;
           }
         });
@@ -213,6 +213,11 @@ export class MainController {
         data: {file: file}
       }).then(function (resp) {
         $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
+        $log.log(self.apiHost + '/assets/images/upload/' + resp.config.data.file.name);
+        file.serverData = {
+          name: resp.config.data.file.name
+        };
+
       }, function (resp) {
         $log.log('Error status: ' + resp.status);
       }, function (evt) {
@@ -252,7 +257,8 @@ export class MainController {
       }
     };
 
-    $scope.viewFile = function (key, file) {
+    $scope.viewFile = function ($event, key, file) {
+      var obj = $event.currentTarget;
       if(file) {
         if(angular.isObject(file)) {
           var value = self.getKeyValue($scope, key);
@@ -263,10 +269,42 @@ export class MainController {
                 var idx = value[o].file.indexOf(file);
                 if(idx !== -1) {
                   // To do
+                  if(!file.viewer) {
+                    file.viewer = angular.element(obj).viewer({
+                      navbar: false,
+                      title: false,
+                      transition: false,
+                      fullscreen: false,
+                      scalable: false,
+                      slidable: false,
+                      playable: false,
+                      onetooneable: false,
+                      url: function() {
+                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
+                      }
+                    });
+                    angular.element(obj).viewer('show');
+                  }
                 }
               } else if(angular.isObject(value[o].file)) {
                 if(value[o].file == file) {
                   // To do
+                  if(!file.viewer) {
+                    file.viewer = angular.element(obj).viewer({
+                      navbar: false,
+                      title: false,
+                      transition: false,
+                      fullscreen: false,
+                      scalable: false,
+                      slidable: false,
+                      playable: false,
+                      onetooneable: false,
+                      url: function() {
+                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
+                      }
+                    });
+                    angular.element(obj).viewer('show');
+                  }
                 }
               }
             }
@@ -302,7 +340,7 @@ export class MainController {
         business_area: $scope.info.business_area,
         blfile: self.getFiles($scope.info.blfile),
         affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile),
+        pcfile: self.getFiles($scope.info.pcfile)
 /*        blfile2: self.getFiles($scope.info.blfile2),
         affile2: self.getFiles($scope.info.affile2),*/
       };
@@ -310,7 +348,7 @@ export class MainController {
       $http({
         method: 'POST',
         url: self.apiHost + '/app/components/form/submit.json',
-        data: params,
+        data: params
       }).then((response) => {
         $log.log(response);
         return response.data;

@@ -20,7 +20,8 @@
     "angular": "~1.5.3",
     "font-awesome": "^4.7.0",
     "selectize.city": "^1.0.0",
-    "ng-file-upload": "^12.2.13"
+    "ng-file-upload": "^12.2.13",
+    "imageviewer": "https://github.com/dqmmpb/viewer.git#master"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.3"

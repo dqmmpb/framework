@@ -69,8 +69,8 @@
                       <div class="image-group">
                         <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
                           <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file" ng-click="viewFile('info.blfile', item.file)">
-                              <img ngf-thumbnail="item.file || 'assets/images/loading.gif'">
+                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
+                              <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
                               <div class="operation">
                                 <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
                               </div>
@@ -78,14 +78,14 @@
                             <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                          <div class="operation" ng-if="item.file">
+                          <!--<div class="operation" ng-if="item.file">
                             <div class="operation-header"><i class="fa fa-fw fa-close pull-right" ng-click="removeFile('info.blfile', item.file)"></i></div>
                             <div class="operation-content">
                               <div class="operation-btn-wrapper">
                                 <button class="btn btn-default btn-view-large">查看大图</button>
                               </div>
                             </div>
-                          </div>
+                          </div>-->
                         </div>
                       </div>
                     </div>
@@ -97,8 +97,8 @@
                     <div class="image-group">
                       <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
                         <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file" ng-click="viewFile('info.affile', item.file)">
-                            <img ngf-thumbnail="item.file || 'assets/images/loading.gif'">
+                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
+                            <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.affile', item.file)">
                             <div class="operation">
                               <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.affile', item.file)"></i></div>
                             </div>
@@ -116,8 +116,8 @@
                     <div class="image-group">
                       <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                         <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file" ng-click="viewFile('info.pcfile', item.file)">
-                            <img ngf-thumbnail="item.file || 'assets/images/loading.gif'">
+                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
+                            <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.pcfile', item.file)">
                             <div class="operation">
                               <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.pcfile', item.file)"></i></div>
                             </div>
