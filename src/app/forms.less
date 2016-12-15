@@ -189,6 +189,7 @@
   .image-thumbnail {
     width: @input-image;
     height: @input-image;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,6 +200,9 @@
       max-width: @input-image;
       max-height: @input-image;
       overflow:hidden;
+
+      max-height: 100%;
+      max-width: 100%;
 
       &.loading {
         width: 32px;
