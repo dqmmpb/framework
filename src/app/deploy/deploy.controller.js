@@ -53,8 +53,8 @@ export class DeployController {
           $scope.rows[i].ch = true;
         }
       } else {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = false;
+        for(var j in $scope.rows) {
+          $scope.rows[j].ch = false;
         }
       }
     };
