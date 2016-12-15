@@ -1,7 +1,7 @@
 <div ng-cloak>
 
   <div>
-    <uib-navbar creation-date="proxy.creationDate"></uib-navbar>
+    <uib-navbar></uib-navbar>
   </div>
 
   <div class="framework-main">
@@ -9,10 +9,14 @@
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="proxy.breads"></uib-breadcrumb>
-      <div uib-tools class="tools" groups="proxy.btnGroups"></div>
+
+      <div class="tools">
+        <div class="btn-group pull-right" role="group" aria-label="">
+          <a ng-click="proxyview('create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
+        </div>
+      </div>
 
       <div class="content mt-10">
-
         <nav class="navbar navbar-default navbar-search">
           <div class="container-fluid">
             <form class="navbar-form navbar-left" role="search">
@@ -76,10 +80,10 @@
                 <td>{{row.cellphone}}</td>
                 <td>{{row.status}}</td>
                 <td>
-                  <button type="button" class="btn btn-primary btn-sm">详情</button>
-                  <button type="button" class="btn btn-success btn-sm">审核</button>
-                  <button type="button" class="btn btn-info btn-sm">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="proxyview('view', row.id)">详情</button>
+                  <button type="button" class="btn btn-success btn-sm" ng-click="proxyview('apply', row.id)">审核</button>
+                  <button type="button" class="btn btn-info btn-sm" ng-click="proxyview('edit', row.id)">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="proxyview('delete', row.id)">删除</button>
                 </td>
               </tr>
               </tbody>
