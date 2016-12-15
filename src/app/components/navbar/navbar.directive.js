@@ -3,9 +3,6 @@ export function NavbarDirective() {
 
   let directive = {
     templateUrl: 'app/components/navbar/navbar.html',
-    scope: {
-        creationDate: '='
-    },
     controller: NavbarController,
     controllerAs: 'navbar',
     transclude: true
@@ -18,8 +15,6 @@ class NavbarController {
   constructor ($scope, moment) {
     'ngInject';
 
-    // "this.creationDate" is available by directive option "bindToController: true"
-    $scope.relativeDate = moment($scope.creationDate).fromNow();
     $scope.isNavCollapsed = true;
 
   }

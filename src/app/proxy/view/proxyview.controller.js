@@ -1,6 +1,10 @@
-export class MainController {
-  constructor ($scope, $log, $http, $timeout, $state, webDevTec, toastr, sidebarGroup, city, Upload) {
+export class ProxyViewController {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
+
+
+    $scope.type = $stateParams.type;
+    $scope.id = $stateParams.id;
 
     this.awesomeThings = [];
     this.classAnimation = '';
@@ -11,48 +15,6 @@ export class MainController {
     this.getSidebarGroups($scope, $state, sidebarGroup);
     this.activate($timeout, webDevTec);
 
-    this.btnGroups = [
-      {
-        cssClass: '',
-        btns: [
-          {
-            title: '返回',
-            icon: 'fa-chevron-left',
-            cssClass: 'btn-info'
-          }
-        ]
-      },
-      {
-        cssClass: '',
-        btns: [
-          {
-            title: '保存',
-            icon: 'fa-save',
-            cssClass: 'btn-success'
-          },
-          {
-            title: '放弃',
-            icon: 'fa-mail-forward',
-            cssClass: 'btn-danger'
-          }
-        ]
-      },
-      {
-        cssClass: 'pull-right',
-        btns: [
-          {
-            title: '刷新',
-            icon: 'fa-refresh',
-            cssClass: 'btn-info'
-          },
-          {
-            title: '配置',
-            icon: 'fa-cog',
-            cssClass: 'btn-primary'
-          }
-        ]
-      }
-    ];
 
     $scope.info = {
       company_name: '123',
@@ -128,6 +90,9 @@ export class MainController {
     this.upload($scope, $log, Upload);
     this.submit($scope, $http, $log);
 
+    $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
+    console.log($scope.redirect_url);
+
   }
   activate($timeout, webDevTec) {
     this.getWebDevTec(webDevTec);
@@ -152,7 +117,23 @@ export class MainController {
     //   this.breads = sidebarGroup.getGroupItems(data[0]);
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[0]);
+    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
+    if($scope.type === 'create')
+      this.breads.push({
+        title: '新增'
+      });
+    else if($scope.type === 'view')
+      this.breads.push({
+        title: '查看'
+      });
+    else if($scope.type === 'edit')
+      this.breads.push({
+        title: '编辑'
+      });
+    else if($scope.type === 'apply')
+      this.breads.push({
+        title: '审核'
+      });
   }
 
   isLeafItem(item) {
@@ -180,6 +161,7 @@ export class MainController {
             var selectedValue= $self.selectedValue();
             $log.log(selectedObject, selectedLabel, selectedValue);
             $scope.info.company_area = selectedValue;
+            $scope.info.company_area_label = selectedLabel;
           }
         });
       });
@@ -196,10 +178,13 @@ export class MainController {
             var selectedValue= $self.selectedValue();
             $log.log(selectedObject, selectedLabel, selectedValue);
             $scope.info.business_area = selectedValue;
+            $scope.info.business_area_label = selectedLabel;
           }
         });
       });
     });
+
+    console.log($scope.info.business_area_label);
   }
 
   getCityString(cities, separator) {

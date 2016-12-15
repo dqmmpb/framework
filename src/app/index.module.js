@@ -5,6 +5,7 @@ import { routerConfig } from './index.route';
 import { runBlock } from './index.run';
 import { MainController } from './main/main.controller';
 import { ProxyController } from './proxy/proxy.controller';
+import { ProxyViewController } from './proxy/view/proxyview.controller';
 import { GithubContributorService } from '../app/components/githubContributor/githubContributor.service';
 import { SidebarGroupService } from '../app/components/sidebarGroup/sidebarGroup.service';
 import { WebDevTecService } from '../app/components/webDevTec/webDevTec.service';
@@ -39,6 +40,7 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .service('city', CityService)
   .service('sidebarGroup', SidebarGroupService)
   .controller('MainController', MainController)
-  .controller('ProxyController', ProxyController);
+  .controller('ProxyController', ProxyController)
+  .controller('ProxyViewController', ProxyViewController);
 
 
