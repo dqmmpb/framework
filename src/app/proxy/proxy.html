@@ -46,7 +46,12 @@
             <table class="table table-hover table-bordered table-vertical-middle table-nowrap">
               <thead>
               <tr>
-                <th class="text-center td-w45px">选择</th>
+                <th class="text-center td-w45px">
+                  <label class="label-checkbox">
+                    <input type="checkbox" name="checkbox" ng-model="chAll" ng-change="checkAll()">
+                    <i class="icon-checkbox"></i>
+                  </label>
+                </th>
                 <th width="5%">序号</th>
                 <th>公司名称</th>
                 <th width="5%">业务区域</th>
@@ -57,19 +62,19 @@
               </tr>
               </thead>
               <tbody>
-              <tr>
+              <tr ng-repeat="row in rows">
                 <td class="text-center td-w45px">
                   <label class="label-checkbox">
-                    <input type="checkbox" name="checkbox">
+                    <input type="checkbox" name="checkbox" ng-model="row.ch" ng-click="check(row.ch)">
                     <i class="icon-checkbox"></i>
                   </label>
                 </td>
-                <td>1</td>
-                <td>济宁同飞科技</td>
-                <td>新疆维吾尔自治区</td>
-                <td>佟彩霞</td>
-                <td>13185016989</td>
-                <td>待审核</td>
+                <td>{{row.index}}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.area}}</td>
+                <td>{{row.legal}}</td>
+                <td>{{row.cellphone}}</td>
+                <td>{{row.status}}</td>
                 <td>
                   <button type="button" class="btn btn-primary btn-sm">详情</button>
                   <button type="button" class="btn btn-success btn-sm">审核</button>
@@ -77,47 +82,6 @@
                   <button type="button" class="btn btn-danger btn-sm">删除</button>
                 </td>
               </tr>
-              <tr>
-                <td class="text-center td-w45px">
-                  <label class="label-checkbox">
-                    <input type="checkbox" name="checkbox">
-                    <i class="icon-checkbox"></i>
-                  </label>
-                </td>
-                <td>2</td>
-                <td>甘肃省事佳杰出商贸有限公司</td>
-                <td>甘肃省</td>
-                <td>王国栋</td>
-                <td>13185016989</td>
-                <td>待审核</td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm" disabled>详情</button>
-                  <button type="button" class="btn btn-success btn-sm">审核</button>
-                  <button type="button" class="btn btn-info btn-sm">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm">删除</button>
-                </td>
-              </tr>
-              <tr>
-                <td class="text-center td-w45px">
-                  <label class="label-checkbox">
-                    <input type="checkbox" name="checkbox">
-                    <i class="icon-checkbox"></i>
-                  </label>
-                </td>
-                <td>3</td>
-                <td>云南云竟管理咨询有限公司</td>
-                <td>云南省</td>
-                <td>张志刚</td>
-                <td>13185016989</td>
-                <td>待审核</td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-sm">详情</button>
-                  <button type="button" class="btn btn-success btn-sm">审核</button>
-                  <button type="button" class="btn btn-info btn-sm">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm">删除</button>
-                </td>
-              </tr>
-
               </tbody>
             </table>
           </div>

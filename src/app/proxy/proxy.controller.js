@@ -126,6 +126,65 @@ export class ProxyController {
     this.upload($scope, $log, Upload);
     this.submit($scope, $http, $log);
 
+    $scope.rows = [
+      {
+        ch: false,
+        idx: 1,
+        name: '济宁同飞科技',
+        area: '新疆维吾尔自治区',
+        legal: '佟彩霞',
+        cellphone: '13185016989',
+        status: '待审核'
+      },
+      {
+        ch: false,
+        idx: 2,
+        name: '甘肃省事佳杰出商贸有限公司',
+        area: '甘肃省',
+        legal: '王国栋',
+        cellphone: '13185016989',
+        status: '待审核'
+      },
+      {
+        ch: false,
+        idx: 3,
+        name: '云南云竟管理咨询有限公司',
+        area: '云南省',
+        legal: '张志刚',
+        cellphone: '13185016989',
+        status: '待审核'
+      }
+    ];
+
+    $scope.chAll = false;
+
+    $scope.checkAll = function () {
+      if($scope.chAll) {
+        for(var i in $scope.rows) {
+          $scope.rows[i].ch = true;
+        }
+      } else {
+        for(var i in $scope.rows) {
+          $scope.rows[i].ch = false;
+        }
+      }
+    };
+
+    $scope.check = function(item) {
+      if(!item)
+        $scope.chAll = false;
+      else {
+        for(var i in this.rows) {
+          if(!$scope.rows[i].ch) {
+            $scope.chAll = false;
+            return;
+          }
+        }
+        $scope.chAll = true;
+      }
+    };
+
+
   }
   activate($timeout, webDevTec) {
     this.getWebDevTec(webDevTec);
