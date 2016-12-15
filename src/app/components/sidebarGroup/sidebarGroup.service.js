@@ -73,15 +73,17 @@ export class SidebarGroupService {
         ]
       },
       {
-        title: '报表结算',
+        title: '网吧部署',
         icon: 'fa-caret-down',
         items: [
           {
-            title: '呼入报表',
-            icon: 'fa-pencil'
+            title: '网吧管理',
+            icon: 'fa-pencil',
+            href: this.apiHost + '/deploy',
+            sref: 'deploy'
           },
           {
-            title: '服务报表',
+            title: '应用部署',
             icon: 'fa-shield'
           }
         ]

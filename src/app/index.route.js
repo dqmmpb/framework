@@ -18,6 +18,18 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       templateUrl: 'app/proxy/view/proxyview.html',
       controller: 'ProxyViewController',
       controllerAs: 'proxyview'
+    })
+    .state('deploy', {
+      url: '/deploy',
+      templateUrl: 'app/deploy/deploy.html',
+      controller: 'DeployController',
+      controllerAs: 'deploy'
+    })
+    .state('deployview', {
+      url: '/deployview/*type?id&redirect_url',
+      templateUrl: 'app/deploy/view/deployview.html',
+      controller: 'DeployViewController',
+      controllerAs: 'deployview'
     });
 
   $urlRouterProvider.otherwise('/');
