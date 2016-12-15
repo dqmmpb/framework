@@ -12,7 +12,7 @@ export function NavbarDirective() {
 }
 
 class NavbarController {
-  constructor ($scope, moment) {
+  constructor ($scope) {
     'ngInject';
 
     $scope.isNavCollapsed = true;
