@@ -2,6 +2,7 @@ export class ProxyController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
 
+
     this.awesomeThings = [];
     this.classAnimation = '';
     this.creationDate = 1480995513875;
@@ -73,16 +74,21 @@ export class ProxyController {
       }
     };
 
-    $scope.proxyview = function(type, id) {
-      $state.go('proxyview', {
-        type: type,
-        id: id,
-        redirect_url: encodeURIComponent(location.href)
-      });
+    $scope.goproxyview = function(type, id) {
+      if(type === 'delete') {
+        if(id) {
+          alert('删除成功');
+        }
+      } else {
+        $state.go('proxyview', {
+          type: type,
+          id: id,
+          redirect_url: encodeURIComponent(location.href)
+        });
+      }
     };
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-    console.log($scope.redirect_url);
 
   }
 

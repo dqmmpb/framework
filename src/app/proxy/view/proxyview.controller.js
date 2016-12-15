@@ -17,14 +17,14 @@ export class ProxyViewController {
 
 
     $scope.info = {
-      company_name: '123',
-      company_area: ["120000", "120000", "120103"],
-      company_area_label: ["天津市", "天津市", "河西区"],
+      company_name: null,
+      company_area: null,
+      company_area_label: null,
       company_address: null,
       cellphone: null,
       legal_representative: null,
-      business_area: ["120000"],
-      business_area_label: ["天津市"],
+      business_area: null,
+      business_area_label: null,
       manage_not_same: false,
       // 营业执照正本扫描件
       blfile: [
@@ -75,23 +75,175 @@ export class ProxyViewController {
       ]
       // 多文件解决方案
       /*,blfile2: [
-        {
-          file: null
-        }
-      ],
-      affile2: [
-        {
-          file: null
-        }
-      ]*/
+       {
+       file: null
+       }
+       ],
+       affile2: [
+       {
+       file: null
+       }
+       ]*/
     };
+
+    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
+      $scope.info = {
+        company_name: '123',
+        company_area: ["120000", "120000", "120103"],
+        company_area_label: ["天津市", "天津市", "河西区"],
+        company_address: '黄河道9527号3号楼5单元888',
+        cellphone: '13819493700',
+        legal_representative: '佟彩霞',
+        business_area: ["120000"],
+        business_area_label: ["天津市"],
+        manage_not_same: false,
+        // 营业执照正本扫描件
+        blfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            }
+          }
+        ],
+        // 代理商申请表扫描件
+        affile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页1'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页2'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页3'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页4'
+          }
+        ],
+        // 法人代表身份证照片
+        pcfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '正面'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '反面'
+          }
+        ],
+        // 实际经营者
+        rpcfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '正面'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '反面'
+          }
+        ]
+        // 多文件解决方案
+        /*,blfile2: [
+         {
+         file: null
+         }
+         ],
+         affile2: [
+         {
+         file: null
+         }
+         ]*/
+      };
+    }
 
     this.getCities($scope, $log, city);
     this.upload($scope, $log, Upload);
     this.submit($scope, $http, $log);
 
+    $scope.goproxyview = function(type, id) {
+      $state.go('proxyview', {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
+    };
+
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-    console.log($scope.redirect_url);
+
 
   }
   activate($timeout, webDevTec) {
@@ -183,8 +335,6 @@ export class ProxyViewController {
         });
       });
     });
-
-    console.log($scope.info.business_area_label);
   }
 
   getCityString(cities, separator) {
@@ -229,6 +379,8 @@ export class ProxyViewController {
         file.serverData = {
           name: resp.config.data.file.name
         };
+        file.noedit = false;
+        console.log(file.noedit);
 
       }, function (resp) {
         $log.log('Error status: ' + resp.status);
