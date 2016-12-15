@@ -1,4 +1,4 @@
-export class MainController {
+export class ProxyController {
   constructor ($scope, $log, $http, $timeout, $state, webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
 
@@ -60,7 +60,7 @@ export class MainController {
       company_address: null,
       cellphone: null,
       legal_representative: null,
-      business_area: ["120000"],
+      business_area: null,
       manage_not_same: false,
       // 营业执照正本扫描件
       blfile: [
@@ -147,10 +147,10 @@ export class MainController {
 
     // sidebarGroup.getGroups().then((data) => {
     //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[0]);
+    //   this.breads = sidebarGroup.getGroupItems(data[1].items[0]);
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[0]);
+    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
   }
 
   isLeafItem(item) {
@@ -160,34 +160,24 @@ export class MainController {
   triggerSidebarItemClick($scope, $state, sidebarGroup, item) {
     if(this.isLeafItem(item)) {
       location.href = $state.href(item.sref);
-      //location.href = item.href;
       //this.breads = sidebarGroup.getGroupItems(item);
       //$scope.$broadcast('breadcrumb-change', data);
     }
   }
 
   getCities($scope, $log, city) {
-    city.getCities().then((data)=> {
-      angular.element('.select-group-all').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          items: $scope.info.company_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.company_area = selectedValue;
-          }
-        });
-      });
-    });
+    angular.element('.input-select').selectize();
     city.getCities(city.provinceFilter).then((data)=> {
+      console.log(data);
+      data.c.unshift({
+        n: '全部',
+        i: '100000'
+      });
       angular.element('.select-group-province').each(function() {
         angular.element(this).selectizeCity({
           data: data,
           names: ['province'],
-          items: $scope.info.business_area || [],
+          items: [data.c[0].i] || [],
           onChange: function($self) {
             var selectedObject = $self.selectedObject();
             var selectedLabel = $self.selectedLabel();

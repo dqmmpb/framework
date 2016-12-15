@@ -3,27 +3,30 @@ export class SidebarGroupService {
     'ngInject';
     this.$log = $log;
     this.$http = $http;
-    this.apiHost = 'http://localhost';
+    this.apiHost = this.apiHost = location.protocol + '//' + location.host;
 
     this.data = [
       {
         title: '我的工作台',
         icon: 'fa-dashboard',
-        href: this.apiHost + '/dashboard'
+        href: this.apiHost + '/home',
+        sref: 'home'
       },
       {
-        title: '话务管理',
+        title: '渠道管理',
         icon: 'fa-caret-down',
         items: [
           {
-            title: '呼入管理',
+            title: '代理商管理',
             icon: 'fa-phone-square',
-            href: this.apiHost + '/phone-square'
+            href: this.apiHost + '/proxy',
+            sref: 'proxy'
           },
           {
             title: '商户查询',
             icon: 'fa-cubes',
-            href: this.apiHost + '/cubes'
+            href: this.apiHost + '/cubes',
+            sref: 'search'
           },
           {
             title: '客户跟踪',
@@ -130,6 +133,20 @@ export class SidebarGroupService {
         reject(self.sidebarData);
       }
     });
+  }
+
+  getGroupsWithoutPromise() {
+    // return this.$http.get(this.apiHost + '/groups?per_page=' + limit)
+    //   .then((response) => {
+    //     return response.data;
+    //   })
+    //   .catch((error) => {
+    //     this.$log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    //   });
+
+    var self = this;
+
+    return self.sidebarData;
   }
 
   getGroupItems(item) {

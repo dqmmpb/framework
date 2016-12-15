@@ -1,0 +1,162 @@
+<div ng-cloak>
+
+  <div>
+    <uib-navbar creation-date="proxy.creationDate"></uib-navbar>
+  </div>
+
+  <div class="framework-main">
+    <uib-sidebar class="sidebar-full" is-collapse="proxy.isCollapse" groups="proxy.sidebarGroups"></uib-sidebar>
+
+    <div class="framework-body">
+      <uib-breadcrumb class="breadcrumb-wrapper" breads="proxy.breads"></uib-breadcrumb>
+      <div uib-tools class="tools" groups="proxy.btnGroups"></div>
+
+      <div class="content mt-10">
+
+        <nav class="navbar navbar-default navbar-search">
+          <div class="container-fluid">
+            <form class="navbar-form navbar-left" role="search">
+              <div class="form-group">
+                <input name="keyword" class="form-control" maxlength="11" placeholder="关键字">
+              </div>
+              <div class="form-group">
+                <div class="form-control-select form-control-select-w100">
+                  <div class="select-group select-group-area select-group-province"></div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-control-select form-control-select-w100">
+                  <select name="status" class="input-select input-select-w100" placeholder="全部状态">
+                    <option selected="selected">全部状态</option>
+                    <option>待审核</option>
+                    <option>审核通过</option>
+                    <option>审核未通过</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-default btn-warning"><i class="fa fa-fw fa-search sr-only"></i> 查询</button>
+              </div>
+            </form>
+          </div>
+        </nav>
+
+        <div class="table-container">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-vertical-middle table-nowrap">
+              <thead>
+              <tr>
+                <th class="text-center td-w45px">选择</th>
+                <th width="5%">序号</th>
+                <th>公司名称</th>
+                <th width="5%">业务区域</th>
+                <th width="10%">法人代表/实际控制人</th>
+                <th width="8%">手机号</th>
+                <th width="7%">状态</th>
+                <th width="15%">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td class="text-center td-w45px">
+                  <label class="label-checkbox">
+                    <input type="checkbox" name="checkbox">
+                    <i class="icon-checkbox"></i>
+                  </label>
+                </td>
+                <td>1</td>
+                <td>济宁同飞科技</td>
+                <td>新疆维吾尔自治区</td>
+                <td>佟彩霞</td>
+                <td>13185016989</td>
+                <td>待审核</td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-sm">详情</button>
+                  <button type="button" class="btn btn-success btn-sm">审核</button>
+                  <button type="button" class="btn btn-info btn-sm">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center td-w45px">
+                  <label class="label-checkbox">
+                    <input type="checkbox" name="checkbox">
+                    <i class="icon-checkbox"></i>
+                  </label>
+                </td>
+                <td>2</td>
+                <td>甘肃省事佳杰出商贸有限公司</td>
+                <td>甘肃省</td>
+                <td>王国栋</td>
+                <td>13185016989</td>
+                <td>待审核</td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-sm" disabled>详情</button>
+                  <button type="button" class="btn btn-success btn-sm">审核</button>
+                  <button type="button" class="btn btn-info btn-sm">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm">删除</button>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center td-w45px">
+                  <label class="label-checkbox">
+                    <input type="checkbox" name="checkbox">
+                    <i class="icon-checkbox"></i>
+                  </label>
+                </td>
+                <td>3</td>
+                <td>云南云竟管理咨询有限公司</td>
+                <td>云南省</td>
+                <td>张志刚</td>
+                <td>13185016989</td>
+                <td>待审核</td>
+                <td>
+                  <button type="button" class="btn btn-primary btn-sm">详情</button>
+                  <button type="button" class="btn btn-success btn-sm">审核</button>
+                  <button type="button" class="btn btn-info btn-sm">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm">删除</button>
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <nav class="pagination-container">
+            <ul class="pagination pull-right">
+              <li>
+                <a href="#" aria-label="Top">
+                  <span aria-hidden="true">首页</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">上一页</span>
+                </a>
+              </li>
+              <li class="active"><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li class="disabled"><a href="#">5</a></li>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">下一页</span>
+                </a>
+              </li>
+              <li>
+                <a href="#" aria-label="End">
+                  <span aria-hidden="true">尾页</span>
+                </a>
+              </li>
+            </ul>
+            <div class="pagination-info pull-right">
+              <span>共6条</span>， <span>每页显示：10条</span>
+            </div>
+          </nav>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

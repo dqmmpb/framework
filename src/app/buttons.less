@@ -1,0 +1,20 @@
+
+@import "variables";
+
+//
+// Buttons
+// --------------------------------------------------
+
+.btn {
+  &:focus, &.focus {
+    outline: none;
+  }
+  &:active, &.active {
+    &:focus {
+      outline: none;
+    }
+    &.focus {
+      outline: none;
+    }
+  }
+}
