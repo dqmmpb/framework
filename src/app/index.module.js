@@ -6,6 +6,8 @@ import { runBlock } from './index.run';
 import { MainController } from './main/main.controller';
 import { ProxyController } from './proxy/proxy.controller';
 import { ProxyViewController } from './proxy/view/proxyview.controller';
+import { ProfitController } from './profit/profit.controller';
+import { ProfitViewController } from './profit/view/profitview.controller';
 import { DeployController } from './deploy/deploy.controller';
 import { DeployViewController } from './deploy/view/deployview.controller';
 import { GithubContributorService } from '../app/components/githubContributor/githubContributor.service';
@@ -44,6 +46,8 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .controller('MainController', MainController)
   .controller('ProxyController', ProxyController)
   .controller('ProxyViewController', ProxyViewController)
+  .controller('ProfitController', ProfitController)
+  .controller('ProfitViewController', ProfitViewController)
   .controller('DeployController', DeployController)
   .controller('DeployViewController', DeployViewController);
 

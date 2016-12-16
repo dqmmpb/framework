@@ -23,52 +23,10 @@ export class SidebarGroupService {
             sref: 'proxy'
           },
           {
-            title: '商户查询',
+            title: '分润设置',
             icon: 'fa-cubes',
-            href: this.apiHost + '/cubes',
-            sref: 'search'
-          },
-          {
-            title: '客户跟踪',
-            icon: 'fa-first-order'
-          },
-          {
-            title: '服务查询',
-            icon: 'fa-cloud-download'
-          },
-          {
-            title: '呼入记录',
-            icon: 'fa-globe'
-          },
-          {
-            title: '年检回访',
-            icon: 'fa-address-book'
-          }
-        ]
-      },
-      {
-        title: '调度管理',
-        icon: 'fa-caret-down',
-        items: [
-          {
-            title: '调度提醒',
-            icon: 'fa-user'
-          },
-          {
-            title: '调度分配',
-            icon: 'fa-rmb'
-          },
-          {
-            title: '调度修改',
-            icon: 'fa-envelope'
-          },
-          {
-            title: '救援回访',
-            icon: 'fa-envelope'
-          },
-          {
-            title: '回访修改',
-            icon: 'fa-pencil'
+            href: this.apiHost + '/profit',
+            sref: 'profit'
           }
         ]
       },
@@ -89,17 +47,26 @@ export class SidebarGroupService {
         ]
       },
       {
-        title: '系统管理',
+        title: '系统设置',
         icon: 'fa-caret-down',
         items: [
           {
-            title: '员工管理',
-            icon: 'fa-user'
+            title: '角色管理',
+            icon: 'fa-users'
           },
           {
             title: '权限管理',
             icon: 'fa-shield'
+          },
+          {
+            title: '数据字典',
+            icon: 'fa-envelope'
+          },
+          {
+            title: '操作日志',
+            icon: 'fa-pencil'
           }
+
         ]
       }
     ];

@@ -5,23 +5,17 @@
   </div>
 
   <div class="framework-main">
-    <uib-sidebar class="sidebar-full" is-collapse="proxy.isCollapse" groups="proxy.sidebarGroups"></uib-sidebar>
+    <uib-sidebar class="sidebar-full" is-collapse="profit.isCollapse" groups="profit.sidebarGroups"></uib-sidebar>
 
     <div class="framework-body">
-      <uib-breadcrumb class="breadcrumb-wrapper" breads="proxy.breads"></uib-breadcrumb>
-
-      <div class="tools">
-        <div class="btn-group pull-right" role="group" aria-label="">
-          <a ng-click="goproxyview('create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
-        </div>
-      </div>
+      <uib-breadcrumb class="breadcrumb-wrapper" breads="profit.breads"></uib-breadcrumb>
 
       <div class="content">
         <nav class="navbar navbar-default navbar-search">
           <div class="container-fluid">
             <form class="navbar-form navbar-left" role="search">
               <div class="form-group">
-                <input name="keyword" class="form-control min-width-200px" placeholder="关键字">
+                <input name="keyword" class="form-control min-width-250px" placeholder="关键字/公司名称/渠道码/手机号">
               </div>
               <div class="form-group">
                 <div class="form-control-select form-control-select-w100">
@@ -58,11 +52,12 @@
                 </th>
                 <th width="5%">序号</th>
                 <th>公司名称</th>
+                <th width="5%">渠道码</th>
                 <th width="5%">业务区域</th>
                 <th width="10%">法人代表/实际控制人</th>
                 <th width="8%">手机号</th>
                 <th width="7%">状态</th>
-                <th width="15%">操作</th>
+                <th width="10%">操作</th>
               </tr>
               </thead>
               <tbody>
@@ -75,15 +70,15 @@
                 </td>
                 <td>{{row.idx}}</td>
                 <td>{{row.name}}</td>
+                <td>{{row.channel ? row.channel : '/'}}</td>
                 <td>{{row.area}}</td>
                 <td>{{row.legal}}</td>
                 <td>{{row.cellphone}}</td>
                 <td>{{row.status}}</td>
                 <td>
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="goproxyview('view', row.id)">详情</button>
-                  <button type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']"ng-click="goproxyview('apply', row.id)">审核</button>
-                  <button type="button" class="btn btn-warning btn-sm" ng-click="goproxyview('edit', row.id)">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm" ng-click="goproxyview('delete', row.id)">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="goprofitview('view', row.id)">详情</button>
+                  <button type="button" ng-if="row.status !== '已设置'" class="btn btn-info btn-sm" ng-click="goprofitview('create', row.id)">设置</button>
+                  <button type="button" ng-if="row.status === '已设置'" class="btn btn-warning btn-sm" ng-click="goprofitview('edit', row.id)">编辑</button>
                 </td>
               </tr>
               </tbody>

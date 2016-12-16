@@ -1,4 +1,4 @@
-export class ProxyViewController {
+export class ProfitViewController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
 
@@ -17,48 +17,104 @@ export class ProxyViewController {
 
 
     $scope.info = {
-      company_name: null,
-      company_area: null,
-      company_area_label: null,
-      company_address: null,
-      cellphone: null,
-      legal_representative: null,
-      business_area: null,
-      business_area_label: null,
+      company_name: '123',
+      company_area: ["120000", "120000", "120103"],
+      company_area_label: ["天津市", "天津市", "河西区"],
+      company_address: '黄河道9527号3号楼5单元888',
+      cellphone: '13819493700',
+      legal_representative: '佟彩霞',
+      business_area: ["120000"],
+      business_area_label: ["天津市"],
       manage_not_same: true,
       // 营业执照正本扫描件
       blfile: [
         {
-          file: null
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          }
         }
       ],
       // 代理商申请表扫描件
       affile: [
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '页1'
         },
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '页2'
         },
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '页3'
         },
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '页4'
         }
       ],
       // 法人代表身份证照片
       pcfile: [
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '正面'
         },
         {
-          file: null,
+          file: {
+            name: 'assets/images/upload/ABC.jpg',
+            size: 278546,
+            type: "image/jpeg",
+            serverData: {
+              name: 'ABC.jpg'
+            },
+            noedit: true
+          },
           caption: '反面'
         }
       ],
@@ -73,7 +129,12 @@ export class ProxyViewController {
           caption: '反面'
         }
       ],
-      applyResult: null
+      applyResult: null,
+      profit: {
+        channel: null,
+        pct_charge: null,
+        pct_consume: null,
+      }
       // 多文件解决方案
       /*,blfile2: [
        {
@@ -201,7 +262,12 @@ export class ProxyViewController {
             caption: '反面'
           }
         ],
-        applyResult: null
+        applyResult: null,
+        profit: {
+          channel: '1001',
+          pct_charge: 5,
+          pct_consume: 10,
+        }
         // 多文件解决方案
         /*,blfile2: [
          {
@@ -220,8 +286,8 @@ export class ProxyViewController {
     this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
 
-    $scope.goproxyview = function(type, id) {
-      $state.go('proxyview', {
+    $scope.goprofitview = function(type, id) {
+      $state.go('profitview', {
         type: type,
         id: id,
         redirect_url: encodeURIComponent(location.href)
@@ -255,10 +321,10 @@ export class ProxyViewController {
     //   this.breads = sidebarGroup.getGroupItems(data[0]);
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
+    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[1]);
     if($scope.type === 'create')
       this.breads.push({
-        title: '新增'
+        title: '设置'
       });
     else if($scope.type === 'view')
       this.breads.push({
@@ -267,10 +333,6 @@ export class ProxyViewController {
     else if($scope.type === 'edit')
       this.breads.push({
         title: '编辑'
-      });
-    else if($scope.type === 'apply')
-      this.breads.push({
-        title: '审核'
       });
   }
 
@@ -476,8 +538,8 @@ export class ProxyViewController {
   }
   initForm($scope, $http, $log) {
     var self = this;
-    $scope.createSubmit = function() {
-      $log.log('create');
+    $scope.createSubmit = function(id) {
+      $log.log('create: ' + id);
       // 处理提交前的表单数据
       var params = {
         company_name: $scope.info.company_name,
@@ -599,7 +661,7 @@ export class ProxyViewController {
     };
 
     $scope.setApplyResult = function(applyResult) {
-      $scope.applyResult = {
+      $scope.info.applyResult = {
         result: applyResult
       };
     }

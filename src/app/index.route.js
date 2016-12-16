@@ -19,6 +19,18 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       controller: 'ProxyViewController',
       controllerAs: 'proxyview'
     })
+    .state('profit', {
+      url: '/profit',
+      templateUrl: 'app/profit/profit.html',
+      controller: 'ProfitController',
+      controllerAs: 'profit'
+    })
+    .state('profitview', {
+      url: '/profitview/*type?id&redirect_url',
+      templateUrl: 'app/profit/view/profitview.html',
+      controller: 'ProfitViewController',
+      controllerAs: 'profitview'
+    })
     .state('deploy', {
       url: '/deploy',
       templateUrl: 'app/deploy/deploy.html',
