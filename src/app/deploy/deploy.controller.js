@@ -31,7 +31,7 @@ export class DeployController {
         area: '甘肃省',
         legal: '王国栋',
         cellphone: '13185016989',
-        status: '待审核'
+        status: '审核通过'
       },
       {
         ch: false,
@@ -73,16 +73,23 @@ export class DeployController {
       }
     };
 
-    $scope.deployview = function(type, id) {
-      $state.go('deployview', {
-        type: type,
-        id: id,
-        redirect_url: encodeURIComponent(location.href)
-      });
+
+    $scope.godeployview = function(type, id) {
+      if(type === 'delete') {
+        if(id) {
+          alert('删除成功');
+        }
+      } else {
+        $state.go('deployview', {
+          type: type,
+          id: id,
+          redirect_url: encodeURIComponent(location.href)
+        });
+      }
     };
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-    console.log($scope.redirect_url);
+
 
   }
 

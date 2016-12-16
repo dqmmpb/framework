@@ -17,15 +17,15 @@ export class DeployViewController {
 
 
     $scope.info = {
-      company_name: '123',
-      company_area: ["120000", "120000", "120103"],
-      company_area_label: ["天津市", "天津市", "河西区"],
+      company_name: null,
+      company_area: null,
+      company_area_label: null,
       company_address: null,
       cellphone: null,
       legal_representative: null,
-      business_area: ["120000"],
-      business_area_label: ["天津市"],
-      manage_not_same: false,
+      business_area: null,
+      business_area_label: null,
+      manage_not_same: true,
       // 营业执照正本扫描件
       blfile: [
         {
@@ -72,23 +72,153 @@ export class DeployViewController {
           file: null,
           caption: '反面'
         }
-      ]
+      ],
+      applyResult: null
       // 多文件解决方案
       /*,blfile2: [
-        {
-          file: null
-        }
-      ],
-      affile2: [
-        {
-          file: null
-        }
-      ]*/
+       {
+       file: null
+       }
+       ],
+       affile2: [
+       {
+       file: null
+       }
+       ]*/
     };
+
+    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
+      $scope.info = {
+        company_name: '123',
+        company_area: ["120000", "120000", "120103"],
+        company_area_label: ["天津市", "天津市", "河西区"],
+        company_address: '黄河道9527号3号楼5单元888',
+        cellphone: '13819493700',
+        legal_representative: '佟彩霞',
+        business_area: ["120000"],
+        business_area_label: ["天津市"],
+        manage_not_same: true,
+        // 营业执照正本扫描件
+        blfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            }
+          }
+        ],
+        // 代理商申请表扫描件
+        affile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页1'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页2'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页3'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '页4'
+          }
+        ],
+        // 法人代表身份证照片
+        pcfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '正面'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '反面'
+          }
+        ],
+        // 实际经营者
+        rpcfile: [
+          {
+            file: null,
+            caption: '正面'
+          },
+          {
+            file: null,
+            caption: '反面'
+          }
+        ],
+        applyResult: null
+        // 多文件解决方案
+        /*,blfile2: [
+         {
+         file: null
+         }
+         ],
+         affile2: [
+         {
+         file: null
+         }
+         ]*/
+      };
+    }
 
     this.getCities($scope, $log, city);
     this.upload($scope, $log, Upload);
-    this.submit($scope, $http, $log);
+    this.initForm($scope, $http, $log);
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
     console.log($scope.redirect_url);
@@ -338,10 +468,11 @@ export class DeployViewController {
     }
     return files;
   }
-  submit($scope, $http, $log) {
-    var self = this;
-    $scope.submit = function() {
 
+  initForm($scope, $http, $log) {
+    var self = this;
+    $scope.createSubmit = function() {
+      $log.log('create');
       // 处理提交前的表单数据
       var params = {
         company_name: $scope.info.company_name,
@@ -353,8 +484,8 @@ export class DeployViewController {
         blfile: self.getFiles($scope.info.blfile),
         affile: self.getFiles($scope.info.affile),
         pcfile: self.getFiles($scope.info.pcfile)
-/*        blfile2: self.getFiles($scope.info.blfile2),
-        affile2: self.getFiles($scope.info.affile2),*/
+        /*        blfile2: self.getFiles($scope.info.blfile2),
+         affile2: self.getFiles($scope.info.affile2),*/
       };
 
       $http({
@@ -363,12 +494,112 @@ export class DeployViewController {
         data: params
       }).then((response) => {
         $log.log(response);
+      return response.data;
+    }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    });
+    };
+
+    $scope.editSubmit = function(id) {
+      $log.log('edit： ' + id);
+      // 处理提交前的表单数据
+      var params = {
+        id: id,
+        company_name: $scope.info.company_name,
+        company_area: $scope.info.company_area,
+        company_address: $scope.info.company_address,
+        legal_representative: $scope.info.legal_representative,
+        cellphone: $scope.info.cellphone,
+        business_area: $scope.info.business_area,
+        blfile: self.getFiles($scope.info.blfile),
+        affile: self.getFiles($scope.info.affile),
+        pcfile: self.getFiles($scope.info.pcfile)
+        /*        blfile2: self.getFiles($scope.info.blfile2),
+         affile2: self.getFiles($scope.info.affile2),*/
+      };
+
+      $http({
+        method: 'POST',
+        url: self.apiHost + '/app/components/form/submit.json',
+        data: params
+      }).then((response) => {
+        $log.log(response);
+      return response.data;
+    }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    });
+    };
+
+    $scope.applySubmit = function(id) {
+
+      if($scope.info.applyResult) {
+        $log.log('apply: ' + id + ', ' + ($scope.info.applyResult.result ? '审核通过' : '审核不通过'));
+        // 处理提交前的表单数据
+        var params = {
+          id: id,
+          company_name: $scope.info.company_name,
+          company_area: $scope.info.company_area,
+          company_address: $scope.info.company_address,
+          legal_representative: $scope.info.legal_representative,
+          cellphone: $scope.info.cellphone,
+          business_area: $scope.info.business_area,
+          blfile: self.getFiles($scope.info.blfile),
+          affile: self.getFiles($scope.info.affile),
+          pcfile: self.getFiles($scope.info.pcfile)
+          /*        blfile2: self.getFiles($scope.info.blfile2),
+           affile2: self.getFiles($scope.info.affile2),*/
+        };
+
+        $http({
+          method: 'POST',
+          url: self.apiHost + '/app/components/form/submit.json',
+          data: params
+        }).then((response) => {
+          $log.log(response);
         return response.data;
       }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
       });
+      }
+    };
+
+    $scope.deleteSubmit = function(id) {
+      $log.log('delete: ' + id);
+      // 处理提交前的表单数据
+      var params = {
+        id: id,
+        company_name: $scope.info.company_name,
+        company_area: $scope.info.company_area,
+        company_address: $scope.info.company_address,
+        legal_representative: $scope.info.legal_representative,
+        cellphone: $scope.info.cellphone,
+        business_area: $scope.info.business_area,
+        blfile: self.getFiles($scope.info.blfile),
+        affile: self.getFiles($scope.info.affile),
+        pcfile: self.getFiles($scope.info.pcfile)
+        /*        blfile2: self.getFiles($scope.info.blfile2),
+         affile2: self.getFiles($scope.info.affile2),*/
+      };
+
+      $http({
+        method: 'POST',
+        url: self.apiHost + '/app/components/form/submit.json',
+        data: params
+      }).then((response) => {
+        $log.log(response);
+      return response.data;
+    }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    });
+    };
+
+    $scope.setApplyResult = function(applyResult) {
+      $scope.info.applyResult = {
+        result: applyResult
+      };
     }
   }
+
 
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');

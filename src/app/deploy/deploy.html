@@ -19,7 +19,7 @@
       <div class="content mt-10">
         <nav class="navbar navbar-default navbar-search">
           <div class="container-fluid">
-            <form class="navbar-form navbar-left" role="search">
+            <form class="navbar-form navbar-left" role="search" ng-click="search()">
               <div class="form-group">
                 <input name="keyword" class="form-control" maxlength="11" placeholder="关键字">
               </div>
@@ -80,10 +80,10 @@
                 <td>{{row.cellphone}}</td>
                 <td>{{row.status}}</td>
                 <td>
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="deployview('view', row.id)">详情</button>
-                  <button type="button" class="btn btn-success btn-sm" ng-click="deployview('apply', row.id)">审核</button>
-                  <button type="button" class="btn btn-info btn-sm" ng-click="deployview('edit', row.id)">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm" ng-click="deployview('delete', row.id)">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="godeployview('view', row.id)">详情</button>
+                  <button type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']" ng-click="godeployview('apply', row.id)">审核</button>
+                  <button type="button" class="btn btn-warning btn-sm" ng-click="godeployview('edit', row.id)">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="godeployview('delete', row.id)">删除</button>
                 </td>
               </tr>
               </tbody>
