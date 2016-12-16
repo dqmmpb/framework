@@ -1,7 +1,6 @@
-export class ProxyController {
+export class DeployController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
-
 
     this.awesomeThings = [];
     this.classAnimation = '';
@@ -32,7 +31,7 @@ export class ProxyController {
         area: '甘肃省',
         legal: '王国栋',
         cellphone: '13185016989',
-        status: '审核通过'
+        status: '待审核'
       },
       {
         ch: false,
@@ -49,8 +48,14 @@ export class ProxyController {
     $scope.chAll = false;
 
     $scope.checkAll = function () {
-      for(var i in $scope.rows) {
-        $scope.rows[i].ch = $scope.chAll;
+      if($scope.chAll) {
+        for(var i in $scope.rows) {
+          $scope.rows[i].ch = true;
+        }
+      } else {
+        for(var j in $scope.rows) {
+          $scope.rows[j].ch = false;
+        }
       }
     };
 
@@ -68,21 +73,16 @@ export class ProxyController {
       }
     };
 
-    $scope.goproxyview = function(type, id) {
-      if(type === 'delete') {
-        if(id) {
-          alert('删除成功');
-        }
-      } else {
-        $state.go('proxyview', {
-          type: type,
-          id: id,
-          redirect_url: encodeURIComponent(location.href)
-        });
-      }
+    $scope.deployview = function(type, id) {
+      $state.go('deployview', {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
     };
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
+    console.log($scope.redirect_url);
 
   }
 
@@ -98,6 +98,7 @@ export class ProxyController {
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
+    console.log(this.breads);
   }
 
   isLeafItem(item) {
@@ -115,6 +116,7 @@ export class ProxyController {
   getCities($scope, $log, city) {
     angular.element('.input-select').selectize();
     city.getCities(city.provinceFilter).then((data)=> {
+      console.log(data);
       data.c.unshift({
         n: '全部',
         i: '100000'
