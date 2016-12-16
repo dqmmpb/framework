@@ -52,12 +52,16 @@ export class SidebarGroupService {
         items: [
           {
             title: '角色管理',
-            icon: 'fa-users'
+            icon: 'fa-users',
+            href: this.apiHost + '/role',
+            sref: 'role'
           },
           {
-            title: '权限管理',
-            icon: 'fa-shield'
-          },
+            title: '用户管理',
+            icon: 'fa-shield',
+            href: this.apiHost + '/user',
+            sref: 'user'
+          }/*,
           {
             title: '数据字典',
             icon: 'fa-envelope'
@@ -65,8 +69,7 @@ export class SidebarGroupService {
           {
             title: '操作日志',
             icon: 'fa-pencil'
-          }
-
+          }*/
         ]
       }
     ];

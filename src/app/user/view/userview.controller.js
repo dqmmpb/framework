@@ -1,4 +1,4 @@
-export class ProfitViewController {
+export class UserViewController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
 
@@ -17,268 +17,18 @@ export class ProfitViewController {
 
 
     $scope.info = {
-      company_name: '123',
-      company_area: ["120000", "120000", "120103"],
-      company_area_label: ["天津市", "天津市", "河西区"],
-      company_address: '黄河道9527号3号楼5单元888',
-      cellphone: '13819493700',
-      legal_representative: '佟彩霞',
-      business_area: ["120000"],
-      business_area_label: ["天津市"],
-      manage_not_same: true,
-      // 营业执照正本扫描件
-      blfile: [
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          }
-        }
-      ],
-      // 代理商申请表扫描件
-      affile: [
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '页1'
-        },
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '页2'
-        },
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '页3'
-        },
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '页4'
-        }
-      ],
-      // 法人代表身份证照片
-      pcfile: [
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '正面'
-        },
-        {
-          file: {
-            name: 'assets/images/upload/ABC.jpg',
-            size: 278546,
-            type: "image/jpeg",
-            serverData: {
-              name: 'ABC.jpg'
-            },
-            noedit: true
-          },
-          caption: '反面'
-        }
-      ],
-      // 实际经营者
-      rpcfile: [
-        {
-          file: null,
-          caption: '正面'
-        },
-        {
-          file: null,
-          caption: '反面'
-        }
-      ],
-      applyResult: null,
-      profit: {
-        channel: null,
-        pct_charge: null,
-        pct_consume: null,
-      }
-      // 多文件解决方案
-      /*,blfile2: [
-       {
-       file: null
-       }
-       ],
-       affile2: [
-       {
-       file: null
-       }
-       ]*/
+      user_name: null,
+      user_desc: null,
+      user_auth: null
     };
 
     if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
       $scope.info = {
-        company_name: '123',
-        company_area: ["120000", "120000", "120103"],
-        company_area_label: ["天津市", "天津市", "河西区"],
-        company_address: '黄河道9527号3号楼5单元888',
-        cellphone: '13819493700',
-        legal_representative: '佟彩霞',
-        business_area: ["120000"],
-        business_area_label: ["天津市"],
-        manage_not_same: true,
-        // 营业执照正本扫描件
-        blfile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            }
-          }
-        ],
-        // 代理商申请表扫描件
-        affile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '页1'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '页2'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '页3'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '页4'
-          }
-        ],
-        // 法人代表身份证照片
-        pcfile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '正面'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '反面'
-          }
-        ],
-        // 实际经营者
-        rpcfile: [
-          {
-            file: null,
-            caption: '正面'
-          },
-          {
-            file: null,
-            caption: '反面'
-          }
-        ],
-        applyResult: null,
-        profit: {
-          channel: '1001',
-          pct_charge: 5,
-          pct_consume: 10,
-        }
-        // 多文件解决方案
-        /*,blfile2: [
-         {
-         file: null
-         }
-         ],
-         affile2: [
-         {
-         file: null
-         }
-         ]*/
+        user_name: '超级管理员',
+        user_desc: '网吧钉钉管理中心最高权限',
+        user_auth: [
+
+        ]
       };
     }
 
@@ -286,8 +36,8 @@ export class ProfitViewController {
     this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
 
-    $scope.goprofitview = function(type, id) {
-      $state.go('profitview', {
+    $scope.gouserview = function(type, id) {
+      $state.go('userview', {
         type: type,
         id: id,
         redirect_url: encodeURIComponent(location.href)
@@ -321,18 +71,18 @@ export class ProfitViewController {
     //   this.breads = sidebarGroup.getGroupItems(data[0]);
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[1]);
+    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[1]);
     if($scope.type === 'create')
       this.breads.push({
-        title: '设置分润'
+        title: '新增用户'
       });
     else if($scope.type === 'view')
       this.breads.push({
-        title: '查看分润'
+        title: '查看用户'
       });
     else if($scope.type === 'edit')
       this.breads.push({
-        title: '编辑分润'
+        title: '编辑用户'
       });
   }
 
@@ -538,21 +288,11 @@ export class ProfitViewController {
   }
   initForm($scope, $http, $log) {
     var self = this;
-    $scope.createSubmit = function(id) {
-      $log.log('create: ' + id);
+    $scope.createSubmit = function() {
+      $log.log('create');
       // 处理提交前的表单数据
       var params = {
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-/*        blfile2: self.getFiles($scope.info.blfile2),
-        affile2: self.getFiles($scope.info.affile2),*/
+        user_name: $scope.info.user_name
       };
 
       $http({
@@ -572,17 +312,7 @@ export class ProfitViewController {
       // 处理提交前的表单数据
       var params = {
         id: id,
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-        /*        blfile2: self.getFiles($scope.info.blfile2),
-         affile2: self.getFiles($scope.info.affile2),*/
+        user_name: $scope.info.user_name
       };
 
       $http({
@@ -595,39 +325,6 @@ export class ProfitViewController {
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
       });
-    };
-
-    $scope.applySubmit = function(id) {
-
-      if($scope.info.applyResult) {
-        $log.log('apply: ' + id + ', ' + ($scope.info.applyResult.result ? '审核通过' : '审核不通过'));
-        // 处理提交前的表单数据
-        var params = {
-          id: id,
-          company_name: $scope.info.company_name,
-          company_area: $scope.info.company_area,
-          company_address: $scope.info.company_address,
-          legal_representative: $scope.info.legal_representative,
-          cellphone: $scope.info.cellphone,
-          business_area: $scope.info.business_area,
-          blfile: self.getFiles($scope.info.blfile),
-          affile: self.getFiles($scope.info.affile),
-          pcfile: self.getFiles($scope.info.pcfile)
-          /*        blfile2: self.getFiles($scope.info.blfile2),
-           affile2: self.getFiles($scope.info.affile2),*/
-        };
-
-        $http({
-          method: 'POST',
-          url: self.apiHost + '/app/components/form/submit.json',
-          data: params
-        }).then((response) => {
-          $log.log(response);
-          return response.data;
-        }).catch((error) => {
-          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        });
-      }
     };
 
     $scope.deleteSubmit = function(id) {
@@ -635,17 +332,7 @@ export class ProfitViewController {
       // 处理提交前的表单数据
       var params = {
         id: id,
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-        /*        blfile2: self.getFiles($scope.info.blfile2),
-         affile2: self.getFiles($scope.info.affile2),*/
+        user_name: $scope.info.user_name
       };
 
       $http({
@@ -659,12 +346,6 @@ export class ProfitViewController {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
       });
     };
-
-    $scope.setApplyResult = function(applyResult) {
-      $scope.info.applyResult = {
-        result: applyResult
-      };
-    }
   }
 
   showToastr() {

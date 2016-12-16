@@ -258,19 +258,19 @@ export class ProxyViewController {
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
     if($scope.type === 'create')
       this.breads.push({
-        title: '新增'
+        title: '新增代理商'
       });
     else if($scope.type === 'view')
       this.breads.push({
-        title: '查看'
+        title: '查看代理商'
       });
     else if($scope.type === 'edit')
       this.breads.push({
-        title: '编辑'
+        title: '编辑代理商'
       });
     else if($scope.type === 'apply')
       this.breads.push({
-        title: '审核'
+        title: '审核代理商'
       });
   }
 

@@ -42,6 +42,30 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       templateUrl: 'app/deploy/view/deployview.html',
       controller: 'DeployViewController',
       controllerAs: 'deployview'
+    })
+    .state('role', {
+      url: '/role',
+      templateUrl: 'app/role/role.html',
+      controller: 'RoleController',
+      controllerAs: 'role'
+    })
+    .state('roleview', {
+      url: '/roleview/*type?id&redirect_url',
+      templateUrl: 'app/role/view/roleview.html',
+      controller: 'RoleViewController',
+      controllerAs: 'roleview'
+    })
+    .state('user', {
+      url: '/user',
+      templateUrl: 'app/user/user.html',
+      controller: 'UserController',
+      controllerAs: 'user'
+    })
+    .state('userview', {
+      url: '/userview/*type?id&redirect_url',
+      templateUrl: 'app/user/view/userview.html',
+      controller: 'UserViewController',
+      controllerAs: 'userview'
     });
 
   $urlRouterProvider.otherwise('/');

@@ -10,6 +10,10 @@ import { ProfitController } from './profit/profit.controller';
 import { ProfitViewController } from './profit/view/profitview.controller';
 import { DeployController } from './deploy/deploy.controller';
 import { DeployViewController } from './deploy/view/deployview.controller';
+import { RoleController } from './role/role.controller';
+import { RoleViewController } from './role/view/roleview.controller';
+import { UserController } from './user/user.controller';
+import { UserViewController } from './user/view/userview.controller';
 import { GithubContributorService } from '../app/components/githubContributor/githubContributor.service';
 import { SidebarGroupService } from '../app/components/sidebarGroup/sidebarGroup.service';
 import { WebDevTecService } from '../app/components/webDevTec/webDevTec.service';
@@ -49,6 +53,10 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .controller('ProfitController', ProfitController)
   .controller('ProfitViewController', ProfitViewController)
   .controller('DeployController', DeployController)
-  .controller('DeployViewController', DeployViewController);
+  .controller('DeployViewController', DeployViewController)
+  .controller('RoleController', RoleController)
+  .controller('RoleViewController', RoleViewController)
+  .controller('UserController', UserController)
+  .controller('UserViewController', UserViewController);
 
 

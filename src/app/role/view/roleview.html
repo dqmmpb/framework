@@ -1,0 +1,170 @@
+<div ng-cloak>
+
+  <div>
+    <uib-navbar></uib-navbar>
+  </div>
+
+  <div class="framework-main">
+    <uib-sidebar class="sidebar-full" is-collapse="roleview.isCollapse" groups="roleview.sidebarGroups"></uib-sidebar>
+
+    <div class="framework-body">
+      <uib-breadcrumb class="breadcrumb-wrapper" breads="roleview.breads"></uib-breadcrumb>
+
+      <div ng-if="type === 'create'">
+        <div class="tools">
+          <div class="btn-group" role="group" aria-label="">
+            <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
+          </div>
+        </div>
+
+        <div class="row mt-10">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-csc">
+              <div class="panel-heading">
+                <div class="panel-title">新增角色</div>
+              </div>
+              <div class="panel-body">
+                <form class="form form-horizontal" ng-submit="createSubmit()">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色名称:</label>
+                    <div class="col-sm-10">
+                      <input type="text" ng-model="info.role_name" class="form-control" placeholder="角色名称">
+                    </div>
+                  </div>
+                  <div class="form-group form-select-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色描述:</label>
+                    <div class="col-sm-10">
+                      <textarea ng-model="info.role_desc" class="form-control" placeholder="街道/路/编号/楼宇/楼层"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
+                    <div class="col-sm-10">
+                      <div class="form-control-select">
+                        <div class="select-group select-group-area select-group-province"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="btn-group" role="group" aria-label="">
+                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存</button>
+                      </div>
+                      <div class="btn-group" role="group" aria-label="">
+                        <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="type === 'view'">
+        <div class="tools">
+          <div class="btn-group" role="group" aria-label="">
+            <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="">
+            <a ng-click="goroleview('edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
+          </div>
+          <div class="btn-group" role="group" aria-label="">
+            <a ng-click="deleteSubmit(id)" class="btn btn-default btn-danger" uib-tooltip="删除" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-trash"></i><span class="hidden-xs"> 删除</span></a>
+          </div>
+        </div>
+
+        <div class="row mt-10">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-csc">
+              <div class="panel-heading">
+                <div class="panel-title">查看角色</div>
+              </div>
+              <div class="panel-body">
+                <div class="form form-horizontal">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色名称:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.role_name}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group form-select-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色描述:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.role_desc || '未填写'}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.role_auth || '未填写'}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-if="type === 'edit'">
+        <div class="tools">
+          <div class="btn-group" role="group" aria-label="">
+            <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
+          </div>
+        </div>
+
+        <div class="row mt-10">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-csc">
+              <div class="panel-heading">
+                <div class="panel-title">编辑角色</div>
+              </div>
+              <div class="panel-body">
+                <form class="form form-horizontal" ng-submit="editSubmit(id)">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色名称:</label>
+                    <div class="col-sm-10">
+                      <input type="text" ng-model="info.role_name" class="form-control" placeholder="角色名称">
+                    </div>
+                  </div>
+                  <div class="form-group form-select-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色描述:</label>
+                    <div class="col-sm-10">
+                      <textarea ng-model="info.role_desc" class="form-control" placeholder="街道/路/编号/楼宇/楼层"></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
+                    <div class="col-sm-10">
+                      <div class="form-control-select">
+                        <div class="select-group select-group-area select-group-province"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                      <div class="btn-group" role="group" aria-label="">
+                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存</button>
+                      </div>
+                      <div class="btn-group" role="group" aria-label="">
+                        <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
