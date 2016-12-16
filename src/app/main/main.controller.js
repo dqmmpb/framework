@@ -142,17 +142,17 @@ export class MainController {
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
-    var self = this;
-    $scope.$on('sidebar-item-click', function(e, item) {
-      self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
-    });
+      var self = this;
+      $scope.$on('sidebar-item-click', function(e, item) {
+        self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
+      });
 
-    // sidebarGroup.getGroups().then((data) => {
-    //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[0]);
-    // });
-    this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[0]);
+      // sidebarGroup.getGroups().then((data) => {
+      //   this.sidebarGroups = data;
+      //   this.breads = sidebarGroup.getGroupItems(data[0]);
+      // });
+      this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
+      this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[0]);
   }
 
   isLeafItem(item) {

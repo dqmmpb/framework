@@ -1,5 +1,5 @@
 export class ProxyController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city){
     'ngInject';
 
 
@@ -32,7 +32,7 @@ export class ProxyController {
         area: '甘肃省',
         legal: '王国栋',
         cellphone: '13185016989',
-        status: '待审核'
+        status: '审核通过'
       },
       {
         ch: false,
@@ -49,14 +49,8 @@ export class ProxyController {
     $scope.chAll = false;
 
     $scope.checkAll = function () {
-      if($scope.chAll) {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = true;
-        }
-      } else {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = false;
-        }
+      for(var i in $scope.rows) {
+        $scope.rows[i].ch = $scope.chAll;
       }
     };
 
@@ -104,7 +98,6 @@ export class ProxyController {
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
-    console.log(this.breads);
   }
 
   isLeafItem(item) {
@@ -122,7 +115,6 @@ export class ProxyController {
   getCities($scope, $log, city) {
     angular.element('.input-select').selectize();
     city.getCities(city.provinceFilter).then((data)=> {
-      console.log(data);
       data.c.unshift({
         n: '全部',
         i: '100000'

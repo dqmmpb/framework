@@ -81,8 +81,8 @@
                 <td>{{row.status}}</td>
                 <td>
                   <button type="button" class="btn btn-primary btn-sm" ng-click="goproxyview('view', row.id)">详情</button>
-                  <button type="button" class="btn btn-success btn-sm" ng-click="goproxyview('apply', row.id)">审核</button>
-                  <button type="button" class="btn btn-info btn-sm" ng-click="goproxyview('edit', row.id)">编辑</button>
+                  <button type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']"ng-click="goproxyview('apply', row.id)">审核</button>
+                  <button type="button" class="btn btn-warning btn-sm" ng-click="goproxyview('edit', row.id)">编辑</button>
                   <button type="button" class="btn btn-danger btn-sm" ng-click="goproxyview('delete', row.id)">删除</button>
                 </td>
               </tr>

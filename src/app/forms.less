@@ -102,6 +102,12 @@
     }
   }
 
+  @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
+    .control-label-double {
+      padding-top: 0;
+    }
+  }
+
 }
 
 // Image Upload
@@ -124,7 +130,7 @@
 
   margin-right: 10px;
 
-  &.last-child {
+  &:last-child {
     margin-right: 0;
   }
 

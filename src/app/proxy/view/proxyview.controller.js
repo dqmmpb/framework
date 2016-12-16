@@ -25,7 +25,7 @@ export class ProxyViewController {
       legal_representative: null,
       business_area: null,
       business_area_label: null,
-      manage_not_same: false,
+      manage_not_same: true,
       // 营业执照正本扫描件
       blfile: [
         {
@@ -72,7 +72,8 @@ export class ProxyViewController {
           file: null,
           caption: '反面'
         }
-      ]
+      ],
+      applyResult: null
       // 多文件解决方案
       /*,blfile2: [
        {
@@ -96,7 +97,7 @@ export class ProxyViewController {
         legal_representative: '佟彩霞',
         business_area: ["120000"],
         business_area_label: ["天津市"],
-        manage_not_same: false,
+        manage_not_same: true,
         // 营业执照正本扫描件
         blfile: [
           {
@@ -192,30 +193,15 @@ export class ProxyViewController {
         // 实际经营者
         rpcfile: [
           {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
+            file: null,
             caption: '正面'
           },
           {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
+            file: null,
             caption: '反面'
           }
-        ]
+        ],
+        applyResult: null
         // 多文件解决方案
         /*,blfile2: [
          {
@@ -232,7 +218,7 @@ export class ProxyViewController {
 
     this.getCities($scope, $log, city);
     this.upload($scope, $log, Upload);
-    this.submit($scope, $http, $log);
+    this.initForm($scope, $http, $log);
 
     $scope.goproxyview = function(type, id) {
       $state.go('proxyview', {
@@ -380,8 +366,6 @@ export class ProxyViewController {
           name: resp.config.data.file.name
         };
         file.noedit = false;
-        console.log(file.noedit);
-
       }, function (resp) {
         $log.log('Error status: ' + resp.status);
       }, function (evt) {
@@ -490,10 +474,10 @@ export class ProxyViewController {
     }
     return files;
   }
-  submit($scope, $http, $log) {
+  initForm($scope, $http, $log) {
     var self = this;
-    $scope.submit = function() {
-
+    $scope.createSubmit = function() {
+      $log.log('create');
       // 处理提交前的表单数据
       var params = {
         company_name: $scope.info.company_name,
@@ -519,6 +503,105 @@ export class ProxyViewController {
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
       });
+    };
+
+    $scope.editSubmit = function(id) {
+      $log.log('edit： ' + id);
+      // 处理提交前的表单数据
+      var params = {
+        id: id,
+        company_name: $scope.info.company_name,
+        company_area: $scope.info.company_area,
+        company_address: $scope.info.company_address,
+        legal_representative: $scope.info.legal_representative,
+        cellphone: $scope.info.cellphone,
+        business_area: $scope.info.business_area,
+        blfile: self.getFiles($scope.info.blfile),
+        affile: self.getFiles($scope.info.affile),
+        pcfile: self.getFiles($scope.info.pcfile)
+        /*        blfile2: self.getFiles($scope.info.blfile2),
+         affile2: self.getFiles($scope.info.affile2),*/
+      };
+
+      $http({
+        method: 'POST',
+        url: self.apiHost + '/app/components/form/submit.json',
+        data: params
+      }).then((response) => {
+        $log.log(response);
+        return response.data;
+      }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+      });
+    };
+
+    $scope.applySubmit = function(id) {
+
+      if($scope.info.applyResult) {
+        $log.log('apply: ' + id + ', ' + ($scope.info.applyResult.result ? '审核通过' : '审核不通过'));
+        // 处理提交前的表单数据
+        var params = {
+          id: id,
+          company_name: $scope.info.company_name,
+          company_area: $scope.info.company_area,
+          company_address: $scope.info.company_address,
+          legal_representative: $scope.info.legal_representative,
+          cellphone: $scope.info.cellphone,
+          business_area: $scope.info.business_area,
+          blfile: self.getFiles($scope.info.blfile),
+          affile: self.getFiles($scope.info.affile),
+          pcfile: self.getFiles($scope.info.pcfile)
+          /*        blfile2: self.getFiles($scope.info.blfile2),
+           affile2: self.getFiles($scope.info.affile2),*/
+        };
+
+        $http({
+          method: 'POST',
+          url: self.apiHost + '/app/components/form/submit.json',
+          data: params
+        }).then((response) => {
+          $log.log(response);
+          return response.data;
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+        });
+      }
+    };
+
+    $scope.deleteSubmit = function(id) {
+      $log.log('delete: ' + id);
+      // 处理提交前的表单数据
+      var params = {
+        id: id,
+        company_name: $scope.info.company_name,
+        company_area: $scope.info.company_area,
+        company_address: $scope.info.company_address,
+        legal_representative: $scope.info.legal_representative,
+        cellphone: $scope.info.cellphone,
+        business_area: $scope.info.business_area,
+        blfile: self.getFiles($scope.info.blfile),
+        affile: self.getFiles($scope.info.affile),
+        pcfile: self.getFiles($scope.info.pcfile)
+        /*        blfile2: self.getFiles($scope.info.blfile2),
+         affile2: self.getFiles($scope.info.affile2),*/
+      };
+
+      $http({
+        method: 'POST',
+        url: self.apiHost + '/app/components/form/submit.json',
+        data: params
+      }).then((response) => {
+        $log.log(response);
+        return response.data;
+      }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+      });
+    };
+
+    $scope.setApplyResult = function(applyResult) {
+      $scope.info.applyResult = {
+        result: applyResult
+      };
     }
   }
 
