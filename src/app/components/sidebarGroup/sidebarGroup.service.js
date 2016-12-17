@@ -42,7 +42,9 @@ export class SidebarGroupService {
           },
           {
             title: '应用部署',
-            icon: 'fa-shield'
+            icon: 'fa-shield',
+            href: this.apiHost + '/apply',
+            sref: 'apply'
           }
         ]
       },

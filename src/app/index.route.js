@@ -43,6 +43,12 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       controller: 'DeployViewController',
       controllerAs: 'deployview'
     })
+    .state('apply', {
+      url: '/apply',
+      templateUrl: 'app/apply/apply.html',
+      controller: 'ApplyController',
+      controllerAs: 'apply'
+    })
     .state('role', {
       url: '/role',
       templateUrl: 'app/role/role.html',

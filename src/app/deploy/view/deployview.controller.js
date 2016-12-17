@@ -220,8 +220,16 @@ export class DeployViewController {
     this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
 
+    $scope.goproxyview = function(type, id) {
+      $state.go('proxyview', {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
+    };
+
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-    console.log($scope.redirect_url);
+
 
   }
   activate($timeout, webDevTec) {
@@ -233,7 +241,7 @@ export class DeployViewController {
 
     angular.forEach(this.awesomeThings, (awesomeThing) => {
       awesomeThing.rank = Math.random();
-    });
+  });
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
@@ -250,19 +258,19 @@ export class DeployViewController {
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
     if($scope.type === 'create')
       this.breads.push({
-        title: '新增'
+        title: '新增代理商'
       });
     else if($scope.type === 'view')
       this.breads.push({
-        title: '查看'
+        title: '查看代理商'
       });
     else if($scope.type === 'edit')
       this.breads.push({
-        title: '编辑'
+        title: '编辑代理商'
       });
     else if($scope.type === 'apply')
       this.breads.push({
-        title: '审核'
+        title: '审核代理商'
       });
   }
 
@@ -282,39 +290,37 @@ export class DeployViewController {
   getCities($scope, $log, city) {
     city.getCities().then((data)=> {
       angular.element('.select-group-all').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          items: $scope.info.company_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.company_area = selectedValue;
-            $scope.info.company_area_label = selectedLabel;
-          }
-        });
+      angular.element(this).selectizeCity({
+        data: data,
+        items: $scope.info.company_area || [],
+        onChange: function($self) {
+          var selectedObject = $self.selectedObject();
+          var selectedLabel = $self.selectedLabel();
+          var selectedValue= $self.selectedValue();
+          $log.log(selectedObject, selectedLabel, selectedValue);
+          $scope.info.company_area = selectedValue;
+          $scope.info.company_area_label = selectedLabel;
+        }
       });
     });
+  });
     city.getCities(city.provinceFilter).then((data)=> {
       angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: $scope.info.business_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.business_area = selectedValue;
-            $scope.info.business_area_label = selectedLabel;
-          }
-        });
+      angular.element(this).selectizeCity({
+        data: data,
+        names: ['province'],
+        items: $scope.info.business_area || [],
+        onChange: function($self) {
+          var selectedObject = $self.selectedObject();
+          var selectedLabel = $self.selectedLabel();
+          var selectedValue= $self.selectedValue();
+          $log.log(selectedObject, selectedLabel, selectedValue);
+          $scope.info.business_area = selectedValue;
+          $scope.info.business_area_label = selectedLabel;
+        }
       });
     });
-
-    console.log($scope.info.business_area_label);
+  });
   }
 
   getCityString(cities, separator) {
@@ -359,7 +365,7 @@ export class DeployViewController {
         file.serverData = {
           name: resp.config.data.file.name
         };
-
+        file.noedit = false;
       }, function (resp) {
         $log.log('Error status: ' + resp.status);
       }, function (evt) {
@@ -468,7 +474,6 @@ export class DeployViewController {
     }
     return files;
   }
-
   initForm($scope, $http, $log) {
     var self = this;
     $scope.createSubmit = function() {
@@ -594,12 +599,11 @@ export class DeployViewController {
     };
 
     $scope.setApplyResult = function(applyResult) {
-      $scope.info.applyResult = {
+      $scope.applyResult = {
         result: applyResult
       };
     }
   }
-
 
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');

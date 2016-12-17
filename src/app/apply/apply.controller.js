@@ -1,6 +1,7 @@
-export class DeployController {
+export class ApplyController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
     'ngInject';
+
 
     this.awesomeThings = [];
     this.classAnimation = '';
@@ -21,7 +22,7 @@ export class DeployController {
         bar_id: 2313,
         legal: '王晓蓉',
         cellphone: '186 6801 0202',
-        status: '审核未通过'
+        status: '待部署'
       },
       {
         ch: false,
@@ -31,7 +32,7 @@ export class DeployController {
         bar_id: 3019,
         legal: '朱一峰',
         cellphone: '186 6801 0202',
-        status: '待审核'
+        status: '已部署'
       },
       {
         ch: false,
@@ -41,21 +42,25 @@ export class DeployController {
         bar_id: 3088,
         legal: '顾晨',
         cellphone: '137 3804 7339',
-        status: '审核未通过'
+        status: '启用'
+      },
+      {
+        ch: false,
+        id: 1,
+        idx: 1,
+        bar_name: '云南昆明阿达音商贸有限公司第一分公司',
+        bar_id: 3166,
+        legal: '未知',
+        cellphone: '137 3804 7339',
+        status: '停用'
       }
     ];
 
     $scope.chAll = false;
 
     $scope.checkAll = function () {
-      if($scope.chAll) {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = true;
-        }
-      } else {
-        for(var j in $scope.rows) {
-          $scope.rows[j].ch = false;
-        }
+      for(var i in $scope.rows) {
+        $scope.rows[i].ch = $scope.chAll;
       }
     };
 
@@ -73,14 +78,13 @@ export class DeployController {
       }
     };
 
-
-    $scope.godeployview = function(type, id) {
+    $scope.goapplyview = function(type, id) {
       if(type === 'delete') {
         if(id) {
           alert('删除成功');
         }
       } else {
-        $state.go('deployview', {
+        $state.go('applyview', {
           type: type,
           id: id,
           redirect_url: encodeURIComponent(location.href)
@@ -89,7 +93,6 @@ export class DeployController {
     };
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-
 
   }
 
@@ -104,8 +107,7 @@ export class DeployController {
     //   this.breads = sidebarGroup.getGroupItems(data[1].items[0]);
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[0]);
-    console.log(this.breads);
+    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[1]);
   }
 
   isLeafItem(item) {
@@ -123,25 +125,24 @@ export class DeployController {
   getCities($scope, $log, city) {
     angular.element('.input-select').selectize();
     city.getCities(city.provinceFilter).then((data)=> {
-      console.log(data);
       data.c.unshift({
-        n: '全部',
-        i: '100000'
-      });
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: [data.c[0].i] || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-          }
-        });
+      n: '全部',
+      i: '100000'
+    });
+    angular.element('.select-group-province').each(function() {
+      angular.element(this).selectizeCity({
+        data: data,
+        names: ['province'],
+        items: [data.c[0].i] || [],
+        onChange: function($self) {
+          var selectedObject = $self.selectedObject();
+          var selectedLabel = $self.selectedLabel();
+          var selectedValue= $self.selectedValue();
+          $log.log(selectedObject, selectedLabel, selectedValue);
+        }
       });
     });
+  });
   }
 
   getCityString(cities, separator) {
