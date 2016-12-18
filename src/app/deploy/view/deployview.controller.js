@@ -220,6 +220,14 @@ export class DeployViewController {
     this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
 
+    $scope.goproxyview = function(type, id) {
+      $state.go('proxyview', {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
+    };
+
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
 
   }
@@ -249,19 +257,19 @@ export class DeployViewController {
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
     if($scope.type === 'create')
       this.breads.push({
-        title: '新增'
+        title: '新增代理商'
       });
     else if($scope.type === 'view')
       this.breads.push({
-        title: '查看'
+        title: '查看代理商'
       });
     else if($scope.type === 'edit')
       this.breads.push({
-        title: '编辑'
+        title: '编辑代理商'
       });
     else if($scope.type === 'apply')
       this.breads.push({
-        title: '审核'
+        title: '审核代理商'
       });
   }
 
@@ -356,7 +364,7 @@ export class DeployViewController {
         file.serverData = {
           name: resp.config.data.file.name
         };
-
+        file.noedit = false;
       }, function (resp) {
         $log.log('Error status: ' + resp.status);
       }, function (evt) {
@@ -596,7 +604,6 @@ export class DeployViewController {
       };
     }
   }
-
 
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');

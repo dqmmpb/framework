@@ -10,6 +10,7 @@ import { ProfitController } from './profit/profit.controller';
 import { ProfitViewController } from './profit/view/profitview.controller';
 import { DeployController } from './deploy/deploy.controller';
 import { DeployViewController } from './deploy/view/deployview.controller';
+import { ApplyController } from './apply/apply.controller';
 import { RoleController } from './role/role.controller';
 import { RoleViewController } from './role/view/roleview.controller';
 import { UserController } from './user/user.controller';
@@ -64,6 +65,7 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .controller('ProfitViewController', ProfitViewController)
   .controller('DeployController', DeployController)
   .controller('DeployViewController', DeployViewController)
+  .controller('ApplyController', ApplyController)
   .controller('RoleController', RoleController)
   .controller('RoleViewController', RoleViewController)
   .controller('UserController', UserController)

@@ -5,18 +5,18 @@
   </div>
 
   <div class="framework-main">
-    <uib-sidebar class="sidebar-full" is-collapse="deploy.isCollapse" groups="deploy.sidebarGroups"></uib-sidebar>
+    <uib-sidebar class="sidebar-full" is-collapse="apply.isCollapse" groups="apply.sidebarGroups"></uib-sidebar>
 
     <div class="framework-body">
-      <uib-breadcrumb class="breadcrumb-wrapper" breads="deploy.breads"></uib-breadcrumb>
+      <uib-breadcrumb class="breadcrumb-wrapper" breads="apply.breads"></uib-breadcrumb>
 
       <div class="tools">
         <div class="btn-group pull-right" role="group" aria-label="">
-          <a ng-click="godeployview('create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
+          <a ng-click="goapplyview('create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
         </div>
       </div>
 
-      <div class="content mt-10">
+      <div class="content">
         <nav class="navbar navbar-default navbar-search">
           <div class="container-fluid">
             <form class="navbar-form navbar-left" role="search" ng-click="search()">
@@ -83,39 +83,40 @@
                 <td>{{row.cellphone}}</td>
                 <td>{{row.status}}</td>
                 <td>
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="godeployview('view', row.id)">详情</button>
-                  <button type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']" ng-click="godeployview('apply', row.id)">审核</button>
-                  <button type="button" class="btn btn-warning btn-sm" ng-click="godeployview('edit', row.id)">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm" ng-click="godeployview('delete', row.id)">删除</button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="goapplyview('deploy', row.id)">部署</button>
+                  <button type="button" class="btn btn-primary btn-sm" ng-click="goapplyview('view', row.id)">详情</button>
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="goapplyview('delete', row.id)">启用</button>
+                  <button type="button" class="btn btn-warning btn-sm" ng-click="goapplyview('edit', row.id)">编辑</button>
+                  <button type="button" class="btn btn-danger btn-sm" ng-click="goapplyview('download', row.id)">下载二维码</button>
                 </td>
               </tr>
               </tbody>
             </table>
-          </div>
+          </div>`
           <nav class="pagination-container">
             <ul class="pagination pull-right">
               <li>
-                <a href="#" aria-label="Top">
+                <a href="javascript:void(0);" aria-label="Top">
                   <span aria-hidden="true">首页</span>
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="Previous">
+                <a href="javascript:void(0);" aria-label="Previous">
                   <span aria-hidden="true">上一页</span>
                 </a>
               </li>
-              <li class="active"><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
+              <li class="active"><a href="javascript:void(0);">1</a></li>
+              <li><a href="javascript:void(0);">2</a></li>
+              <li><a href="javascript:void(0);">3</a></li>
+              <li><a href="javascript:void(0);">4</a></li>
               <li class="disabled"><a href="#">5</a></li>
               <li>
-                <a href="#" aria-label="Next">
+                <a href="javascript:void(0);" aria-label="Next">
                   <span aria-hidden="true">下一页</span>
                 </a>
               </li>
               <li>
-                <a href="#" aria-label="End">
+                <a href="javascript:void(0);" aria-label="End">
                   <span aria-hidden="true">尾页</span>
                 </a>
               </li>
