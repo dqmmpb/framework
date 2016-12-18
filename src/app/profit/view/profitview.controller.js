@@ -133,7 +133,7 @@ export class ProfitViewController {
       profit: {
         channel: null,
         pct_charge: null,
-        pct_consume: null,
+        pct_consume: null
       }
       // 多文件解决方案
       /*,blfile2: [
@@ -266,7 +266,7 @@ export class ProfitViewController {
         profit: {
           channel: '1001',
           pct_charge: 5,
-          pct_consume: 10,
+          pct_consume: 10
         }
         // 多文件解决方案
         /*,blfile2: [
@@ -295,7 +295,6 @@ export class ProfitViewController {
     };
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-
 
   }
   activate($timeout, webDevTec) {

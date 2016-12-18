@@ -1,5 +1,5 @@
 export class ProfitController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city) {
     'ngInject';
 
 

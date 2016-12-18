@@ -1,5 +1,5 @@
 export class RoleController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, role) {
     'ngInject';
 
 
@@ -11,60 +11,7 @@ export class RoleController {
     this.apiHost = location.protocol + '//' + location.host;
     this.getSidebarGroups($scope, $state, sidebarGroup);
 
-    this.getCities($scope, $log, city);
-
-    $scope.rows = [
-      {
-        ch: false,
-        id: 1,
-        idx: 1,
-        name: '超级管理员',
-        desc: '网吧钉钉管理中心最高权限'
-      },
-      {
-        ch: false,
-        id: 2,
-        idx: 2,
-        name: '代理商主管理员',
-        desc: '代理商管理主管理员，可设置代理商以下层级使用人员的角色及权限',
-      },
-      {
-        ch: false,
-        id: 3,
-        idx: 3,
-        name: '代理商业务员',
-        desc: '代理商管理主管理员，可设置代理商以下层级使用人员的角色及权限',
-      },
-      {
-        ch: false,
-        id: 4,
-        idx: 4,
-        name: '网吧业主',
-        desc: '对应网吧管理主管理员，可设置对应网吧以下使用人员的权限',
-      }
-    ];
-
-    $scope.chAll = false;
-
-    $scope.checkAll = function () {
-      for(var i in $scope.rows) {
-        $scope.rows[i].ch = $scope.chAll;
-      }
-    };
-
-    $scope.check = function(item) {
-      if(!item)
-        $scope.chAll = false;
-      else {
-        for(var i in this.rows) {
-          if(!$scope.rows[i].ch) {
-            $scope.chAll = false;
-            return;
-          }
-        }
-        $scope.chAll = true;
-      }
-    };
+    this.getRoles($scope, $log, role);
 
     $scope.goroleview = function(type, id) {
       if(type === 'delete') {
@@ -110,36 +57,44 @@ export class RoleController {
     }
   }
 
-  getCities($scope, $log, city) {
-    angular.element('.input-select').selectize();
-    city.getCities(city.provinceFilter).then((data)=> {
-      data.c.unshift({
-        n: '全部',
-        i: '100000'
-      });
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: [data.c[0].i] || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-          }
-        });
-      });
-    });
-  }
+  getRoles($scope, $log, role) {
 
-  getCityString(cities, separator) {
-    if(cities) {
-      if(separator)
-        return cities.join(separator);
-      else
-        return cities.join(' ');
-    }
+    role.getRoles().then((data)=> {
+      $scope.rows = [];
+
+      for(var i = 0; i < data.length; i++) {
+        $scope.rows[i] = {
+          ch: false,
+          id: data[i].id,
+          idx: data[i].idx,
+          name: data[i].name,
+          desc: data[i].desc
+        }
+      }
+
+      $scope.chAll = false;
+
+      $scope.checkAll = function () {
+        for(var i in $scope.rows) {
+          $scope.rows[i].ch = $scope.chAll;
+        }
+      };
+
+      $scope.check = function(item) {
+        if(!item)
+          $scope.chAll = false;
+        else {
+          for(var i in this.rows) {
+            if(!$scope.rows[i].ch) {
+              $scope.chAll = false;
+              return;
+            }
+          }
+          $scope.chAll = true;
+        }
+      };
+
+    });
   }
 
   showToastr() {

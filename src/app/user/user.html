@@ -43,6 +43,7 @@
                 </th>
                 <th width="5%">序号</th>
                 <th width="10%">用户姓名</th>
+                <th width="10%">钉钉账号</th>
                 <th width="10%">用户角色</th>
                 <th>登录账号/手机号</th>
                 <th width="10%">操作</th>
@@ -58,10 +59,12 @@
                 </td>
                 <td>{{row.idx}}</td>
                 <td>{{row.name}}</td>
+                <td>{{row.dd}}</td>
                 <td>{{row.role}}</td>
                 <td>{{row.cellphone}}</td>
                 <td>
                   <button type="button" class="btn btn-primary btn-sm" ng-click="gouserview('view', row.id)">详情</button>
+                  <button type="button" class="btn btn-success btn-sm" ng-click="gouserview('reset', row.id)">重置密码</button>
                   <button type="button" class="btn btn-warning btn-sm" ng-click="gouserview('edit', row.id)">编辑</button>
                   <button type="button" class="btn btn-danger btn-sm" ng-click="gouserview('delete', row.id)">删除</button>
                 </td>

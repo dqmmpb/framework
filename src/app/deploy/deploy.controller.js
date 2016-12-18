@@ -1,5 +1,5 @@
 export class DeployController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city) {
     'ngInject';
 
     this.awesomeThings = [];
@@ -105,7 +105,6 @@ export class DeployController {
     // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
-    console.log(this.breads);
   }
 
   isLeafItem(item) {
@@ -123,7 +122,6 @@ export class DeployController {
   getCities($scope, $log, city) {
     angular.element('.input-select').selectize();
     city.getCities(city.provinceFilter).then((data)=> {
-      console.log(data);
       data.c.unshift({
         n: '全部',
         i: '100000'

@@ -221,7 +221,6 @@ export class DeployViewController {
     this.initForm($scope, $http, $log);
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-    console.log($scope.redirect_url);
 
   }
   activate($timeout, webDevTec) {
@@ -313,8 +312,6 @@ export class DeployViewController {
         });
       });
     });
-
-    console.log($scope.info.business_area_label);
   }
 
   getCityString(cities, separator) {

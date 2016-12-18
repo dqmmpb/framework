@@ -1,4 +1,4 @@
-export class CityService {
+export class UserService {
   constructor ($log, $http) {
     'ngInject';
 
@@ -7,10 +7,10 @@ export class CityService {
     this.apiHost = location.protocol + '//' + location.host;
   }
 
-  getCities(filter) {
+  getUsers(filter) {
     var args = Array.prototype.slice.call(arguments, 1);
     var _self = this;
-    return this.$http.get(this.apiHost + '/app/components/city/city.min.json')
+    return this.$http.get(this.apiHost + '/app/components/user/user.json')
       .then((response) => {
         if(angular.isFunction(filter))
           return filter.apply(_self, Array.prototype.concat(response, args));
@@ -23,19 +23,11 @@ export class CityService {
       });
   }
 
-  provinceFilter(response) {
+  idFilter(response, id) {
     var data = response.data;
-    var province = {};
-    province.i = data.i;
-    province.n = data.n;
-    province.c = [];
-    for(var p in data.c) {
-      var prov = {
-        i: data.c[p].i,
-        n: data.c[p].n
-      };
-      province.c.push(prov);
+    for(var i = 0; i < data.length; i++) {
+      if(data[i].id === Number(id))
+        return data[i];
     }
-    return province;
   }
 }

@@ -1,0 +1,27 @@
+<tbody>
+  <tr ng-repeat='auth in authes' ng-class="{true: 'rowspan'}[!!auth.mM.rowspan || !!auth.sM.rowspan]">
+    <td ng-if="auth.mMFirst" rowspan={{auth.mM.rowspan}} class="text-center td-w45px">
+      <label class="label-checkbox">
+        <input type="checkbox" name="checkbox" ng-model="auth.mM.ch" ng-click="checkMM(auth.mM)" ng-disabled="type === 'view'">
+        <i class="icon-checkbox"></i>
+        <div class="text-checkbox">{{auth.mM.name}}</div>
+      </label>
+    </td>
+    <td ng-if="auth.sMFirst" rowspan={{auth.sM.rowspan}} class="text-center td-w45px">
+      <label class="label-checkbox">
+        <input type="checkbox" name="checkbox" ng-model="auth.sM.ch" ng-click="checkSM(auth.mM, auth.sM)" ng-disabled="type === 'view'">
+        <i class="icon-checkbox"></i>
+        <div class="text-checkbox">{{auth.sM.name}}</div>
+      </label>
+    </td>
+    <td>
+      <label class="label-checkbox">
+        <input type="checkbox" name="checkbox" ng-model="auth.aT.ch" ng-click="checkAT(auth.mM, auth.sM, auth.aT)" ng-disabled="type === 'view'">
+        <i class="icon-checkbox"></i>
+        <div class="text-checkbox">{{auth.aT.name}}</div>
+      </label>
+    </td>
+    <td>{{auth.aT.desc}}</td>
+  </tr>
+</tbody>
+

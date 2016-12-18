@@ -1,5 +1,5 @@
 export class RoleViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, role, auth) {
     'ngInject';
 
 
@@ -13,8 +13,6 @@ export class RoleViewController {
     this.isCollapse = false;
     this.apiHost = location.protocol + '//' + location.host;
     this.getSidebarGroups($scope, $state, sidebarGroup);
-    this.activate($timeout, webDevTec);
-
 
     $scope.info = {
       role_name: null,
@@ -22,18 +20,12 @@ export class RoleViewController {
       role_auth: null
     };
 
-    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-      $scope.info = {
-        role_name: '超级管理员',
-        role_desc: '网吧钉钉管理中心最高权限',
-        role_auth: [
+    this.getAuthes($scope, $log, auth);
 
-        ]
-      };
+    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
+      this.getRole($scope, $log, role, $scope.id, auth);
     }
 
-    this.getCities($scope, $log, city);
-    this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
 
     $scope.goroleview = function(type, id) {
@@ -47,17 +39,6 @@ export class RoleViewController {
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
 
 
-  }
-  activate($timeout, webDevTec) {
-    this.getWebDevTec(webDevTec);
-  }
-
-  getWebDevTec(webDevTec) {
-    this.awesomeThings = webDevTec.getTec();
-
-    angular.forEach(this.awesomeThings, (awesomeThing) => {
-      awesomeThing.rank = Math.random();
-    });
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
@@ -99,193 +80,28 @@ export class RoleViewController {
     }
   }
 
-  getCities($scope, $log, city) {
-    city.getCities().then((data)=> {
-      angular.element('.select-group-all').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          items: $scope.info.company_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.company_area = selectedValue;
-            $scope.info.company_area_label = selectedLabel;
-          }
-        });
-      });
-    });
-    city.getCities(city.provinceFilter).then((data)=> {
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: $scope.info.business_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.business_area = selectedValue;
-            $scope.info.business_area_label = selectedLabel;
-          }
-        });
-      });
-    });
-  }
-
-  getCityString(cities, separator) {
-    if(cities) {
-      if(separator)
-        return cities.join(separator);
-      else
-        return cities.join(' ');
-    }
-  }
-
-  // 根据Key 查找$scope中的变量
-  getKeyValue($scope, key) {
-    var obj = $scope;
-
-    if(key) {
-      var keyPath = key.split('.');
-      for(var tempKey in keyPath) {
-        if(obj[keyPath[tempKey]])
-          obj = obj[keyPath[tempKey]];
-        else
-          return null;
-      }
-      if(obj)
-        return obj;
-      else
-        return null;
-    } else
-      return obj;
-  }
-
-  upload($scope, $log, Upload) {
+  getAuthes($scope, $log, auth) {
     var self = this;
-    // upload on file select or drop
-    $scope.upload = function (file) {
-      Upload.upload({
-        url: self.apiHost + '/app/components/upload/url.json',
-        data: {file: file}
-      }).then(function (resp) {
-        $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
-        $log.log(self.apiHost + '/assets/images/upload/' + resp.config.data.file.name);
-        file.serverData = {
-          name: resp.config.data.file.name
+    auth.getRestructureAuthes().then((data)=> {
+      self.authes = data;
+    });
+  }
+
+  getRole($scope, $log, role, id) {
+    role.getRoles(role.idFilter, id).then((data)=> {
+      if(data)
+        $scope.info = {
+          role_id: data.id,
+          role_name: data.name,
+          role_desc: data.desc,
+          role_auth: data.auth
         };
-        file.noedit = false;
-      }, function (resp) {
-        $log.log('Error status: ' + resp.status);
-      }, function (evt) {
-        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        $log.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-      });
-    };
 
-    $scope.uploadFiles = function (files) {
-      if (files && files.length) {
-        for (var i = 0; i < files.length; i++) {
-          $scope.upload(files[i]);
-        }
-      }
-    };
-
-    // 统一使用数组方式存储对象
-    $scope.removeFile = function (key, file) {
-      if(file) {
-        if(angular.isObject(file)) {
-          var value = self.getKeyValue($scope, key);
-          // 移除对象
-          if(value) {
-            for(var o in value) {
-              if(angular.isArray(value[o].file)) {
-                var idx = value[o].file.indexOf(file);
-                if(idx !== -1) {
-                  value[o].file.splice(idx, 1);
-                }
-              } else if(angular.isObject(value[o].file)) {
-                if(value[o].file == file)
-                  value[o].file = null;
-              }
-            }
-          }
-        }
-      }
-    };
-
-    $scope.viewFile = function ($event, key, file) {
-      var obj = $event.currentTarget;
-      if(file) {
-        if(angular.isObject(file)) {
-          var value = self.getKeyValue($scope, key);
-          // 查找元素
-          if(value) {
-            for(var o in value) {
-              if(angular.isArray(value[o].file)) {
-                var idx = value[o].file.indexOf(file);
-                if(idx !== -1) {
-                  // To do
-                  if(!file.viewer) {
-                    file.viewer = angular.element(obj).viewer({
-                      navbar: false,
-                      title: false,
-                      transition: false,
-                      fullscreen: false,
-                      scalable: false,
-                      slidable: false,
-                      playable: false,
-                      onetooneable: false,
-                      url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
-                      }
-                    });
-                    angular.element(obj).viewer('show');
-                  }
-                }
-              } else if(angular.isObject(value[o].file)) {
-                if(value[o].file == file) {
-                  // To do
-                  if(!file.viewer) {
-                    file.viewer = angular.element(obj).viewer({
-                      navbar: false,
-                      title: false,
-                      transition: false,
-                      fullscreen: false,
-                      scalable: false,
-                      slidable: false,
-                      playable: false,
-                      onetooneable: false,
-                      url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
-                      }
-                    });
-                    angular.element(obj).viewer('show');
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    };
+      //auth.setRoleAuthes($scope.info.role_auth);
+      //console.log($scope.info.role_auth);
+    });
   }
 
-  // 从存储的文件字段中读取所有文件，并拼接为数组
-  getFiles(fileStructure) {
-    var files = [];
-    for(var obj in fileStructure) {
-      if(angular.isArray(fileStructure[obj].file)) {
-        files = files.concat(fileStructure[obj].file);
-      } else if(angular.isObject(fileStructure[obj].file)) {
-        files.push(fileStructure[obj].file);
-      }
-    }
-    return files;
-  }
   initForm($scope, $http, $log) {
     var self = this;
     $scope.createSubmit = function() {

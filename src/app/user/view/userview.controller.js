@@ -1,5 +1,5 @@
 export class UserViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, role, user) {
     'ngInject';
 
 
@@ -13,27 +13,21 @@ export class UserViewController {
     this.isCollapse = false;
     this.apiHost = location.protocol + '//' + location.host;
     this.getSidebarGroups($scope, $state, sidebarGroup);
-    this.activate($timeout, webDevTec);
-
 
     $scope.info = {
+      user_id: null,
+      user_idx: null,
       user_name: null,
-      user_desc: null,
-      user_auth: null
+      user_dd: null,
+      user_role: null,
+      user_cellphone: null
     };
 
-    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-      $scope.info = {
-        user_name: '超级管理员',
-        user_desc: '网吧钉钉管理中心最高权限',
-        user_auth: [
-
-        ]
-      };
+    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
+      this.getUser($scope, $log, user, $scope.id);
     }
 
-    this.getCities($scope, $log, city);
-    this.upload($scope, $log, Upload);
+    this.getRoles($scope, $log, role);
     this.initForm($scope, $http, $log);
 
     $scope.gouserview = function(type, id) {
@@ -46,18 +40,6 @@ export class UserViewController {
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
 
-
-  }
-  activate($timeout, webDevTec) {
-    this.getWebDevTec(webDevTec);
-  }
-
-  getWebDevTec(webDevTec) {
-    this.awesomeThings = webDevTec.getTec();
-
-    angular.forEach(this.awesomeThings, (awesomeThing) => {
-      awesomeThing.rank = Math.random();
-    });
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
@@ -84,6 +66,10 @@ export class UserViewController {
       this.breads.push({
         title: '编辑用户'
       });
+    else if($scope.type === 'reset')
+      this.breads.push({
+        title: '重置密码'
+      });
   }
 
   isLeafItem(item) {
@@ -99,193 +85,33 @@ export class UserViewController {
     }
   }
 
-  getCities($scope, $log, city) {
-    city.getCities().then((data)=> {
-      angular.element('.select-group-all').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          items: $scope.info.company_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.company_area = selectedValue;
-            $scope.info.company_area_label = selectedLabel;
-          }
-        });
-      });
-    });
-    city.getCities(city.provinceFilter).then((data)=> {
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: $scope.info.business_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
-            $scope.info.business_area = selectedValue;
-            $scope.info.business_area_label = selectedLabel;
-          }
-        });
-      });
-    });
-  }
-
-  getCityString(cities, separator) {
-    if(cities) {
-      if(separator)
-        return cities.join(separator);
-      else
-        return cities.join(' ');
-    }
-  }
-
-  // 根据Key 查找$scope中的变量
-  getKeyValue($scope, key) {
-    var obj = $scope;
-
-    if(key) {
-      var keyPath = key.split('.');
-      for(var tempKey in keyPath) {
-        if(obj[keyPath[tempKey]])
-          obj = obj[keyPath[tempKey]];
-        else
-          return null;
-      }
-      if(obj)
-        return obj;
-      else
-        return null;
-    } else
-      return obj;
-  }
-
-  upload($scope, $log, Upload) {
-    var self = this;
-    // upload on file select or drop
-    $scope.upload = function (file) {
-      Upload.upload({
-        url: self.apiHost + '/app/components/upload/url.json',
-        data: {file: file}
-      }).then(function (resp) {
-        $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
-        $log.log(self.apiHost + '/assets/images/upload/' + resp.config.data.file.name);
-        file.serverData = {
-          name: resp.config.data.file.name
+  getUser($scope, $log, user, id) {
+    user.getUsers(user.idFilter, id).then((data)=> {
+      if(data)
+        $scope.info = {
+          user_id: data.id,
+          user_idx: data.idx,
+          user_name: data.name,
+          user_dd: data.dd,
+          user_role: data.role,
+          user_cellphone: data.cellphone
         };
-        file.noedit = false;
-      }, function (resp) {
-        $log.log('Error status: ' + resp.status);
-      }, function (evt) {
-        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        $log.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+    });
+  }
+
+  getRoles($scope, $log, role) {
+
+    role.getRoles().then((data)=> {
+      angular.element('.input-select').each(function() {
+        angular.element(this).selectize({
+          options: data,
+          labelField: 'name',
+          valueField: 'name'
+        });
       });
-    };
-
-    $scope.uploadFiles = function (files) {
-      if (files && files.length) {
-        for (var i = 0; i < files.length; i++) {
-          $scope.upload(files[i]);
-        }
-      }
-    };
-
-    // 统一使用数组方式存储对象
-    $scope.removeFile = function (key, file) {
-      if(file) {
-        if(angular.isObject(file)) {
-          var value = self.getKeyValue($scope, key);
-          // 移除对象
-          if(value) {
-            for(var o in value) {
-              if(angular.isArray(value[o].file)) {
-                var idx = value[o].file.indexOf(file);
-                if(idx !== -1) {
-                  value[o].file.splice(idx, 1);
-                }
-              } else if(angular.isObject(value[o].file)) {
-                if(value[o].file == file)
-                  value[o].file = null;
-              }
-            }
-          }
-        }
-      }
-    };
-
-    $scope.viewFile = function ($event, key, file) {
-      var obj = $event.currentTarget;
-      if(file) {
-        if(angular.isObject(file)) {
-          var value = self.getKeyValue($scope, key);
-          // 查找元素
-          if(value) {
-            for(var o in value) {
-              if(angular.isArray(value[o].file)) {
-                var idx = value[o].file.indexOf(file);
-                if(idx !== -1) {
-                  // To do
-                  if(!file.viewer) {
-                    file.viewer = angular.element(obj).viewer({
-                      navbar: false,
-                      title: false,
-                      transition: false,
-                      fullscreen: false,
-                      scalable: false,
-                      slidable: false,
-                      playable: false,
-                      onetooneable: false,
-                      url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
-                      }
-                    });
-                    angular.element(obj).viewer('show');
-                  }
-                }
-              } else if(angular.isObject(value[o].file)) {
-                if(value[o].file == file) {
-                  // To do
-                  if(!file.viewer) {
-                    file.viewer = angular.element(obj).viewer({
-                      navbar: false,
-                      title: false,
-                      transition: false,
-                      fullscreen: false,
-                      scalable: false,
-                      slidable: false,
-                      playable: false,
-                      onetooneable: false,
-                      url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
-                      }
-                    });
-                    angular.element(obj).viewer('show');
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    };
+    });
   }
 
-  // 从存储的文件字段中读取所有文件，并拼接为数组
-  getFiles(fileStructure) {
-    var files = [];
-    for(var obj in fileStructure) {
-      if(angular.isArray(fileStructure[obj].file)) {
-        files = files.concat(fileStructure[obj].file);
-      } else if(angular.isObject(fileStructure[obj].file)) {
-        files.push(fileStructure[obj].file);
-      }
-    }
-    return files;
-  }
   initForm($scope, $http, $log) {
     var self = this;
     $scope.createSubmit = function() {
@@ -329,6 +155,26 @@ export class UserViewController {
 
     $scope.deleteSubmit = function(id) {
       $log.log('delete: ' + id);
+      // 处理提交前的表单数据
+      var params = {
+        id: id,
+        user_name: $scope.info.user_name
+      };
+
+      $http({
+        method: 'POST',
+        url: self.apiHost + '/app/components/form/submit.json',
+        data: params
+      }).then((response) => {
+        $log.log(response);
+        return response.data;
+      }).catch((error) => {
+        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+      });
+    };
+
+    $scope.resetPasswordSubmit = function(id) {
+      $log.log('reset password: ' + id);
       // 处理提交前的表单数据
       var params = {
         id: id,

@@ -41,8 +41,27 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
                     <div class="col-sm-10">
-                      <div class="form-control-select">
-                        <div class="select-group select-group-area select-group-province"></div>
+                      <div class="table-container">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-bordered table-vertical-middle table-nowrap table-auth">
+                            <thead>
+                            <tr>
+                              <!--<th class="text-center td-w45px">
+                                <label class="label-checkbox">
+                                  <input type="checkbox" name="checkbox" ng-model="chAll" ng-change="checkAll()">
+                                  <i class="icon-checkbox"></i>
+                                  <div class="text-checkbox">系统</div>
+                                </label>
+                              </th>-->
+                              <th width="5">模块</th>
+                              <th width="5">子模块</th>
+                              <th>权限</th>
+                              <th>权限描述</th>
+                            </tr>
+                            </thead>
+                            <tbody uib-auth authes="roleview.authes" type="type"></tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -100,7 +119,28 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.role_auth || '未填写'}}</p>
+                      <div class="table-container">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-bordered table-vertical-middle table-nowrap table-auth">
+                            <thead>
+                            <tr>
+                              <!--<th class="text-center td-w45px">
+                                <label class="label-checkbox">
+                                  <input type="checkbox" name="checkbox" ng-model="chAll" ng-change="checkAll()">
+                                  <i class="icon-checkbox"></i>
+                                  <div class="text-checkbox">系统</div>
+                                </label>
+                              </th>-->
+                              <th width="5">模块</th>
+                              <th width="5">子模块</th>
+                              <th>权限</th>
+                              <th>权限描述</th>
+                            </tr>
+                            </thead>
+                            <tbody uib-auth authes="roleview.authes" type="type" role-authes="info.role_auth"></tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -141,8 +181,27 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>权限设置:</label>
                     <div class="col-sm-10">
-                      <div class="form-control-select">
-                        <div class="select-group select-group-area select-group-province"></div>
+                      <div class="table-container">
+                        <div class="table-responsive">
+                          <table class="table table-hover table-bordered table-vertical-middle table-nowrap table-auth">
+                            <thead>
+                            <tr>
+                              <!--<th class="text-center td-w45px">
+                                <label class="label-checkbox">
+                                  <input type="checkbox" name="checkbox" ng-model="chAll" ng-change="checkAll()">
+                                  <i class="icon-checkbox"></i>
+                                  <div class="text-checkbox">系统</div>
+                                </label>
+                              </th>-->
+                              <th width="5">模块</th>
+                              <th width="5">子模块</th>
+                              <th>权限</th>
+                              <th>权限描述</th>
+                            </tr>
+                            </thead>
+                            <tbody uib-auth authes="roleview.authes" type="type" role-authes="info.role_auth"></tbody>
+                          </table>
+                        </div>
                       </div>
                     </div>
                   </div>
