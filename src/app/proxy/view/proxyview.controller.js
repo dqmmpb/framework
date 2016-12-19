@@ -13,7 +13,6 @@ export class ProxyViewController {
     this.isCollapse = false;
     this.apiHost = location.protocol + '//' + location.host;
     this.getSidebarGroups($scope, $state, sidebarGroup);
-    this.activate($timeout, webDevTec);
 
 
     $scope.info = {
@@ -23,9 +22,33 @@ export class ProxyViewController {
       company_address: null,
       cellphone: null,
       legal_representative: null,
+      // 法人代表身份证照片
+      pcfile: [
+        {
+          file: null,
+          caption: '正面'
+        },
+        {
+          file: null,
+          caption: '反面'
+        }
+      ],
+      manage_not_same: true,
+      real_manange_cellphone: null,
+      real_manage_name: null,
+      // 实际经营者
+      rpcfile: [
+        {
+          file: null,
+          caption: '正面'
+        },
+        {
+          file: null,
+          caption: '反面'
+        }
+      ],
       business_area: null,
       business_area_label: null,
-      manage_not_same: true,
       // 营业执照正本扫描件
       blfile: [
         {
@@ -51,28 +74,6 @@ export class ProxyViewController {
           caption: '页4'
         }
       ],
-      // 法人代表身份证照片
-      pcfile: [
-        {
-          file: null,
-          caption: '正面'
-        },
-        {
-          file: null,
-          caption: '反面'
-        }
-      ],
-      // 实际经营者
-      rpcfile: [
-        {
-          file: null,
-          caption: '正面'
-        },
-        {
-          file: null,
-          caption: '反面'
-        }
-      ],
       applyResult: null
       // 多文件解决方案
       /*,blfile2: [
@@ -95,9 +96,49 @@ export class ProxyViewController {
         company_address: '黄河道9527号3号楼5单元888',
         cellphone: '13819493700',
         legal_representative: '佟彩霞',
+        // 法人代表身份证照片
+        pcfile: [
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '正面'
+          },
+          {
+            file: {
+              name: 'assets/images/upload/ABC.jpg',
+              size: 278546,
+              type: "image/jpeg",
+              serverData: {
+                name: 'ABC.jpg'
+              },
+              noedit: true
+            },
+            caption: '反面'
+          }
+        ],
+        manage_not_same: true,
+        real_manange_cellphone: '19255458833',
+        real_manage_name: '康洪领',
+        // 实际控制人
+        rpcfile: [
+          {
+            file: null,
+            caption: '正面'
+          },
+          {
+            file: null,
+            caption: '反面'
+          }
+        ],
         business_area: ["120000"],
         business_area_label: ["天津市"],
-        manage_not_same: true,
         // 营业执照正本扫描件
         blfile: [
           {
@@ -163,44 +204,6 @@ export class ProxyViewController {
             caption: '页4'
           }
         ],
-        // 法人代表身份证照片
-        pcfile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '正面'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '反面'
-          }
-        ],
-        // 实际经营者
-        rpcfile: [
-          {
-            file: null,
-            caption: '正面'
-          },
-          {
-            file: null,
-            caption: '反面'
-          }
-        ],
         applyResult: null
         // 多文件解决方案
         /*,blfile2: [
@@ -216,9 +219,26 @@ export class ProxyViewController {
       };
     }
 
+    $scope.validator = {};
+    $scope.errorMessages = {};
+
+    $scope.errorMessages.company_area_string = [
+      {
+        type: "required",
+        text: '请选择省市区(*必填)'
+      }
+    ];
+    $scope.errorMessages.business_area_string = [
+      {
+        type: "required",
+        text: '请选择省市区(*必填)'
+      }
+    ];
+
     this.getCities($scope, $log, city);
     this.upload($scope, $log, Upload);
     this.initForm($scope, $http, $log);
+    this.initWatch($scope);
 
     $scope.goproxyview = function(type, id) {
       $state.go('proxyview', {
@@ -230,18 +250,81 @@ export class ProxyViewController {
 
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
 
-
-  }
-  activate($timeout, webDevTec) {
-    this.getWebDevTec(webDevTec);
   }
 
-  getWebDevTec(webDevTec) {
-    this.awesomeThings = webDevTec.getTec();
+  validator(files) {
+    for(var i in files) {
+      if(!files[i].file) {
+        return files[i];
+      }
+    }
+  }
+  initWatch($scope) {
+    var self = this;
+    var i = 0,  il = 0;
+    for(i = 0, il = $scope.info.pcfile.length; i < il; i++) {
+      $scope.$watch('info.pcfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.pcfile);
+        $scope.validator.pcfile = !vfile ? true : undefined;
+        $scope.errorMessages.pcfile = [
+          {
+            type: "required",
+            text: '请上传身份证照片(*必填)'
+          }
+        ]
+      });
+    }
 
-    angular.forEach(this.awesomeThings, (awesomeThing) => {
-      awesomeThing.rank = Math.random();
-    });
+    for(i = 0, il = $scope.info.rpcfile.length; i < il; i++) {
+      $scope.$watch('info.rpcfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.rpcfile);
+        $scope.validator.rpcfile = !vfile ? true : undefined;
+        $scope.errorMessages.rpcfile = [
+          {
+            type: "required",
+            text: '请上传身份证照片(*必填)'
+          }
+        ]
+      });
+    }
+
+    for(i = 0, il = $scope.info.blfile.length; i < il; i++) {
+      $scope.$watch('info.blfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.blfile);
+        $scope.validator.blfile = !vfile ? true : undefined;
+        $scope.errorMessages.blfile = [
+          {
+            type: "required",
+            text: '请上传营业执照正本照片/扫描件(*必填)'
+          }
+        ]
+      });
+    }
+
+    for(i = 0, il = $scope.info.affile.length; i < il; i++) {
+      $scope.$watch('info.affile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.affile);
+        $scope.validator.affile = !vfile ? true : undefined;
+        $scope.errorMessages.affile = [
+          {
+            type: "required",
+            text: '请上传网吧钉钉代理协议照片/扫描件(*必填)'
+          }
+        ]
+      });
+    }
+
+    // $scope.$watch('info.company_area', function(newValue, oldValue) {
+    //   console.log(newValue);
+    //   $scope.validator.company_area_string = newValue ? true : undefined;
+    //   $scope.errorMessages.company_area_string = [
+    //     {
+    //       type: "required",
+    //       text: '请选择省市区(*必填)'
+    //     }
+    //   ]
+    // });
+
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
@@ -296,10 +379,15 @@ export class ProxyViewController {
           onChange: function($self) {
             var selectedObject = $self.selectedObject();
             var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
+            var selectedValue = $self.selectedValue();
             $scope.info.company_area = selectedValue;
             $scope.info.company_area_label = selectedLabel;
+            $scope.validator.company_area_string = $scope.info.company_area.length === 3 ? true : undefined;
+            $log.log(selectedObject, selectedLabel, selectedValue);
+
+            // 获取焦点再失去焦点 否则model变更有问题 比较诡异
+            angular.element('input[name="validator_company_area"]').focus();
+            angular.element('input[name="validator_company_area"]').blur();
           }
         });
       });
@@ -313,10 +401,15 @@ export class ProxyViewController {
           onChange: function($self) {
             var selectedObject = $self.selectedObject();
             var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
+            var selectedValue = $self.selectedValue();
             $scope.info.business_area = selectedValue;
             $scope.info.business_area_label = selectedLabel;
+            $scope.validator.business_area_string = $scope.info.business_area.length === 1 ? true : undefined;
+            $log.log(selectedObject, selectedLabel, selectedValue);
+
+            // 获取焦点再失去焦点 否则model变更有问题 比较诡异
+            angular.element('input[name="validator_business_area"]').focus();
+            angular.element('input[name="validator_business_area"]').blur();
           }
         });
       });
@@ -476,63 +569,69 @@ export class ProxyViewController {
   }
   initForm($scope, $http, $log) {
     var self = this;
-    $scope.createSubmit = function() {
-      $log.log('create');
-      // 处理提交前的表单数据
-      var params = {
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-/*        blfile2: self.getFiles($scope.info.blfile2),
-        affile2: self.getFiles($scope.info.affile2),*/
-      };
+    $scope.createSubmit = function(isValid) {
+      $log.log('create. isValid: ' + isValid);
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
-      }).then((response) => {
-        $log.log(response);
-        return response.data;
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-      });
+      if(isValid) {
+        // 处理提交前的表单数据
+        var params = {
+          company_name: $scope.info.company_name,
+          company_area: $scope.info.company_area,
+          company_address: $scope.info.company_address,
+          legal_representative: $scope.info.legal_representative,
+          cellphone: $scope.info.cellphone,
+          business_area: $scope.info.business_area,
+          blfile: self.getFiles($scope.info.blfile),
+          affile: self.getFiles($scope.info.affile),
+          pcfile: self.getFiles($scope.info.pcfile)
+          /*        blfile2: self.getFiles($scope.info.blfile2),
+           affile2: self.getFiles($scope.info.affile2),*/
+        };
+
+        $http({
+          method: 'POST',
+          url: self.apiHost + '/app/components/form/submit.json',
+          data: params
+        }).then((response) => {
+          $log.log(response);
+          return response.data;
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+        });
+      }
     };
 
-    $scope.editSubmit = function(id) {
-      $log.log('edit： ' + id);
-      // 处理提交前的表单数据
-      var params = {
-        id: id,
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-        /*        blfile2: self.getFiles($scope.info.blfile2),
-         affile2: self.getFiles($scope.info.affile2),*/
-      };
+    $scope.editSubmit = function(id, isValid) {
+      $log.log('edit： ' + id + '. isValid' + isValid);
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
-      }).then((response) => {
-        $log.log(response);
-        return response.data;
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-      });
+      if(isValid) {
+        // 处理提交前的表单数据
+        var params = {
+          id: id,
+          company_name: $scope.info.company_name,
+          company_area: $scope.info.company_area,
+          company_address: $scope.info.company_address,
+          legal_representative: $scope.info.legal_representative,
+          cellphone: $scope.info.cellphone,
+          business_area: $scope.info.business_area,
+          blfile: self.getFiles($scope.info.blfile),
+          affile: self.getFiles($scope.info.affile),
+          pcfile: self.getFiles($scope.info.pcfile)
+          /*        blfile2: self.getFiles($scope.info.blfile2),
+           affile2: self.getFiles($scope.info.affile2),*/
+        };
+
+        $http({
+          method: 'POST',
+          url: self.apiHost + '/app/components/form/submit.json',
+          data: params
+        }).then((response) => {
+          $log.log(response);
+          return response.data;
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+        });
+      }
     };
 
     $scope.applySubmit = function(id) {

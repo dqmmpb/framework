@@ -24,11 +24,14 @@
                 <div class="panel-title">新增代理商</div>
               </div>
               <div class="panel-body">
-                <form class="form form-horizontal" ng-submit="createSubmit()">
+                <form name="form" class="form form-horizontal" ng-submit="createSubmit(form.$valid)" novalidate>
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.company_name" class="form-control" placeholder="公司名称">
+                      <input type="text" ng-model="info.company_name" name="company_name" class="form-control" placeholder="公司名称" required>
+                      <div class="error-messages" ng-messages="form.company_name.$error">
+                        <small class="error" ng-message="required">公司名称（*必填）</small>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group form-select-group">
@@ -37,11 +40,18 @@
                       <div class="form-control-select">
                         <div class="select-group select-group-area select-group-all"></div>
                       </div>
+                      <input type="hidden" ng-model="validator.company_area_string" name="validator_company_area" class="form-control" placeholder="省市区" required>
+                      <div class="error-messages" ng-messages="form.validator_company_area.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.company_area_string" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <input type="text" ng-model="info.company_address" class="form-control" placeholder="街道/路/编号/楼宇/楼层">
+                      <input type="text" ng-model="info.company_address" name="company_address" class="form-control" placeholder="街道/路/编号/楼宇/楼层" required>
+                      <div class="error-messages" ng-messages="form.company_address.$error">
+                        <small class="error" ng-message="required">公司地址（*必填）</small>
+                      </div>
                     </div>
                   </div>
 
@@ -50,14 +60,22 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.legal_representative" class="form-control" placeholder="法定代表/实际控制人">
+                          <input type="text" ng-model="info.legal_representative" name="legal_representative" class="form-control" placeholder="法定代表" required>
+                          <div class="error-messages" ng-messages="form.legal_representative.$error">
+                            <small class="error" ng-message="required">法定代表（*必填）</small>
+                          </div>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
+                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <div class="error-messages" ng-messages="form.cellphone.$error">
+                            <small class="error" ng-message="required">手机号（*必填）</small>
+                            <small class="error" ng-message="minlength">请输入11位手机号</small>
+                            <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                          </div>
                         </div>
                       </div>
 
@@ -73,10 +91,14 @@
                                     <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.pcfile', item.file)"></i></div>
                                   </div>
                                 </div>
-                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="legal_file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
+                          </div>
+                          <input type="hidden" ng-model="validator.pcfile" name="validator_pcfile" class="form-control" placeholder="法人代表" required>
+                          <div class="error-messages" ng-messages="form.validator_pcfile.$error">
+                            <small class="error" ng-repeat="errorMessage in errorMessages.pcfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
                           </div>
                         </div>
                       </div>
@@ -98,13 +120,21 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.legal_representative" class="form-control" placeholder="实际控制人">
+                          <input type="text" ng-model="info.real_manange_name" name="real_manange_name" class="form-control" placeholder="实际控制人" required>
+                          <div class="error-messages" ng-messages="form.real_manange_name.$error">
+                            <small class="error" ng-message="required">实际控制人（*必填）</small>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
+                          <input type="text" ng-model="info.real_manange_cellphone" name="real_manange_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <div class="error-messages" ng-messages="form.real_manange_cellphone.$error">
+                            <small class="error" ng-message="required">手机号（*必填）</small>
+                            <small class="error" ng-message="minlength">请输入11位手机号</small>
+                            <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
@@ -124,6 +154,10 @@
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
                           </div>
+                          <input type="hidden" ng-model="validator.rpcfile" name="validator_rpcfile" class="form-control" placeholder="实际控制人" required>
+                          <div class="error-messages" ng-messages="form.validator_rpcfile.$error">
+                            <small class="error" ng-repeat="errorMessage in errorMessages.rpcfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -135,27 +169,33 @@
                       <div class="form-control-select">
                         <div class="select-group select-group-area select-group-province"></div>
                       </div>
+                      <input type="hidden" ng-model="validator.business_area_string" name="validator_business_area" class="form-control" placeholder="省市区" required>
+                      <div class="error-messages" ng-messages="form.validator_business_area.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.business_area_string" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                       <div class="image-group">
-                        <div class="image-group">
-                          <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
-                            <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
-                                <div class="operation">
-                                  <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
-                                </div>
+                        <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
+                          <div class="image-wrapper">
+                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
+                              <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="operation">
+                                <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
                               </div>
-                              <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                             </div>
-                            <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
+                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
+                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
+                      </div>
+                      <input type="hidden" ng-model="validator.blfile" name="validator_blfile" class="form-control" placeholder="营业执照正本" required>
+                      <div class="error-messages" ng-messages="form.validator_blfile.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.blfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
                       </div>
                     </div>
                   </div>
@@ -177,13 +217,17 @@
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
                       </div>
+                      <input type="hidden" ng-model="validator.affile" name="validator_affile" class="form-control" placeholder="营业执照正本" required>
+                      <div class="error-messages" ng-messages="form.validator_affile.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.affile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
-                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存</button>
+                        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
                       </div>
                       <div class="btn-group" role="group" aria-label="">
                         <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃</a>
@@ -376,11 +420,14 @@
                 <div class="panel-title">编辑代理商</div>
               </div>
               <div class="panel-body">
-                <form class="form form-horizontal" ng-submit="editSubmit(id)">
+                <form name="form" class="form form-horizontal" ng-submit="editSubmit(id, form.$valid)" novalidate>
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.company_name" class="form-control" placeholder="公司名称">
+                      <input type="text" ng-model="info.company_name" name="company_name" class="form-control" placeholder="公司名称" required>
+                      <div class="error-messages" ng-messages="form.company_name.$error">
+                        <small class="error" ng-message="required">公司名称（*必填）</small>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group form-select-group">
@@ -389,11 +436,18 @@
                       <div class="form-control-select">
                         <div class="select-group select-group-area select-group-all"></div>
                       </div>
+                      <input type="hidden" ng-model="validator.company_area_string" name="validator_company_area" class="form-control" placeholder="省市区" required>
+                      <div class="error-messages" ng-messages="form.validator_company_area.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.company_area_string" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <input type="text" ng-model="info.company_address" class="form-control" placeholder="街道/路/编号/楼宇/楼层">
+                      <input type="text" ng-model="info.company_address" name="company_address" class="form-control" placeholder="街道/路/编号/楼宇/楼层" required>
+                      <div class="error-messages" ng-messages="form.company_address.$error">
+                        <small class="error" ng-message="required">公司地址（*必填）</small>
+                      </div>
                     </div>
                   </div>
 
@@ -402,14 +456,22 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.legal_representative" class="form-control" placeholder="法定代表/实际控制人">
+                          <input type="text" ng-model="info.legal_representative" name="legal_representative" class="form-control" placeholder="法定代表" required>
+                          <div class="error-messages" ng-messages="form.legal_representative.$error">
+                            <small class="error" ng-message="required">法定代表（*必填）</small>
+                          </div>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
+                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <div class="error-messages" ng-messages="form.cellphone.$error">
+                            <small class="error" ng-message="required">手机号（*必填）</small>
+                            <small class="error" ng-message="minlength">请输入11位手机号</small>
+                            <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                          </div>
                         </div>
                       </div>
 
@@ -436,6 +498,10 @@
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
                           </div>
+                          <input type="hidden" ng-model="validator.pcfile" name="validator_pcfile" class="form-control" placeholder="法人代表" required>
+                          <div class="error-messages" ng-messages="form.validator_pcfile.$error">
+                            <small class="error" ng-repeat="errorMessage in errorMessages.pcfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -456,13 +522,21 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.legal_representative" class="form-control" placeholder="实际控制人">
+                          <input type="text" ng-model="info.real_manange_name" name="real_manange_name" class="form-control" placeholder="实际控制人" required>
+                          <div class="error-messages" ng-messages="form.real_manange_name.$error">
+                            <small class="error" ng-message="required">实际控制人（*必填）</small>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
+                          <input type="text" ng-model="info.real_manange_cellphone" name="real_manange_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <div class="error-messages" ng-messages="form.real_manange_cellphone.$error">
+                            <small class="error" ng-message="required">手机号（*必填）</small>
+                            <small class="error" ng-message="minlength">请输入11位手机号</small>
+                            <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                          </div>
                         </div>
                       </div>
                       <div class="form-group" ng-if="info.manage_not_same">
@@ -488,10 +562,13 @@
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
                           </div>
+                          <input type="hidden" ng-model="validator.rpcfile" name="validator_rpcfile" class="form-control" placeholder="实际控制人" required>
+                          <div class="error-messages" ng-messages="form.validator_rpcfile.$error">
+                            <small class="error" ng-repeat="errorMessage in errorMessages.rpcfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                          </div>
                         </div>
                       </div>
                     </div>
-
                   </div>
 
                   <div class="form-group">
@@ -500,35 +577,43 @@
                       <div class="form-control-select">
                         <div class="select-group select-group-area select-group-province"></div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="image-group">
-                          <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
-                            <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-if="item.file.noedit" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
-                                <div class="operation">
-                                  <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
-                                </div>
-                              </div>
-                              <div class="image-thumbnail" ng-if="!item.file.noedit" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
-                                <div class="operation">
-                                  <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
-                                </div>
-                              </div>
-                              <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                            </div>
-                            <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                          </div>
-                        </div>
+                      <input type="hidden" ng-model="validator.business_area_string" name="validator_business_area" class="form-control" placeholder="省市区" required>
+                      <div class="error-messages" ng-messages="form.validator_business_area.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.business_area_string" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
                       </div>
                     </div>
                   </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
+                    <div class="col-sm-4">
+                      <div class="image-group">
+                        <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
+                          <div class="image-wrapper">
+                            <div class="image-thumbnail" ng-if="item.file.noedit" ng-hide="!item.file" ng-hide="!item.file">
+                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="operation">
+                                <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
+                              </div>
+                            </div>
+                            <div class="image-thumbnail" ng-if="!item.file.noedit" ng-hide="!item.file" ng-hide="!item.file">
+                              <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="operation">
+                                <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
+                              </div>
+                            </div>
+                            <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                          </div>
+                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
+                        </div>
+                      </div>
+                      <input type="hidden" ng-model="validator.blfile" name="validator_blfile" class="form-control" placeholder="营业执照正本" required>
+                      <div class="error-messages" ng-messages="form.validator_blfile.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.blfile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理协议<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
                     <div class="col-sm-10">
@@ -552,13 +637,17 @@
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
                       </div>
+                      <input type="hidden" ng-model="validator.affile" name="validator_affile" class="form-control" placeholder="营业执照正本" required>
+                      <div class="error-messages" ng-messages="form.validator_affile.$error">
+                        <small class="error" ng-repeat="errorMessage in errorMessages.affile" ng-message="{{errorMessage.type}}">{{ errorMessage.text }}</small>
+                      </div>
                     </div>
                   </div>
 
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
-                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存</button>
+                        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
                       </div>
                       <div class="btn-group" role="group" aria-label="">
                         <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃</a>
