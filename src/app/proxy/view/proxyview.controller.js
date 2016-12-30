@@ -1,342 +1,115 @@
 export class ProxyViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, webDevTec, toastr, sidebarGroup, city, Upload) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, proxy, city, Upload, profile) {
     'ngInject';
 
-
-    $scope.type = $stateParams.type;
-    $scope.id = $stateParams.id;
-
-    this.awesomeThings = [];
-    this.classAnimation = '';
-    this.creationDate = 1480995513875;
+    this.cfg = cfg;
+    this.$http = $http;
     this.toastr = toastr;
     this.isCollapse = false;
-    this.apiHost = location.protocol + '//' + location.host;
-    this.getSidebarGroups($scope, $state, sidebarGroup);
 
+    $scope.cfg = cfg;
+    $scope.loading = true;
 
-    $scope.info = {
-      company_name: null,
-      company_area: null,
-      company_area_label: null,
-      company_address: null,
-      cellphone: null,
-      legal_representative: null,
-      // 法人代表身份证照片
-      pcfile: [
-        {
+    profile.getProfile().then((data)=> {
+
+      $scope.type = $stateParams.type;
+      $scope.id = $stateParams.id;
+
+      $scope.profile = data;
+
+      this.getSidebarGroups($scope, $state, sidebarGroup);
+
+      $scope.info = {
+        name: null,
+        areaCode: null,
+        area: null,
+        address: null,
+        cellphone: null,
+        legal: null,
+        is_same: true,
+        real_cellphone: null,
+        real_name: null,
+        // 法人代表身份证照片
+        pcfile: [{
           file: null,
           caption: '正面'
         },
-        {
-          file: null,
-          caption: '反面'
-        }
-      ],
-      manage_not_same: true,
-      real_manange_cellphone: null,
-      real_manage_name: null,
-      // 实际经营者
-      rpcfile: [
-        {
+          {
+            file: null,
+            caption: '反面'
+          }],
+        // 实际经营者
+        rpcfile: [{
           file: null,
           caption: '正面'
         },
-        {
-          file: null,
-          caption: '反面'
-        }
-      ],
-      business_area: null,
-      business_area_label: null,
-      // 营业执照正本扫描件
-      blfile: [
-        {
+          {
+            file: null,
+            caption: '反面'
+          }],
+        // 营业执照正本扫描件
+        blfile: [{
           file: null
-        }
-      ],
-      // 代理商申请表扫描件
-      affile: [
-        {
+        }],
+        // 代理商申请表扫描件
+        affile: [{
           file: null,
           caption: '页1'
         },
-        {
-          file: null,
-          caption: '页2'
-        },
-        {
-          file: null,
-          caption: '页3'
-        },
-        {
-          file: null,
-          caption: '页4'
-        }
-      ],
-      applyResult: null
-      // 多文件解决方案
-      /*,blfile2: [
-       {
-       file: null
-       }
-       ],
-       affile2: [
-       {
-       file: null
-       }
-       ]*/
-    };
-
-    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-      $scope.info = {
-        company_name: '123',
-        company_area: ["120000", "120000", "120103"],
-        company_area_label: ["天津市", "天津市", "河西区"],
-        company_address: '黄河道9527号3号楼5单元888',
-        cellphone: '13819493700',
-        legal_representative: '佟彩霞',
-        // 法人代表身份证照片
-        pcfile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '正面'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '反面'
-          }
-        ],
-        manage_not_same: true,
-        real_manange_cellphone: '19255458833',
-        real_manage_name: '康洪领',
-        // 实际控制人
-        rpcfile: [
           {
             file: null,
-            caption: '正面'
-          },
-          {
-            file: null,
-            caption: '反面'
-          }
-        ],
-        business_area: ["120000"],
-        business_area_label: ["天津市"],
-        // 营业执照正本扫描件
-        blfile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            }
-          }
-        ],
-        // 代理商申请表扫描件
-        affile: [
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
-            caption: '页1'
-          },
-          {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
             caption: '页2'
           },
           {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
+            file: null,
             caption: '页3'
           },
           {
-            file: {
-              name: 'assets/images/upload/ABC.jpg',
-              size: 278546,
-              type: "image/jpeg",
-              serverData: {
-                name: 'ABC.jpg'
-              },
-              noedit: true
-            },
+            file: null,
             caption: '页4'
-          }
-        ],
-        applyResult: null
-        // 多文件解决方案
-        /*,blfile2: [
-         {
-         file: null
-         }
-         ],
-         affile2: [
-         {
-         file: null
-         }
-         ]*/
+          }]
       };
-    }
 
-    $scope.validator = {};
-    $scope.errorMessages = {};
+      if($scope.type === 'create') {
 
-    $scope.errorMessages.company_area_string = [
-      {
-        type: "required",
-        text: '请选择省市区(*必填)'
+        this.initForm($scope, $log, toastr);
+        this.viewFile($scope);
+
+        this.getCities($scope, $log, $timeout, city);
+        this.upload($scope, $log, Upload);
+
+        this.initValidation($scope, proxy);
+
+        this.goView($scope, $state, $stateParams);
+      } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, $scope.id);
       }
-    ];
-    $scope.errorMessages.business_area_string = [
-      {
-        type: "required",
-        text: '请选择省市区(*必填)'
-      }
-    ];
 
-    this.getCities($scope, $log, city);
-    this.upload($scope, $log, Upload);
-    this.initForm($scope, $http, $log);
-    this.initWatch($scope);
+    });
 
-    $scope.goproxyview = function(type, id) {
-      $state.go('proxyview', {
+  }
+
+  goView($scope, $state, $stateParams) {
+    $scope.goview = function(view, type, id) {
+      $state.go(view, {
         type: type,
         id: id,
         redirect_url: encodeURIComponent(location.href)
       });
     };
-
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-
-  }
-
-  validator(files) {
-    for(var i in files) {
-      if(!files[i].file) {
-        return files[i];
-      }
-    }
-  }
-  initWatch($scope) {
-    var self = this;
-    var i = 0,  il = 0;
-    for(i = 0, il = $scope.info.pcfile.length; i < il; i++) {
-      $scope.$watch('info.pcfile[' + i +'].file', function() {
-        var vfile = self.validator($scope.info.pcfile);
-        $scope.validator.pcfile = !vfile ? true : undefined;
-        $scope.errorMessages.pcfile = [
-          {
-            type: "required",
-            text: '请上传身份证照片(*必填)'
-          }
-        ]
-      });
-    }
-
-    for(i = 0, il = $scope.info.rpcfile.length; i < il; i++) {
-      $scope.$watch('info.rpcfile[' + i +'].file', function() {
-        var vfile = self.validator($scope.info.rpcfile);
-        $scope.validator.rpcfile = !vfile ? true : undefined;
-        $scope.errorMessages.rpcfile = [
-          {
-            type: "required",
-            text: '请上传身份证照片(*必填)'
-          }
-        ]
-      });
-    }
-
-    for(i = 0, il = $scope.info.blfile.length; i < il; i++) {
-      $scope.$watch('info.blfile[' + i +'].file', function() {
-        var vfile = self.validator($scope.info.blfile);
-        $scope.validator.blfile = !vfile ? true : undefined;
-        $scope.errorMessages.blfile = [
-          {
-            type: "required",
-            text: '请上传营业执照正本照片/扫描件(*必填)'
-          }
-        ]
-      });
-    }
-
-    for(i = 0, il = $scope.info.affile.length; i < il; i++) {
-      $scope.$watch('info.affile[' + i +'].file', function() {
-        var vfile = self.validator($scope.info.affile);
-        $scope.validator.affile = !vfile ? true : undefined;
-        $scope.errorMessages.affile = [
-          {
-            type: "required",
-            text: '请上传网吧钉钉代理协议照片/扫描件(*必填)'
-          }
-        ]
-      });
-    }
-
-    // $scope.$watch('info.company_area', function(newValue, oldValue) {
-    //   console.log(newValue);
-    //   $scope.validator.company_area_string = newValue ? true : undefined;
-    //   $scope.errorMessages.company_area_string = [
-    //     {
-    //       type: "required",
-    //       text: '请选择省市区(*必填)'
-    //     }
-    //   ]
-    // });
-
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
-    var self = this;
-    $scope.$on('sidebar-item-click', function(e, item) {
-      self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
+    sidebarGroup.init(this.cfg.sidebarData, '');
+    $scope.$on('uib:sidebar.item.select', function($event, item) {
+      if(item.leaf) {
+        $state.go(item.sref, {}, {
+          reload: true
+        });
+      }
     });
 
-    // sidebarGroup.getGroups().then((data) => {
-    //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[0]);
-    // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
     if($scope.type === 'create')
@@ -357,63 +130,194 @@ export class ProxyViewController {
       });
   }
 
-  isLeafItem(item) {
-    return item && (item.items && item.items.length == 0 || !item.items);
-  }
-
-  triggerSidebarItemClick($scope, $state, sidebarGroup, item) {
-    if(this.isLeafItem(item)) {
-      $state.go(item.sref);
-      //location.href = item.href;
-      //this.breads = sidebarGroup.getGroupItems(item);
-      //$scope.$broadcast('breadcrumb-change', data);
+  validator(files) {
+    for(var i in files) {
+      if(!files[i].file) {
+        return files[i];
+      }
     }
   }
 
-  getCities($scope, $log, city) {
+  initValidation($scope, dataService) {
+    var self = this;
+
+    $scope.validator = {
+    };
+    $scope.errorMessages = {};
+
+    $scope.errorMessages.company_area_string = [
+      {
+        text: '请选择省市区(*必填)'
+      }
+    ];
+    $scope.errorMessages.business_area_string = [
+      {
+        text: '请选择省市区(*必填)'
+      }
+    ];
+
+    var i = 0,  il = 0;
+    for(i = 0, il = $scope.info.pcfile.length; i < il; i++) {
+      $scope.$watch('info.pcfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.pcfile);
+        $scope.validator.pcfile = !vfile ? true : null;
+        $scope.errorMessages.pcfile = [
+          {
+            text: '请上传身份证照片(*必填)'
+          }
+        ]
+      });
+    }
+
+    for(i = 0, il = $scope.info.rpcfile.length; i < il; i++) {
+      $scope.$watch('info.rpcfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.rpcfile);
+        $scope.validator.rpcfile = !vfile ? true : null;
+        $scope.errorMessages.rpcfile = [
+          {
+            text: '请上传身份证照片(*必填)'
+          }
+        ]
+      });
+    }
+
+    for(i = 0, il = $scope.info.blfile.length; i < il; i++) {
+      $scope.$watch('info.blfile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.blfile);
+        $scope.validator.blfile = !vfile ? true : null;
+        $scope.errorMessages.blfile = [
+          {
+            text: '请上传营业执照正本照片/扫描件(*必填)'
+          }
+        ]
+      });
+    }
+
+    for(i = 0, il = $scope.info.affile.length; i < il; i++) {
+      $scope.$watch('info.affile[' + i +'].file', function() {
+        var vfile = self.validator($scope.info.affile);
+        $scope.validator.affile = !vfile ? true : null;
+        $scope.errorMessages.affile = [
+          {
+            text: '请上传网吧钉钉代理协议照片/扫描件(*必填)'
+          }
+        ]
+      });
+    }
+
+    $scope.$watch('info.is_same', function() {
+      if($scope.oData) {
+        var oldInfo = dataService.wrapper($scope.oData);
+        $scope.info.real_name = oldInfo.real_name;
+        $scope.info.real_cellphone = oldInfo.real_cellphone;
+        $scope.info.rpcfile = oldInfo.rpcfile;
+      } else {
+        $scope.info.real_name = null;
+        $scope.info.real_cellphone = null;
+        $scope.info.rpcfile = [{
+          file: null,
+          caption: '正面'
+        },
+          {
+            file: null,
+            caption: '反面'
+          }];
+      }
+    })
+
+  }
+
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, id) {
+    var self = this;
+    proxy.getDetail(id).then((data)=> {
+      if(data) {
+        $scope.oData = data;
+        $scope.info = proxy.wrapper(data);
+
+        self.initForm($scope, $log, toastr);
+        self.viewFile($scope);
+
+        self.getCities($scope, $log, $timeout, city);
+        self.upload($scope, $log, Upload);
+
+        self.initValidation($scope, proxy);
+
+        self.goView($scope, $state, $stateParams);
+      }
+    });
+  }
+
+  getCities($scope, $log, $timeout, city) {
     city.getCities().then((data)=> {
-      angular.element('.select-group-all').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          items: $scope.info.company_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue = $self.selectedValue();
-            $scope.info.company_area = selectedValue;
-            $scope.info.company_area_label = selectedLabel;
-            $scope.validator.company_area_string = $scope.info.company_area.length === 3 ? true : undefined;
-            $log.log(selectedObject, selectedLabel, selectedValue);
 
-            // 获取焦点再失去焦点 否则model变更有问题 比较诡异
-            angular.element('input[name="validator_company_area"]').focus();
-            angular.element('input[name="validator_company_area"]').blur();
-          }
-        });
-      });
-    });
-    city.getCities(city.provinceFilter).then((data)=> {
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: $scope.info.business_area || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue = $self.selectedValue();
-            $scope.info.business_area = selectedValue;
-            $scope.info.business_area_label = selectedLabel;
-            $scope.validator.business_area_string = $scope.info.business_area.length === 1 ? true : undefined;
-            $log.log(selectedObject, selectedLabel, selectedValue);
+      $scope.loading = false;
 
-            // 获取焦点再失去焦点 否则model变更有问题 比较诡异
-            angular.element('input[name="validator_business_area"]').focus();
-            angular.element('input[name="validator_business_area"]').blur();
-          }
+      $timeout(function() {
+        // 判断默认值
+        if($scope.info.areaCode) {
+          $scope.validator.company_area_string = ($scope.info.areaCode && $scope.info.areaCode.length === 3) ? true : undefined;
+        }
+
+        angular.element('.select-group-all').each(function() {
+          angular.element(this).selectizeCity({
+            data: data,
+            items: $scope.info.areaCode || [],
+            onChange: function($self) {
+              var selectedObject = $self.selectedObject();
+              var selectedLabel = $self.selectedLabel();
+              var selectedValue = $self.selectedValue();
+              $scope.info.areaCode = selectedValue;
+              $scope.info.area = selectedLabel;
+              $log.log(selectedObject, selectedLabel, selectedValue);
+
+              // 接受值的变化
+              if(!$scope.$$phase) {
+                $scope.$apply(function() {
+                  $scope.validator.company_area_string = ($scope.info.areaCode && $scope.info.areaCode.length === 3 ? true : undefined);
+                });
+              }
+            }
+          });
         });
-      });
+      }, 10);
+
+
     });
+/*    city.getCities(city.provinceFilter).then((data)=> {
+
+      $scope.loading = false;
+
+      $timeout(function() {
+        // 判断默认值
+        if($scope.info.business_areaCode) {
+          $scope.validator.business_area_string = ($scope.info.business_areaCode && $scope.info.business_areaCode.length === 1) ? true : undefined;
+        }
+
+        angular.element('.select-group-province').each(function() {
+          angular.element(this).selectizeCity({
+            data: data,
+            names: ['province'],
+            items: $scope.info.business_areaCode || [],
+            onChange: function($self) {
+              var selectedObject = $self.selectedObject();
+              var selectedLabel = $self.selectedLabel();
+              var selectedValue = $self.selectedValue();
+              $scope.info.business_areaCode = selectedValue;
+              $scope.info.business_area = selectedLabel;
+              $log.log(selectedObject, selectedLabel, selectedValue);
+
+              // 接受值的变化
+              if(!$scope.$$phase) {
+                $scope.$apply(function() {
+                  $scope.validator.business_area_string = ($scope.info.business_areaCode && $scope.info.business_areaCode.length === 1) ? true : undefined;
+                });
+              }
+            }
+          });
+        });
+      }, 10);
+
+    });*/
   }
 
   getCityString(cities, separator) {
@@ -450,13 +354,13 @@ export class ProxyViewController {
     // upload on file select or drop
     $scope.upload = function (file) {
       Upload.upload({
-        url: self.apiHost + '/app/components/upload/url.json',
+        url: self.cfg.api.upload.url,
         data: {file: file}
       }).then(function (resp) {
         $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
-        $log.log(self.apiHost + '/assets/images/upload/' + resp.config.data.file.name);
         file.serverData = {
-          name: resp.config.data.file.name
+          name: resp.data.data,
+          url: self.cfg.uploadPath + '/' + resp.data.data
         };
         file.noedit = false;
       }, function (resp) {
@@ -477,19 +381,19 @@ export class ProxyViewController {
 
     // 统一使用数组方式存储对象
     $scope.removeFile = function (key, file) {
-      if(file) {
-        if(angular.isObject(file)) {
+      if (file) {
+        if (angular.isObject(file)) {
           var value = self.getKeyValue($scope, key);
           // 移除对象
-          if(value) {
-            for(var o in value) {
-              if(angular.isArray(value[o].file)) {
+          if (value) {
+            for (var o in value) {
+              if (angular.isArray(value[o].file)) {
                 var idx = value[o].file.indexOf(file);
-                if(idx !== -1) {
+                if (idx !== -1) {
                   value[o].file.splice(idx, 1);
                 }
-              } else if(angular.isObject(value[o].file)) {
-                if(value[o].file == file)
+              } else if (angular.isObject(value[o].file)) {
+                if (value[o].file == file)
                   value[o].file = null;
               }
             }
@@ -497,6 +401,10 @@ export class ProxyViewController {
         }
       }
     };
+  }
+
+  viewFile($scope) {
+    var self = this;
 
     $scope.viewFile = function ($event, key, file) {
       var obj = $event.currentTarget;
@@ -521,7 +429,7 @@ export class ProxyViewController {
                       playable: false,
                       onetooneable: false,
                       url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
+                        return file.serverData.url;
                       }
                     });
                     angular.element(obj).viewer('show');
@@ -541,7 +449,7 @@ export class ProxyViewController {
                       playable: false,
                       onetooneable: false,
                       url: function() {
-                        return self.apiHost + '/assets/images/upload/' + file.serverData.name;
+                        return file.serverData.url;
                       }
                     });
                     angular.element(obj).viewer('show');
@@ -567,134 +475,166 @@ export class ProxyViewController {
     }
     return files;
   }
-  initForm($scope, $http, $log) {
+
+  restructureFile(files) {
+
+    var newFiles = [];
+    if(files) {
+      for(var i in files) {
+        if(files[i] && files[i].serverData && files[i].serverData.name) {
+          newFiles.push(files[i].serverData.name);
+        }
+      }
+      if(newFiles && newFiles.length > 0) {
+        return newFiles.join(',');
+      }
+    }
+    return null;
+  }
+
+  preParams(type, params) {
     var self = this;
+
+    if(type === 'create') {
+      return {
+        name: params.name,
+        areaCode: params.areaCode.join(','),
+        area: params.area.join(','),
+        // business_areaCode: params.business_areaCode.join(','),
+        // business_area: params.business_area.join(','),
+        address: params.address,
+        corporName: params.legal,
+        corporMobile: params.cellphone,
+        isCorporReal: params.is_same ? 0 : 1,
+        realControlName: params.real_name,
+        realControlMobile: params.real_cellphone,
+        corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
+        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
+        licencePic: self.restructureFile(self.getFiles(params.blfile)),
+        dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
+      };
+    } else if(type === 'edit') {
+      return {
+        id: params.id,
+        name: params.name,
+        areaCode: params.areaCode.join(','),
+        area: params.area.join(','),
+        // business_areaCode: params.business_areaCode.join(','),
+        // business_area: params.business_area.join(','),
+        address: params.address,
+        corporName: params.legal,
+        corporMobile: params.cellphone,
+        isCorporReal: params.is_same ? 0 : 1,
+        realControlName: params.real_name,
+        realControlMobile: params.real_cellphone,
+        corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
+        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
+        licencePic: self.restructureFile(self.getFiles(params.blfile)),
+        dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
+      };
+    } else if(type === 'delete') {
+      return {
+        id: params.id
+      };
+    } else if(type === 'apply') {
+      return {
+        id: params.id
+      };
+    }
+
+  }
+
+  initForm($scope, $log, toastr) {
+    var self = this;
+
     $scope.createSubmit = function(isValid) {
       $log.log('create. isValid: ' + isValid);
-
       if(isValid) {
-        // 处理提交前的表单数据
-        var params = {
-          company_name: $scope.info.company_name,
-          company_area: $scope.info.company_area,
-          company_address: $scope.info.company_address,
-          legal_representative: $scope.info.legal_representative,
-          cellphone: $scope.info.cellphone,
-          business_area: $scope.info.business_area,
-          blfile: self.getFiles($scope.info.blfile),
-          affile: self.getFiles($scope.info.affile),
-          pcfile: self.getFiles($scope.info.pcfile)
-          /*        blfile2: self.getFiles($scope.info.blfile2),
-           affile2: self.getFiles($scope.info.affile2),*/
-        };
-
-        $http({
-          method: 'POST',
-          url: self.apiHost + '/app/components/form/submit.json',
-          data: params
+        $log.log(self.preParams('create', $scope.info));
+        self.$http({
+          url: self.cfg.api.proxy.save.url,
+          method: self.cfg.api.proxy.save.type,
+          data: self.preParams('create', $scope.info)
         }).then((response) => {
-          $log.log(response);
-          return response.data;
+          if(response.data.result === 0) {
+            toastr.success('新建成功！');
+            $scope.goview('proxy');
+          } else if(response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
         });
       }
     };
 
     $scope.editSubmit = function(id, isValid) {
-      $log.log('edit： ' + id + '. isValid' + isValid);
+      $log.log('edit： ' + id + '. isValid: ' + isValid);
 
       if(isValid) {
-        // 处理提交前的表单数据
-        var params = {
-          id: id,
-          company_name: $scope.info.company_name,
-          company_area: $scope.info.company_area,
-          company_address: $scope.info.company_address,
-          legal_representative: $scope.info.legal_representative,
-          cellphone: $scope.info.cellphone,
-          business_area: $scope.info.business_area,
-          blfile: self.getFiles($scope.info.blfile),
-          affile: self.getFiles($scope.info.affile),
-          pcfile: self.getFiles($scope.info.pcfile)
-          /*        blfile2: self.getFiles($scope.info.blfile2),
-           affile2: self.getFiles($scope.info.affile2),*/
-        };
-
-        $http({
-          method: 'POST',
-          url: self.apiHost + '/app/components/form/submit.json',
-          data: params
+        $log.log(self.preParams('edit', $scope.info));
+        self.$http({
+          url: self.cfg.api.proxy.update.url,
+          method: self.cfg.api.proxy.update.type,
+          data: self.preParams('edit', $scope.info)
         }).then((response) => {
-          $log.log(response);
-          return response.data;
+          if(response.data.result === 0) {
+            toastr.success('编辑成功！');
+            $scope.goview('proxy');
+          } else if(response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        });
-      }
-    };
-
-    $scope.applySubmit = function(id) {
-
-      if($scope.info.applyResult) {
-        $log.log('apply: ' + id + ', ' + ($scope.info.applyResult.result ? '审核通过' : '审核不通过'));
-        // 处理提交前的表单数据
-        var params = {
-          id: id,
-          company_name: $scope.info.company_name,
-          company_area: $scope.info.company_area,
-          company_address: $scope.info.company_address,
-          legal_representative: $scope.info.legal_representative,
-          cellphone: $scope.info.cellphone,
-          business_area: $scope.info.business_area,
-          blfile: self.getFiles($scope.info.blfile),
-          affile: self.getFiles($scope.info.affile),
-          pcfile: self.getFiles($scope.info.pcfile)
-          /*        blfile2: self.getFiles($scope.info.blfile2),
-           affile2: self.getFiles($scope.info.affile2),*/
-        };
-
-        $http({
-          method: 'POST',
-          url: self.apiHost + '/app/components/form/submit.json',
-          data: params
-        }).then((response) => {
-          $log.log(response);
-          return response.data;
-        }).catch((error) => {
-          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
         });
       }
     };
 
     $scope.deleteSubmit = function(id) {
-      $log.log('delete: ' + id);
-      // 处理提交前的表单数据
-      var params = {
-        id: id,
-        company_name: $scope.info.company_name,
-        company_area: $scope.info.company_area,
-        company_address: $scope.info.company_address,
-        legal_representative: $scope.info.legal_representative,
-        cellphone: $scope.info.cellphone,
-        business_area: $scope.info.business_area,
-        blfile: self.getFiles($scope.info.blfile),
-        affile: self.getFiles($scope.info.affile),
-        pcfile: self.getFiles($scope.info.pcfile)
-        /*        blfile2: self.getFiles($scope.info.blfile2),
-         affile2: self.getFiles($scope.info.affile2),*/
-      };
+      $log.log('delete： ' + id);
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
+      self.$http({
+        url: self.cfg.api.proxy.delete.url,
+        method: self.cfg.api.proxy.delete.type,
+        params: self.preParams('delete', $scope.info)
       }).then((response) => {
-        $log.log(response);
-        return response.data;
+        if (response.data.result === 0) {
+          toastr.error('删除成功！');
+          $scope.goview('proxy');
+        } else if (response.data.result === 1) {
+          toastr.error('处理失败，请重试');
+        }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+        toastr.error('网络异常，请重试');
       });
+    };
+
+    $scope.applySubmit = function(id, isValid) {
+
+      $log.log('apply： ' + id + '. isValid: ' + isValid);
+
+      if(isValid) {
+        self.$http({
+          url: self.cfg.api.proxy.apply.url,
+          method: self.cfg.api.proxy.apply.type,
+          data: self.preParams('apply', {
+            id: $scope.info.id
+          })
+        }).then((response) => {
+          if (response.data.result === 0) {
+            toastr.error('处理成功！');
+            $scope.goview('proxy');
+          } else if (response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
+        });
+      }
     };
 
     $scope.setApplyResult = function(applyResult) {

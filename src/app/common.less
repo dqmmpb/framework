@@ -10,8 +10,8 @@ html {
   outline: none;
 }
 
-[ng\:cloak],[ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak{
-  display:none ! important;
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak{
+  display: none !important;
 }
 
 //::-webkit-scrollbar{
@@ -126,11 +126,13 @@ html {
 
 
 .navbar {
+
   &.navbar-search {
 
     background: transparent;
     border: none;
     margin-bottom: 0;
+    min-height: 34px;
 
     & .container-fluid {
       @media (min-width: @grid-float-breakpoint) {
@@ -151,7 +153,7 @@ html {
         padding-bottom: 0;
         padding-left: 0;
         padding-right: 0;
-        margin-top: 10px;
+        margin-top: 0;
         margin-bottom: 0;
 
         .form-group {
@@ -211,12 +213,15 @@ html {
 
   .td-w30px {
     width: 30px;
+    min-width: 30px;
   }
   .td-w40px {
     width: 40px;
+    min-width: 40px;
   }
   .td-w45px {
     width: 45px;
+    min-width: 45px;
   }
 }
 
@@ -239,4 +244,8 @@ html {
   @media (max-width: @screen-xs-max) {
     min-width: inherit;
   }
+}
+
+.row-empty {
+  min-height: @font-size-h2;
 }

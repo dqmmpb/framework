@@ -1,278 +1,47 @@
 <div ng-cloak>
 
-  <div>
-    <uib-navbar creation-date="main.creationDate"></uib-navbar>
-  </div>
+  <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <uib-sidebar class="sidebar-full" is-collapse="main.isCollapse" groups="main.sidebarGroups"></uib-sidebar>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="main.isCollapse" groups="main.sidebarGroups"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="main.breads"></uib-breadcrumb>
-      <div uib-tools class="tools" groups="main.btnGroups"></div>
 
-      <div class="row mt-10">
-        <div class="col-md-10">
-          <div class="panel panel-default panel-csc">
-            <div class="panel-heading">
-              <div class="panel-title">代理商管理</div>
-            </div>
-            <div class="panel-body">
-              <form class="form form-horizontal" ng-submit="submit()">
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>公司名称:</label>
-                  <div class="col-sm-8">
-                    <input type="text" ng-model="info.company_name" class="form-control" placeholder="公司名称">
-                  </div>
-                </div>
-                <div class="form-group form-select-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>公司地址:</label>
-                  <div class="col-sm-8">
-                    <div class="form-control-select">
-                      <div class="select-group select-group-area select-group-all"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-8">
-                    <input type="text" ng-model="info.company_address" class="form-control" placeholder="街道/路/编号/楼宇/楼层">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>手机号:</label>
-                  <div class="col-sm-8">
-                    <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
-                    <!--<div class="input-group input-group-success">
-                      <input type="text" ng-model="info.cellphone" class="form-control" placeholder="手机号">
-                      <a class="input-group-addon"><i class="fa fa-fw fa-mobile"></i></a>
-                    </div>-->
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>法定代表/实际控制人:</label>
-                  <div class="col-sm-8">
-                    <input type="text" ng-model="info.legal_representative" class="form-control" placeholder="法定代表/实际控制人">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-8">
-                    <label class="label-checkbox label-checkbox-single label-checkbox-success">
-                      <input type="checkbox" name="checkbox" ng-model="info.manage_not_same">
-                      <i class="icon-checkbox"></i>
-                      <div class="text-checkbox">实际经营者和法定代表不同</div>
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group" ng-if="info.manage_not_same">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>实际经营者身份证照片</label>
-                  <div class="col-sm-8">
-                    <div class="image-group">
-                      <div class="input-image input-image-add" ng-repeat="item in info.rpcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                        <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                            <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.rpcfile', item.file)">
-                            <div class="operation">
-                              <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.rpcfile', item.file)"></i></div>
-                            </div>
-                          </div>
-                          <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                        </div>
-                        <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>业务区域:</label>
-                  <div class="col-sm-8">
-                    <div class="form-control-select">
-                      <div class="select-group select-group-area select-group-province"></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>营业执照正本扫描件</label>
-                  <div class="col-sm-8">
-                    <div class="image-group">
-                      <div class="image-group">
-                        <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
-                          <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.blfile', item.file)">
-                              <div class="operation">
-                                <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
-                              </div>
-                            </div>
-                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                          </div>
-                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                          <!--<div class="operation" ng-if="item.file">
-                            <div class="operation-header"><i class="fa fa-fw fa-close pull-right" ng-click="removeFile('info.blfile', item.file)"></i></div>
-                            <div class="operation-content">
-                              <div class="operation-btn-wrapper">
-                                <button class="btn btn-default btn-view-large">查看大图</button>
-                              </div>
-                            </div>
-                          </div>-->
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>代理商申请表扫描件</label>
-                  <div class="col-sm-8">
-                    <div class="image-group">
-                      <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                        <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                            <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.affile', item.file)">
-                            <div class="operation">
-                              <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.affile', item.file)"></i></div>
-                            </div>
-                          </div>
-                          <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                        </div>
-                        <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>法人代表身份证照片</label>
-                  <div class="col-sm-8">
-                    <div class="image-group">
-                      <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                        <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                            <img class="viewer-image" ngf-thumbnail="item.file || 'assets/images/loading.gif'" ng-click="viewFile($event, 'info.pcfile', item.file)">
-                            <div class="operation">
-                              <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.pcfile', item.file)"></i></div>
-                            </div>
-                          </div>
-                          <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                        </div>
-                        <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!--<div class="form-group">
-                  <label class="col-sm-3 control-label">备注:</label>
-                  <div class="col-sm-8">
-                    <textarea class="form-control form-control-textarea" rows="3" placeholder="请填写备注信息"></textarea>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-8">
-                    <label class="label-checkbox label-checkbox-success">
-                      <input type="checkbox" name="checkbox">
-                      <i class="icon-checkbox"></i>
-                      <div class="text-checkbox">我已同意<a>《服务协议》</a></div>
-                    </label>
-                  </div>
-                </div>-->
-                <!-- 多文件上传 -->
-                <!--<div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>营业执照正本扫描件</label>
-                  <div class="col-sm-8">
-                    <div class="image-group" ng-repeat="item in info.blfile2">
-                      <div class="input-image" ng-repeat="file in item.file">
-                        <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!file" ng-hide="!file" ng-click="viewFile('info.blfile2', file)">
-                            <img ngf-thumbnail="file || 'assets/images/loading.gif'">
-                            <div class="operation">
-                              <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile2', file)"></i></div>
-                            </div>
-                          </div>
-                        </div>
-                        &lt;!&ndash;<div class="operation" ng-if="file">
-                          <div class="operation-header"><i class="fa fa-fw fa-close pull-right" ng-click="removeFile('info.blfile2', file)"></i></div>
-                          <div class="operation-content">
-                            <div class="operation-btn-wrapper">
-                              <button class="btn btn-default btn-view-large">查看大图</button>
-                            </div>
-                          </div>
-                        </div>&ndash;&gt;
-                      </div>
-
-                      <div class="input-image input-image-add" ng-class="{true: 'hidden'}[!!item.file && item.file.length >= 1]">
-                        <div class="image-wrapper">
-                          <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" ngf-keep="'distinct'" ngf-multiple="true" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-files="4" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <div class="form-group">
-                  <label class="col-sm-3 control-label"><span class="span-danger">*</span>代理商申请表扫描件</label>
-                  <div class="col-sm-8">
-                    <div class="image-group" ng-repeat="item in info.affile2">
-                      <div class="input-image" ng-repeat="file in item.file">
-                        <div class="image-wrapper">
-                          <div class="image-thumbnail" ng-hide="!file" ng-hide="!file" ng-click="viewFile('info.affile2', file)">
-                            <img ngf-thumbnail="file || 'assets/images/loading.gif'">
-                            <div class="operation">
-                              <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.affile2', file)"></i></div>
-                            </div>
-                          </div>
-                        </div>
-                        &lt;!&ndash;<div class="operation" ng-if="file">
-                          <div class="operation-header"><i class="fa fa-fw fa-close pull-right" ng-click="removeFile('info.affile2', file)"></i></div>
-                          <div class="operation-content">
-                            <div class="operation-btn-wrapper">
-                              <button class="btn btn-default btn-view-large">查看大图</button>
-                            </div>
-                          </div>
-                        </div>&ndash;&gt;
-                      </div>
-
-                      <div class="input-image input-image-add" ng-class="{true: 'hidden'}[!!item.file && item.file.length >= 4]">
-                        <div class="image-wrapper">
-                          <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" ngf-keep="'distinct'" ngf-multiple="true" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-files="4" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>-->
-                <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-8">
-                    <div class="btn-group" role="group" aria-label="">
-                      <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存</button>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-     <!-- <div class="jumbotron text-center">
-        <h1>'Allo, 'Allo!</h1>
-        <p class="lead">
-          <img src="assets/images/yeoman.png" alt="I'm Yeoman"><br>
-          Always a pleasure scaffolding your apps.{{main.toastrConfig.positionClass }}
-        </p>
-        <p class="" ng-class="main.classAnimation">
-          <button type="button" class="btn btn-lg btn-success" ng-click="main.showToastr()">Splendid Toastr</button>
-        </p>
-      </div>
-
-      <div class="row">
-        <div class="col-sm-6 col-md-4" ng-repeat="awesomeThing in main.awesomeThings | orderBy:'rank'">
-          <div class="thumbnail">
-            <img class="pull-right" ng-src="assets/images/{{ awesomeThing.logo }}" alt="{{ awesomeThing.title }}">
+      <div ng-if="!loading" class="row">
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail alert-success">
             <div class="caption">
-              <h3>{{ awesomeThing.title }}</h3>
-              <p>{{ awesomeThing.description }}</p>
-              <p><a ng-href="{{awesomeThing.url}}">{{ awesomeThing.url }}</a></p>
+              <h3>上月分润</h3>
+              <p contenteditable="true">{{mainData.fenrunTotalTheAlls | currency: "￥"}}</p>
             </div>
           </div>
         </div>
-      </div>-->
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail alert-info">
+            <div class="caption">
+              <h3>本月分润</h3>
+              <p>{{mainData.fenrunTotalThisMonth | currency: "￥"}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail alert-danger">
+            <div class="caption">
+              <h3>分润累计</h3>
+              <p>{{mainData.fenrunTotalTheLastMonth | currency: "￥"}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail alert-warning">
+            <div class="caption">
+              <h3>部署网吧数量</h3>
+              <p>{{mainData.ticketFinishedCount}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>

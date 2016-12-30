@@ -1,16 +1,14 @@
 <div ng-cloak>
 
-  <div>
-    <uib-navbar></uib-navbar>
-  </div>
+  <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <uib-sidebar class="sidebar-full" is-collapse="profitview.isCollapse" groups="profitview.sidebarGroups"></uib-sidebar>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profitview.isCollapse" groups="profitview.sidebarGroups"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="profitview.breads"></uib-breadcrumb>
 
-      <div ng-if="type === 'create'">
+      <div ng-if="type === 'create' && !loading">
         <div class="tools">
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
@@ -30,7 +28,7 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                         <div class="col-sm-10">
-                          <p class="form-control-static">{{info.company_name}}</p>
+                          <p class="form-control-static">{{info.name}}</p>
                         </div>
                       </div>
                     </div>
@@ -93,18 +91,18 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_name}}</p>
+                      <p class="form-control-static">{{info.name}}</p>
                     </div>
                   </div>
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_area_label && profitview.getCityString(info.company_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area_label && proxyview.getCityString(info.area_label) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <p class="form-control-static">{{info.company_address || '未填写'}}</p>
+                      <p class="form-control-static">{{info.address || '未填写'}}</p>
                     </div>
                   </div>
 
@@ -113,7 +111,7 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.legal || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -130,8 +128,8 @@
                           <div class="image-group">
                             <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -141,18 +139,18 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-6" ng-if="info.manage_not_same">
+                    <div class="col-sm-6" ng-if="!info.is_same">
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_name || '未填写'}}</p>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.cellphone || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_cellphone || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -160,10 +158,10 @@
                         <label class="col-sm-4 control-label control-label-double"><span class="span-danger">*</span>实际控制人<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
                         <div class="col-sm-8">
                           <div class="image-group">
-                            <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
+                            <div class="input-image input-image-add" ng-repeat="item in info.rpcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.rpcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -177,9 +175,10 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && profitview.getCityString(info.business_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
                     </div>
                   </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
                     <div class="col-sm-10">
@@ -187,8 +186,8 @@
                         <div class="image-group">
                           <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
                             <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="image-thumbnail" ng-hide="!item.file">
+                                <img class="viewer-image" ng-src="{{item.file.serverData.url  || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
                               </div>
                             </div>
                             <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -198,28 +197,13 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理协议<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
+                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理<span class="visible-sm-inline"> <br/></span>协议照片/扫描件:</label>
                     <div class="col-sm-10">
                       <div class="image-group">
                         <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
                           <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
-                            </div>
-                          </div>
-                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>法人代表<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                          <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                            <div class="image-thumbnail" ng-hide="!item.file">
+                              <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
                             </div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -234,14 +218,16 @@
         </div>
       </div>
 
-      <div ng-if="type === 'view'">
+      <div ng-if="type === 'view' && !loading">
         <div class="tools">
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div class="btn-group" role="group" aria-label="">
-            <a ng-if="!info.profit" ng-click="goprofitview('create', id)" class="btn btn-default btn-info" uib-tooltip="设置" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-cog"></i><span class="hidden-xs"> 设置</span></a>
-            <a ng-if="info.profit" ng-click="goprofitview('edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.save.url)" class="btn-group" role="group" aria-label="">
+            <a ng-if="!info.profit" ng-click="goview('profitview', 'create', id)" class="btn btn-default btn-info" uib-tooltip="设置" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-cog"></i><span class="hidden-xs"> 设置</span></a>
+          </div>
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" class="btn-group" role="group" aria-label="">
+            <a ng-if="info.profit" ng-click="goview('profitview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
         </div>
 
@@ -253,18 +239,16 @@
               </div>
               <div class="panel-body">
                 <div class="form form-horizontal">
-
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
                         <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                         <div class="col-sm-10">
-                          <p class="form-control-static">{{info.company_name}}</p>
+                          <p class="form-control-static">{{info.name}}</p>
                         </div>
                       </div>
                     </div>
                   </div>
-
                   <div class="row">
                     <div class="col-sm-4">
                       <div class="form-group">
@@ -305,18 +289,18 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_name}}</p>
+                      <p class="form-control-static">{{info.name}}</p>
                     </div>
                   </div>
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_area_label && profitview.getCityString(info.company_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area_label && proxyview.getCityString(info.area_label) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <p class="form-control-static">{{info.company_address || '未填写'}}</p>
+                      <p class="form-control-static">{{info.address || '未填写'}}</p>
                     </div>
                   </div>
 
@@ -325,7 +309,7 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.legal || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -342,8 +326,8 @@
                           <div class="image-group">
                             <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -353,18 +337,18 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-6" ng-if="info.manage_not_same">
+                    <div class="col-sm-6" ng-if="!info.is_same">
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_name || '未填写'}}</p>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.cellphone || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_cellphone || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -372,10 +356,10 @@
                         <label class="col-sm-4 control-label control-label-double"><span class="span-danger">*</span>实际控制人<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
                         <div class="col-sm-8">
                           <div class="image-group">
-                            <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
+                            <div class="input-image input-image-add" ng-repeat="item in info.rpcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.rpcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -389,9 +373,10 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && profitview.getCityString(info.business_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
                     </div>
                   </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
                     <div class="col-sm-10">
@@ -399,8 +384,8 @@
                         <div class="image-group">
                           <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
                             <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="image-thumbnail" ng-hide="!item.file">
+                                <img class="viewer-image" ng-src="{{item.file.serverData.url  || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
                               </div>
                             </div>
                             <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -410,28 +395,13 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理协议<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
+                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理<span class="visible-sm-inline"> <br/></span>协议照片/扫描件:</label>
                     <div class="col-sm-10">
                       <div class="image-group">
                         <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
                           <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
-                            </div>
-                          </div>
-                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>法人代表<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                          <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                            <div class="image-thumbnail" ng-hide="!item.file">
+                              <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
                             </div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -446,7 +416,7 @@
         </div>
       </div>
 
-      <div ng-if="type === 'edit'">
+      <div ng-if="type === 'edit' && !loading">
         <div class="tools">
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
@@ -466,7 +436,7 @@
                       <div class="form-group">
                         <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                         <div class="col-sm-10">
-                          <p class="form-control-static">{{info.company_name}}</p>
+                          <p class="form-control-static">{{info.name}}</p>
                         </div>
                       </div>
                     </div>
@@ -529,27 +499,26 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_name}}</p>
+                      <p class="form-control-static">{{info.name}}</p>
                     </div>
                   </div>
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.company_area_label && profitview.getCityString(info.company_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area && proxyview.getCityString(info.area) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <p class="form-control-static">{{info.company_address || '未填写'}}</p>
+                      <p class="form-control-static">{{info.address || '未填写'}}</p>
                     </div>
                   </div>
-
                   <div class="row">
                     <div class="col-sm-6">
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.legal || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -566,8 +535,8 @@
                           <div class="image-group">
                             <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -577,18 +546,18 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-6" ng-if="info.manage_not_same">
+                    <div class="col-sm-6" ng-if="!info.is_same">
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal_representative || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_name || '未填写'}}</p>
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <p class="form-control-static">{{info.cellphone || '未填写'}}</p>
+                          <p class="form-control-static">{{info.real_cellphone || '未填写'}}</p>
                         </div>
                       </div>
 
@@ -596,10 +565,10 @@
                         <label class="col-sm-4 control-label control-label-double"><span class="span-danger">*</span>实际控制人<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
                         <div class="col-sm-8">
                           <div class="image-group">
-                            <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
+                            <div class="input-image input-image-add" ng-repeat="item in info.rpcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
                               <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                                <div class="image-thumbnail" ng-hide="!item.file">
+                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.rpcfile', item.file)">
                                 </div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -613,9 +582,10 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && profitview.getCityString(info.business_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
                     </div>
                   </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
                     <div class="col-sm-10">
@@ -623,8 +593,8 @@
                         <div class="image-group">
                           <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
                             <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                                <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
+                              <div class="image-thumbnail" ng-hide="!item.file">
+                                <img class="viewer-image" ng-src="{{item.file.serverData.url  || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
                               </div>
                             </div>
                             <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
@@ -634,28 +604,13 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理协议<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
+                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网吧钉钉代理<span class="visible-sm-inline"> <br/></span>协议照片/扫描件:</label>
                     <div class="col-sm-10">
                       <div class="image-group">
                         <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
                           <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
-                            </div>
-                          </div>
-                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>法人代表<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                          <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.name || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
+                            <div class="image-thumbnail" ng-hide="!item.file">
+                              <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
                             </div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>

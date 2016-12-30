@@ -108,8 +108,6 @@
     margin-top: -3px;
   }
 
-  font-size: 0;
-
   display: inline-block;
   vertical-align: middle;
 }
@@ -161,4 +159,17 @@
       margin-right: 0;
     }
   }
+
+  &.cl-1 {
+    .selectize-control {
+      width: 100%;
+    }
+  }
+
+  &.cl-2 {
+    .selectize-control {
+      width: ~"calc((100% - 10px)/2)";
+    }
+  }
+
 }

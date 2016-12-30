@@ -1,61 +1,58 @@
-/**
- * Created by dengqiming on 06/12/2016.
- */
+angular.module('ui.framework.sidebar', [])
+  .controller('UibSidebarController', function () {
 
-export function SidebarDirective() {
-  'ngInject';
-
-  let directive = {
-    templateUrl: 'app/components/sidebar/sidebar.html',
-    scope: {
-      groups: '=',
-      isCollapse: '='
-    },
-    link: linkFunc,
-    controller: SidebarController,
-    controllerAs: 'sidebar',
-    transclude: true
-  };
-
-  function linkFunc(scope, element, attrs) {
-
-    scope.toggled = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      scope.isCollapse = !scope.isCollapse;
-      scope.tooltipEnable = !scope.tooltipEnable;
+  })
+  .directive('uibSidebar', function (cfg) {
+    return {
+      controller: 'UibSidebarController',
+      controllerAs: 'sidebar',
+      restrict: 'A',
+      templateUrl: function (element, attrs) {
+        return attrs.templateUrl || 'app/components/sidebar/sidebar.html';
+      },
+      transclude: true,
+      scope: {
+        profile: '=',
+        groups: '=',
+        isCollapse: '='
+      },
+      link: linkFunc
     };
 
-    scope.tooltipEnable = scope.isCollapse;
-    scope.miniClass = attrs.miniClass || 'sidebar-mini';
-    scope.fullClass = attrs.fullClass || 'sidebar-full';
+    function linkFunc(scope, element, attrs) {
 
-    if(!scope.isCollapse)
-      element.addClass(scope.fullClass);
-    else
-      element.addClass(scope.miniClass);
+      scope.collapse = function() {
+        scope.isCollapse = !scope.isCollapse;
+        scope.tooltipEnable = !scope.tooltipEnable;
+      };
 
-    scope.$watch('isCollapse', function(isCollapse) {
-      element.toggleClass(scope.miniClass, !!isCollapse);
-    });
+      scope.tooltipEnable = scope.isCollapse;
+      scope.miniClass = attrs.miniClass || 'sidebar-mini';
+      scope.fullClass = attrs.fullClass || 'sidebar-full';
 
-    scope.groupConfig = function($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
+      if(!scope.isCollapse)
+        element.addClass(scope.fullClass);
+      else
+        element.addClass(scope.miniClass);
+
+      scope.$watch('isCollapse', function(isCollapse) {
+        element.toggleClass(scope.miniClass, !!isCollapse);
+      });
+
+      scope.groupConfig = function($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+      };
+
+      scope.select = function(item) {
+        scope.$emit('uib:sidebar.item.select', item);
+      };
+
+      scope.hasAuth = function(item) {
+        return cfg.hasAuth(scope.profile, item.resource);
+      };
+
+      scope.$watch('profile', function(newValue) {
+      });
     }
-  }
-
-  return directive;
-
-}
-
-class SidebarController {
-  constructor ($scope) {
-    'ngInject';
-
-    $scope.itemClick = function($event, item) {
-      $event.preventDefault();
-      $scope.$emit('sidebar-item-click', item);
-    };
-  }
-}
+  });

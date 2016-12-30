@@ -1,145 +1,130 @@
 export class DeployController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams,webDevTec, toastr, sidebarGroup, city) {
+  constructor ($scope, $log, $http, $timeout, $location, $state, $stateParams, toastr, sidebarGroup, cfg, city, deploy, profile) {
     'ngInject';
 
-    this.awesomeThings = [];
-    this.classAnimation = '';
-    this.creationDate = 1480995513875;
+    this.cfg = cfg;
+    this.$http = $http;
     this.toastr = toastr;
     this.isCollapse = false;
-    this.apiHost = location.protocol + '//' + location.host;
-    this.getSidebarGroups($scope, $state, sidebarGroup);
 
-    this.getCities($scope, $log, city);
+    $scope.cfg = cfg;
+    $scope.loading = true;
 
-    $scope.rows = [
-      {
-        ch: false,
-        id: 1,
-        idx: 1,
-        bar_name: '杭州云顺网吧有限公司',
-        bar_id: 2313,
-        legal: '王晓蓉',
-        cellphone: '186 6801 0202',
-        status: '审核未通过'
-      },
-      {
-        ch: false,
-        id: 1,
-        idx: 1,
-        bar_name: '杭州沁泉网吧有限公司',
-        bar_id: 3019,
-        legal: '朱一峰',
-        cellphone: '186 6801 0202',
-        status: '待审核'
-      },
-      {
-        ch: false,
-        id: 1,
-        idx: 1,
-        bar_name: '杭州蓝盆友文化创意有限公司',
-        bar_id: 3088,
-        legal: '顾晨',
-        cellphone: '137 3804 7339',
-        status: '审核未通过'
-      }
-    ];
+    profile.getProfile().then((data)=> {
 
-    $scope.chAll = false;
+      $scope.profile = data;
 
-    $scope.checkAll = function () {
-      if($scope.chAll) {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = true;
-        }
-      } else {
-        for(var j in $scope.rows) {
-          $scope.rows[j].ch = false;
-        }
-      }
-    };
+      this.getSidebarGroups($scope, $state, sidebarGroup);
 
-    $scope.check = function(item) {
-      if(!item)
-        $scope.chAll = false;
-      else {
-        for(var i in this.rows) {
-          if(!$scope.rows[i].ch) {
-            $scope.chAll = false;
-            return;
-          }
-        }
-        $scope.chAll = true;
-      }
-    };
+      this.initSearch($scope, $location, $state, $log, $timeout, city);
 
+      this.getPage($scope, $location, $state, $log, deploy);
 
-    $scope.godeployview = function(type, id) {
-      if(type === 'delete') {
-        if(id) {
-          alert('删除成功');
-        }
-      } else {
-        $state.go('deployview', {
-          type: type,
-          id: id,
-          redirect_url: encodeURIComponent(location.href)
-        });
-      }
-    };
+      this.goView($scope, $state, $stateParams);
 
-    $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
+      this.initOperation($scope, $state, $log, toastr);
 
+    });
 
   }
 
+  goView($scope, $state, $stateParams) {
+    $scope.goview = function(view, type, id) {
+      $state.go(view, {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
+    };
+    $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
+  }
+
   getSidebarGroups($scope, $state, sidebarGroup) {
-    var self = this;
-    $scope.$on('sidebar-item-click', function(e, item) {
-      self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
+    sidebarGroup.init(this.cfg.sidebarData, '');
+    $scope.$on('uib:sidebar.item.select', function($event, item) {
+      if(item.leaf) {
+        $state.go(item.sref, {}, {
+          reload: true
+        });
+      }
     });
 
-    // sidebarGroup.getGroups().then((data) => {
-    //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[1].items[0]);
-    // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[0]);
   }
 
-  isLeafItem(item) {
-    return item && (item.items && item.items.length == 0 || !item.items);
-  }
+  getPage($scope, $location, $state, $log, dataService, currentPage) {
 
-  triggerSidebarItemClick($scope, $state, sidebarGroup, item) {
-    if(this.isLeafItem(item)) {
-      $state.go(item.sref);
-      //this.breads = sidebarGroup.getGroupItems(item);
-      //$scope.$broadcast('breadcrumb-change', data);
-    }
-  }
+    var searchParams = $location.search();
 
-  getCities($scope, $log, city) {
-    angular.element('.input-select').selectize();
-    city.getCities(city.provinceFilter).then((data)=> {
-      data.c.unshift({
-        n: '全部',
-        i: '100000'
-      });
-      angular.element('.select-group-province').each(function() {
-        angular.element(this).selectizeCity({
-          data: data,
-          names: ['province'],
-          items: [data.c[0].i] || [],
-          onChange: function($self) {
-            var selectedObject = $self.selectedObject();
-            var selectedLabel = $self.selectedLabel();
-            var selectedValue= $self.selectedValue();
-            $log.log(selectedObject, selectedLabel, selectedValue);
+    currentPage = currentPage ? currentPage : searchParams.currentPage ? parseInt(searchParams.currentPage): 1;
+
+    $scope.searchForm = {
+      keyWord: $scope.searchForm.keyWord,
+      areaCode: $scope.searchForm.areaCode ? $scope.searchForm.areaCode : "100000",
+      status: $scope.searchForm.status ? $scope.searchForm.status : -1,
+      doSearch: $scope.searchForm.doSearch
+    };
+
+    dataService.getPage(currentPage, $scope.searchForm).then((data)=> {
+      $scope.oData = data;
+      $scope.page = dataService.wrapperPage(data);
+
+      for(var i = 0, il = $scope.page.list.length; i < il; i++) {
+        $scope.page.list[i].ch = false;
+      }
+
+      $scope.page.chAll = false;
+
+      $scope.checkAll = function (page) {
+        for(var i in page.list) {
+          page.list[i].ch = page.chAll;
+        }
+      };
+
+      $scope.check = function(page, item) {
+        if(!item)
+          page.chAll = false;
+        else {
+          for(var i in page.list) {
+            if(!page.list[i].ch) {
+              page.chAll = false;
+              return;
+            }
           }
-        });
-      });
+          page.chAll = true;
+        }
+      };
+
+      $scope.totalItems = $scope.page.totalCount;
+      $scope.currentPage = $scope.page.pageNumber;
+      $scope.itemsPerPage = $scope.page.pageSize;
+      $scope.pageCount = $scope.page.pageCount === 0 ? 1: $scope.page.pageCount;
+
+      $scope.loading = false;
+
     });
+
+    $scope.setPage = function (pageNo) {
+      $scope.currentPage = pageNo;
+    };
+
+    $scope.pageChanged = function() {
+      $log.log('Page changed to: ' + $scope.currentPage);
+
+      //self.getPage($scope, $log, dataService, $scope.currentPage, $scope.searchForm);
+      $state.go($scope.searchForm.doSearch ? 'deploy.search' : 'deploy.page', {
+        keyWord: $scope.searchForm.keyWord,
+        areaCode: $scope.searchForm.areaCode ? $scope.searchForm.areaCode : "100000",
+        status: $scope.searchForm.status ? $scope.searchForm.status : -1,
+        doSearch: $scope.searchForm.doSearch,
+        currentPage: $scope.currentPage
+      }, {
+        reload: true
+      });
+    };
+
+    $scope.maxSize = 5;
   }
 
   getCityString(cities, separator) {
@@ -149,6 +134,139 @@ export class DeployController {
       else
         return cities.join(' ');
     }
+  }
+
+  initSearch($scope, $location, $state, $log, $timeout, city) {
+
+    var searchParams = $location.search();
+
+    $scope.searchForm = {
+      keyWord: searchParams.keyWord,
+      areaCode: searchParams.areaCode ? searchParams.areaCode : "100000",
+      status: searchParams.status ? searchParams.status : -1,
+      doSearch: searchParams.doSearch
+    };
+
+    $scope.currentPage = searchParams.currentPage;
+
+    $scope.statuses = [
+      {
+        value: -1,
+        name: "全部状态"
+      },{
+        value: 0,
+        name: "待审核"
+      },
+      {
+        value: 1,
+        name: "审核通过"
+      },
+      {
+        value: 2,
+        name: "审核未通过"
+      }
+    ];
+
+    city.getCities(city.provinceFilter).then((data)=> {
+
+      $scope.loading = false;
+
+      $timeout(function() {
+        data.c.unshift({
+          n: '全部',
+          i: '100000'
+        });
+        angular.element('.select-group-province').each(function() {
+          angular.element(this).selectizeCity({
+            data: data,
+            names: ['province'],
+            items: [$scope.searchForm.areaCode ? $scope.searchForm.areaCode : "100000"] || [],
+            onChange: function($self) {
+              var selectedObject = $self.selectedObject();
+              var selectedLabel = $self.selectedLabel();
+              var selectedValue = $self.selectedValue();
+              $log.log(selectedObject, selectedLabel, selectedValue);
+              $scope.searchForm.areaCode = selectedValue.join('');
+            }
+          });
+        });
+
+        angular.element('.input-select').each(function() {
+          angular.element(this).selectize({
+            options: $scope.statuses,
+            items: [$scope.searchForm.status] || [],
+            labelField: 'name',
+            valueField: 'value',
+            maxItems: 1,
+            placeholder: '全部状态',
+            onChange: function (value) {
+              $scope.searchForm.status = value;
+            }
+          });
+        });
+
+      }, 10);
+
+    });
+
+    $scope.searchSubmit = function () {
+      $scope.searchForm.doSearch = true;
+      $state.go('deploy.search', {
+        keyWord: $scope.searchForm.keyWord,
+        areaCode: $scope.searchForm.areaCode ? $scope.searchForm.areaCode : "100000",
+        status: $scope.searchForm.status ? $scope.searchForm.status : -1,
+        doSearch: $scope.searchForm.doSearch,
+        currentPage: 1
+      }, {
+        reload: true
+      });
+      //self.getPage($scope, $log, dataService, 1, $scope.searchForm);
+    }
+  }
+
+  preParams(type, params) {
+
+    if(type === 'delete') {
+      return {
+        id: params.id
+      }
+    }
+
+  }
+
+  initOperation($scope, $state, $log, toastr) {
+
+    var self = this;
+
+    $scope.operation = function(type, item) {
+
+      if (type === 'delete') {
+        $log.log('delete： ' + item.id);
+
+        self.$http({
+          url: self.cfg.api.deploy.delete.url,
+          method: self.cfg.api.deploy.delete.type,
+          params: self.preParams('delete', item)
+        }).then((response) => {
+          if (response.data.result === 0) {
+            toastr.error('删除成功！');
+            $state.go($scope.searchForm.doSearch ? 'deploy.search' : 'deploy.page', {
+              keyWord: $scope.searchForm.keyWord,
+              doSearch: $scope.searchForm.doSearch,
+              currentPage: $scope.currentPage
+            }, {
+              reload: true
+            });
+          } else if (response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
+        });
+      }
+    };
+
   }
 
   showToastr() {

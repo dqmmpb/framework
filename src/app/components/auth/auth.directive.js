@@ -1,51 +1,28 @@
-/**
- * Created by dengqiming on 06/12/2016.
- */
+angular.module('ui.framework.auth', [])
+  .controller('UibAuthController', function () {
 
-export function AuthDirective() {
-  'ngInject';
+    var vm = this;
 
-  let directive = {
-    templateUrl: 'app/components/auth/auth.html',
-    scope: {
-      authes: '=',
-      type: '=',
-      roleAuthes: '='
-    },
-    controller: AuthController,
-    controllerAs: 'auth',
-    transclude: true,
-    replace: true
-  };
-
-  return directive;
-
-}
-
-class AuthController {
-  constructor ($scope) {
-    'ngInject';
-
-    $scope.checkMM = function (mM) {
-      for(var i in mM.sub) {
+    vm.checkMM = function (mM) {
+      for (var i in mM.sub) {
         mM.sub[i].ch = mM.ch;
 
-        for(var j in mM.sub[i].auth) {
+        for (var j in mM.sub[i].auth) {
           mM.sub[i].auth[j].ch = mM.sub[i].ch;
         }
       }
     };
 
-    $scope.checkSM = function (mM, sM) {
-      for(var i in sM.auth) {
+    vm.checkSM = function (mM, sM) {
+      for (var i in sM.auth) {
         sM.auth[i].ch = sM.ch;
       }
 
-      if(!sM.ch)
+      if (!sM.ch)
         mM.ch = false;
       else {
-        for(var j in mM.sub) {
-          if(!mM.sub[j].ch) {
+        for (var j in mM.sub) {
+          if (!mM.sub[j].ch) {
             mM.ch = false;
             return;
           }
@@ -55,12 +32,12 @@ class AuthController {
 
     };
 
-    $scope.checkAT = function(mM, sM, aT) {
-      if(!aT.ch)
+    vm.checkAT = function (mM, sM, aT) {
+      if (!aT.ch)
         sM.ch = false;
       else {
-        for(var i in sM.auth) {
-          if(!sM.auth[i].ch) {
+        for (var i in sM.auth) {
+          if (!sM.auth[i].ch) {
             sM.ch = false;
             mM.ch = false;
             return;
@@ -68,11 +45,11 @@ class AuthController {
         }
         sM.ch = true;
       }
-      if(!sM.ch)
+      if (!sM.ch)
         mM.ch = false;
       else {
-        for(var j in mM.sub) {
-          if(!mM.sub[j].ch) {
+        for (var j in mM.sub) {
+          if (!mM.sub[j].ch) {
             mM.ch = false;
             return;
           }
@@ -81,14 +58,65 @@ class AuthController {
       }
     };
 
-    $scope.$watch('roleAuthes', function() {
-      for(var i in $scope.authes ) {
-        if($scope.roleAuthes.indexOf($scope.authes[i].aT.id) !== -1) {
-          $scope.authes[i].aT.ch = true;
-          $scope.checkAT($scope.authes[i].mM, $scope.authes[i].sM, $scope.authes[i].aT);
+    vm.reChecked = function () {
+      for (var i in vm.authes) {
+        if (vm.auth) {
+          if (vm.auth.indexOf(vm.authes[i].aT.id) !== -1) {
+            vm.authes[i].aT.ch = true;
+            vm.checkAT(vm.authes[i].mM, vm.authes[i].sM, vm.authes[i].aT);
+          }
         }
       }
-    });
-  }
+    };
 
-}
+    vm.setAuthes = function(authes) {
+      vm.authes = authes;
+    };
+
+    vm.setAuth = function(auth) {
+      vm.auth = auth;
+    };
+
+  })
+  .directive('uibAuth', function () {
+    return {
+      controller: 'UibAuthController',
+      controllerAs: 'auth',
+      restrict: 'A',
+      templateUrl: function (element, attrs) {
+        return attrs.templateUrl || 'app/components/auth/auth.html';
+      },
+      transclude: true,
+      scope: {
+        allAuthes: '=',
+        roleAuth: '='
+      },
+      link: function(scope, element, attrs, authCtrl) {
+
+        scope.disabled = !!attrs.disable;
+
+        authCtrl.setAuthes(scope.allAuthes);
+        authCtrl.setAuth(scope.roleAuth);
+        authCtrl.reChecked();
+
+        scope.checkMM = function(mM) {
+          authCtrl.checkMM(mM);
+        };
+        scope.checkSM = function(mM, sM) {
+          authCtrl.checkSM(mM, sM);
+        };
+        scope.checkAT = function (mM, sM, aT) {
+          authCtrl.checkAT(mM, sM, aT);
+        };
+        scope.$watch('allAuthes', function () {
+          authCtrl.setAuthes(scope.allAuthes);
+          authCtrl.reChecked();
+        });
+        scope.$watch('roleAuth', function () {
+          authCtrl.setAuth(scope.roleAuth);
+          authCtrl.reChecked();
+        });
+
+      }
+    };
+  });

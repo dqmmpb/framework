@@ -1,27 +1,40 @@
-<tbody>
-  <tr ng-repeat='auth in authes' ng-class="{true: 'rowspan'}[!!auth.mM.rowspan || !!auth.sM.rowspan]">
-    <td ng-if="auth.mMFirst" rowspan={{auth.mM.rowspan}} class="text-center td-w45px">
-      <label class="label-checkbox">
-        <input type="checkbox" name="checkbox" ng-model="auth.mM.ch" ng-click="checkMM(auth.mM)" ng-disabled="type === 'view'">
-        <i class="icon-checkbox"></i>
-        <div class="text-checkbox">{{auth.mM.name}}</div>
-      </label>
-    </td>
-    <td ng-if="auth.sMFirst" rowspan={{auth.sM.rowspan}} class="text-center td-w45px">
-      <label class="label-checkbox">
-        <input type="checkbox" name="checkbox" ng-model="auth.sM.ch" ng-click="checkSM(auth.mM, auth.sM)" ng-disabled="type === 'view'">
-        <i class="icon-checkbox"></i>
-        <div class="text-checkbox">{{auth.sM.name}}</div>
-      </label>
-    </td>
-    <td>
-      <label class="label-checkbox">
-        <input type="checkbox" name="checkbox" ng-model="auth.aT.ch" ng-click="checkAT(auth.mM, auth.sM, auth.aT)" ng-disabled="type === 'view'">
-        <i class="icon-checkbox"></i>
-        <div class="text-checkbox">{{auth.aT.name}}</div>
-      </label>
-    </td>
-    <td>{{auth.aT.desc}}</td>
-  </tr>
-</tbody>
-
+<div class="table-container">
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered table-vertical-middle table-nowrap table-auth">
+      <thead>
+      <tr>
+        <th width="5">模块</th>
+        <th width="5">子模块</th>
+        <th>权限</th>
+        <th>权限描述</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat='auth in auth.authes' ng-class="{true: 'rowspan'}[!!auth.mM.rowspan || !!auth.sM.rowspan]">
+          <td ng-if="auth.mMFirst" rowspan={{auth.mM.rowspan}} class="text-center td-w45px">
+            <label class="label-checkbox">
+              <input type="checkbox" name="checkbox" ng-model="auth.mM.ch" ng-click="checkMM(auth.mM)" ng-disabled="!!disabled">
+              <i class="icon-checkbox"></i>
+              <div class="text-checkbox">{{auth.mM.name}}</div>
+            </label>
+          </td>
+          <td ng-if="auth.sMFirst" rowspan={{auth.sM.rowspan}} class="text-center td-w45px">
+            <label class="label-checkbox">
+              <input type="checkbox" name="checkbox" ng-model="auth.sM.ch" ng-click="checkSM(auth.mM, auth.sM)" ng-disabled="!!disabled">
+              <i class="icon-checkbox"></i>
+              <div class="text-checkbox">{{auth.sM.name}}</div>
+            </label>
+          </td>
+          <td>
+            <label class="label-checkbox">
+              <input type="checkbox" name="checkbox" ng-model="auth.aT.ch" ng-click="checkAT(auth.mM, auth.sM, auth.aT)" ng-disabled="!!disabled">
+              <i class="icon-checkbox"></i>
+              <div class="text-checkbox">{{auth.aT.name}}</div>
+            </label>
+          </td>
+          <td>{{auth.aT.desc}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

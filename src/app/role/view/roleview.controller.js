@@ -1,56 +1,76 @@
 export class RoleViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, role, auth) {
+  constructor ($scope, $log, $http, $state, $stateParams, toastr, sidebarGroup, cfg, role, auth, profile) {
     'ngInject';
 
-
-    $scope.type = $stateParams.type;
-    $scope.id = $stateParams.id;
-
-    this.awesomeThings = [];
-    this.classAnimation = '';
-    this.creationDate = 1480995513875;
+    this.cfg = cfg;
+    this.$http = $http;
     this.toastr = toastr;
     this.isCollapse = false;
-    this.apiHost = location.protocol + '//' + location.host;
-    this.getSidebarGroups($scope, $state, sidebarGroup);
 
-    $scope.info = {
-      role_name: null,
-      role_desc: null,
-      role_auth: null
-    };
+    $scope.cfg = cfg;
+    $scope.loading = true;
 
-    this.getAuthes($scope, $log, auth);
+    profile.getProfile().then((data)=> {
 
-    if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
-      this.getRole($scope, $log, role, $scope.id, auth);
-    }
+      $scope.type = $stateParams.type;
+      $scope.id = $stateParams.id;
 
-    this.initForm($scope, $http, $log);
+      $scope.profile = data;
 
-    $scope.goroleview = function(type, id) {
-      $state.go('roleview', {
+      this.getSidebarGroups($scope, $state, sidebarGroup);
+
+      $scope.info = {
+        name: null,
+        value: null,
+        desc: null,
+        auth: null
+      };
+
+      $scope.getAuthIdArray = function(authes) {
+        if(angular.isArray(authes)) {
+          return authes.map(function(item) {
+            return item.id;
+          });
+        } else {
+          return [];
+        }
+      };
+
+      if($scope.type === 'create') {
+        this.initForm($scope, $log, toastr);
+
+        this.getAuthes($scope, $log, auth);
+
+        this.goView($scope, $state, $stateParams);
+      } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
+        this.getData($scope, $log, $state, $stateParams, toastr, role, auth, $scope.id);
+      }
+
+    });
+
+  }
+
+  goView($scope, $state, $stateParams) {
+    $scope.goview = function(view, type, id) {
+      $state.go(view, {
         type: type,
         id: id,
         redirect_url: encodeURIComponent(location.href)
       });
     };
-
     $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
-
-
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
-    var self = this;
-    $scope.$on('sidebar-item-click', function(e, item) {
-      self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
+    sidebarGroup.init(this.cfg.sidebarData, '');
+    $scope.$on('uib:sidebar.item.select', function($event, item) {
+      if(item.leaf) {
+        $state.go(item.sref, {}, {
+          reload: true
+        });
+      }
     });
 
-    // sidebarGroup.getGroups().then((data) => {
-    //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[0]);
-    // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[0]);
     if($scope.type === 'create')
@@ -67,99 +87,144 @@ export class RoleViewController {
       });
   }
 
-  isLeafItem(item) {
-    return item && (item.items && item.items.length == 0 || !item.items);
-  }
-
-  triggerSidebarItemClick($scope, $state, sidebarGroup, item) {
-    if(this.isLeafItem(item)) {
-      $state.go(item.sref);
-      //location.href = item.href;
-      //this.breads = sidebarGroup.getGroupItems(item);
-      //$scope.$broadcast('breadcrumb-change', data);
-    }
-  }
-
   getAuthes($scope, $log, auth) {
-    var self = this;
-    auth.getRestructureAuthes().then((data)=> {
-      self.authes = data;
+    auth.getAll().then((data)=> {
+      if(data) {
+        $scope.oAuth = data;
+        $scope.authes = auth.restructure(auth.wrapperAll(data));
+        $scope.loading = false;
+      }
     });
   }
 
-  getRole($scope, $log, role, id) {
-    role.getRoles(role.idFilter, id).then((data)=> {
-      if(data)
-        $scope.info = {
-          role_id: data.id,
-          role_name: data.name,
-          role_desc: data.desc,
-          role_auth: data.auth
-        };
+  getData($scope, $log, $state, $stateParams, toastr, role, auth, id) {
+    var self = this;
+    role.getDetail(id).then((data)=> {
+      if(data) {
+        $scope.oData = data;
+        $scope.info = role.wrapper(data);
+        $scope.info.authes = $scope.getAuthIdArray($scope.info.auth);
 
-      //auth.setRoleAuthes($scope.info.role_auth);
-      //console.log($scope.info.role_auth);
+        self.initForm($scope, $log, toastr);
+
+        self.getAuthes($scope, $log, auth);
+
+        self.goView($scope, $state, $stateParams);
+      }
     });
   }
 
-  initForm($scope, $http, $log) {
+  restructureAuth(authes) {
+
+    var newAuth = [];
+    for(var auth in authes) {
+      if(authes[auth].aT.ch) {
+        newAuth.push(authes[auth].aT.id);
+      }
+    }
+    return newAuth;
+  }
+
+  preParams(type, params, authes) {
     var self = this;
-    $scope.createSubmit = function() {
-      $log.log('create');
-      // 处理提交前的表单数据
-      var params = {
-        role_name: $scope.info.role_name
+
+    if(type === 'create') {
+      return {
+        name: params.name,
+        value: params.value,
+        remark: params.desc,
+        resourceArray: self.restructureAuth(authes).join(',')
       };
+    } else if(type === 'edit') {
+      return {
+        id: params.id,
+        name: params.name,
+        value: params.value,
+        remark: params.desc,
+        resourceArray: self.restructureAuth(authes).join(',')
+      };
+    } else if(type === 'delete') {
+      return {
+        id: params.id
+      };
+    }
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
-      }).then((response) => {
-        $log.log(response);
-        return response.data;
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-      });
+  }
+
+  initForm($scope, $log, toastr) {
+    var self = this;
+
+    $scope.createSubmit = function(isValid) {
+      $log.log('create. isValid: ' + isValid);
+      if(isValid) {
+        $log.log(self.preParams('create', $scope.info, $scope.authes));
+        self.$http({
+          url: self.cfg.api.role.save.url,
+          method: self.cfg.api.role.save.type,
+          data: self.preParams('edit', $scope.info, $scope.authes)
+        }).then((response) => {
+          if(response.data.result === 0) {
+            toastr.success('新建成功！');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('role');
+          } else if(response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
+        });
+      }
     };
 
-    $scope.editSubmit = function(id) {
-      $log.log('edit： ' + id);
-      // 处理提交前的表单数据
-      var params = {
-        id: id,
-        role_name: $scope.info.role_name
-      };
+    $scope.editSubmit = function(id, isValid) {
+      $log.log('edit： ' + id + '. isValid: ' + isValid);
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
-      }).then((response) => {
-        $log.log(response);
-        return response.data;
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-      });
+      if(isValid) {
+        $log.log(self.preParams('edit', $scope.info, $scope.authes));
+        self.$http({
+          url: self.cfg.api.role.update.url,
+          method: self.cfg.api.role.update.type,
+          data: self.preParams('edit', $scope.info, $scope.authes)
+        }).then((response) => {
+          if(response.data.result === 0) {
+            toastr.success('编辑成功！');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('role');
+          } else if(response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
+        });
+      }
     };
 
     $scope.deleteSubmit = function(id) {
-      $log.log('delete: ' + id);
-      // 处理提交前的表单数据
-      var params = {
-        id: id,
-        role_name: $scope.info.role_name
-      };
+      $log.log('delete： ' + id);
 
-      $http({
-        method: 'POST',
-        url: self.apiHost + '/app/components/form/submit.json',
-        data: params
+      self.$http({
+        url: self.cfg.api.role.delete.url,
+        method: self.cfg.api.role.delete.type,
+        params: self.preParams('delete', $scope.info, $scope.authes)
       }).then((response) => {
-        $log.log(response);
-        return response.data;
+        if (response.data.result === 0) {
+          toastr.error('删除成功！');
+          if($scope.redirect_url)
+            location.href = $scope.redirect_url;
+          else
+            $scope.goview('role');
+        } else if (response.data.result === 1) {
+          toastr.error('处理失败，请重试');
+        }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+        toastr.error('网络异常，请重试');
       });
     };
   }

@@ -1,102 +1,74 @@
 <div ng-cloak>
 
-  <div>
-    <uib-navbar></uib-navbar>
-  </div>
+  <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <uib-sidebar class="sidebar-full" is-collapse="role.isCollapse" groups="role.sidebarGroups"></uib-sidebar>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="role.isCollapse" groups="role.sidebarGroups"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="role.breads"></uib-breadcrumb>
 
-      <div class="tools">
-        <div class="btn-group pull-right" role="group" aria-label="">
-          <a ng-click="goroleview('create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
-        </div>
-      </div>
-
       <div class="content">
         <nav class="navbar navbar-default navbar-search">
           <div class="container-fluid">
-            <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input name="keyword" class="form-control min-width-250px" placeholder="关键字">
+            <form name="search" class="navbar-form navbar-left" role="search" ng-submit="searchSubmit()">
+              <div ng-if="cfg.hasAuth(profile, cfg.api.role.search.url)" class="form-group">
+                <input type="text" ng-model="searchForm.keyWord" name="keyWord" class="form-control min-width-250px" placeholder="关键字">
               </div>
-              <div class="form-group">
-                <button type="button" class="btn btn-default btn-warning"><i class="fa fa-fw fa-search sr-only"></i> 查询</button>
+              <div ng-if="cfg.hasAuth(profile, cfg.api.role.search.url)" class="form-group">
+                <button type="submit" class="btn btn-default btn-warning"><i class="fa fa-fw fa-search sr-only"></i> 查询</button>
+              </div>
+              <div ng-if="cfg.hasAuth(profile, cfg.api.role.save.url)" class="form-group">
+                <a ng-click="goview('roleview', 'create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
               </div>
             </form>
           </div>
         </nav>
 
-        <div class="table-container">
+        <div ng-if="page && !loading" class="table-container">
           <div class="table-responsive">
             <table class="table table-hover table-bordered table-vertical-middle table-nowrap">
               <thead>
               <tr>
-                <th class="text-center td-w45px">
+                <!--<th class="text-center td-w45px">
                   <label class="label-checkbox">
-                    <input type="checkbox" name="checkbox" ng-model="chAll" ng-change="checkAll()">
+                    <input type="checkbox" name="checkbox" ng-model="page.chAll" ng-change="checkAll(page)">
                     <i class="icon-checkbox"></i>
                   </label>
-                </th>
-                <th width="5%">序号</th>
+                </th>-->
                 <th width="10%">角色名称</th>
                 <th>角色描述</th>
                 <th width="10%">操作</th>
               </tr>
               </thead>
               <tbody>
-              <tr ng-repeat="row in rows">
-                <td class="text-center td-w45px">
+              <tr ng-repeat="row in page.list">
+                <!--<td class="text-center td-w45px" data-id="{{row.id}}">
                   <label class="label-checkbox">
-                    <input type="checkbox" name="checkbox" ng-model="row.ch" ng-click="check(row.ch)">
+                    <input type="checkbox" name="checkbox" ng-model="row.ch" ng-click="check(page, row.ch)">
                     <i class="icon-checkbox"></i>
                   </label>
-                </td>
-                <td>{{row.idx}}</td>
+                </td>-->
                 <td>{{row.name}}</td>
                 <td>{{row.desc}}</td>
                 <td>
-                  <button type="button" class="btn btn-primary btn-sm" ng-click="goroleview('view', row.id)">详情</button>
-                  <button type="button" class="btn btn-warning btn-sm" ng-click="goroleview('edit', row.id)">编辑</button>
-                  <button type="button" class="btn btn-danger btn-sm" ng-click="goroleview('delete', row.id)">删除</button>
+                  <div ng-if="!row.empty">
+                    <button type="button" class="btn btn-primary btn-sm" ng-click="goview('roleview', 'view', row.id)">详情</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.role.update.url)" type="button" class="btn btn-warning btn-sm" ng-click="goview('roleview', 'edit', row.id)">编辑</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.role.delete.url)" type="button" class="btn btn-danger btn-sm" ng-click="operation('delete', row)">删除</button>
+                  </div>
+                  <div ng-if="row.empty" class="row-empty"></div>
                 </td>
               </tr>
               </tbody>
             </table>
           </div>
           <nav class="pagination-container">
-            <ul class="pagination pull-right">
-              <li>
-                <a href="javascript:void(0);" aria-label="Top">
-                  <span aria-hidden="true">首页</span>
-                </a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" aria-label="Previous">
-                  <span aria-hidden="true">上一页</span>
-                </a>
-              </li>
-              <li class="active"><a href="javascript:void(0);">1</a></li>
-              <li><a href="javascript:void(0);">2</a></li>
-              <li><a href="javascript:void(0);">3</a></li>
-              <li><a href="javascript:void(0);">4</a></li>
-              <li class="disabled"><a href="#">5</a></li>
-              <li>
-                <a href="javascript:void(0);" aria-label="Next">
-                  <span aria-hidden="true">下一页</span>
-                </a>
-              </li>
-              <li>
-                <a href="javascript:void(0);" aria-label="End">
-                  <span aria-hidden="true">尾页</span>
-                </a>
-              </li>
-            </ul>
+
+            <ul uib-pagination total-items="totalItems" ng-model="$parent.currentPage" items-per-page="itemsPerPage" max-size="maxSize" class="pagination pull-right" boundary-links="true" ng-change="pageChanged()" first-text="首页" previous-text="上一页" next-text="下一页" last-text="尾页"></ul>
+
             <div class="pagination-info pull-right">
-              <span>共6条</span>， <span>每页显示：10条</span>
+              <span>{{currentPage}} / {{pageCount}}，共{{totalItems}}条</span>，<span>每页{{page.pageSize}}条</span>
             </div>
           </nav>
         </div>

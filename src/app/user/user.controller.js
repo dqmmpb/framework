@@ -1,102 +1,206 @@
 export class UserController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, user) {
+  constructor ($scope, $log, $http, $location, $state, $stateParams, toastr, sidebarGroup, cfg, user, profile) {
     'ngInject';
 
-
-    this.awesomeThings = [];
-    this.classAnimation = '';
-    this.creationDate = 1480995513875;
+    this.cfg = cfg;
+    this.$http = $http;
     this.toastr = toastr;
     this.isCollapse = false;
-    this.apiHost = location.protocol + '//' + location.host;
-    this.getSidebarGroups($scope, $state, sidebarGroup);
 
-    this.getUsers($scope, $log, user);
+    $scope.cfg = cfg;
+    $scope.loading = true;
 
-    $scope.gouserview = function(type, id) {
-      if(type === 'delete') {
-        if(id) {
-          alert('删除成功');
-        }
-      } else {
-        $state.go('userview', {
-          type: type,
-          id: id,
-          redirect_url: encodeURIComponent(location.href)
-        });
-      }
-    };
+    profile.getProfile().then((data)=> {
 
-    $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
+      $scope.profile = data;
+
+      this.getSidebarGroups($scope, $state, sidebarGroup);
+
+      this.initSearch($scope, $location, $state, $log);
+
+      this.getPage($scope, $location, $state, $log, user);
+
+      this.goView($scope, $state, $stateParams);
+
+      this.initOperation($scope, $state, $log, toastr);
+
+    });
 
   }
 
-  getUsers($scope, $log, user) {
-
-    user.getUsers().then((data)=> {
-      $scope.rows = [];
-
-      for(var i = 0; i < data.length; i++) {
-        $scope.rows[i] = {
-          ch: false,
-          id: data[i].id,
-          idx: data[i].idx,
-          name: data[i].name,
-          dd: data[i].dd,
-          role: data[i].role,
-          cellphone: data[i].cellphone
-        }
-      }
-
-      $scope.chAll = false;
-
-      $scope.checkAll = function () {
-        for(var i in $scope.rows) {
-          $scope.rows[i].ch = $scope.chAll;
-        }
-      };
-
-      $scope.check = function(item) {
-        if(!item)
-          $scope.chAll = false;
-        else {
-          for(var i in this.rows) {
-            if(!$scope.rows[i].ch) {
-              $scope.chAll = false;
-              return;
-            }
-          }
-          $scope.chAll = true;
-        }
-      };
-
-    });
+  goView($scope, $state, $stateParams) {
+    $scope.goview = function(view, type, id) {
+      $state.go(view, {
+        type: type,
+        id: id,
+        redirect_url: encodeURIComponent(location.href)
+      });
+    };
+    $scope.redirect_url = $stateParams.redirect_url ? decodeURIComponent($stateParams.redirect_url): null;
   }
 
   getSidebarGroups($scope, $state, sidebarGroup) {
-    var self = this;
-    $scope.$on('sidebar-item-click', function(e, item) {
-      self.triggerSidebarItemClick($scope, $state, sidebarGroup, item);
+    sidebarGroup.init(this.cfg.sidebarData, '');
+    $scope.$on('uib:sidebar.item.select', function($event, item) {
+      if(item.leaf) {
+        $state.go(item.sref, {}, {
+          reload: true
+        });
+      }
     });
 
-    // sidebarGroup.getGroups().then((data) => {
-    //   this.sidebarGroups = data;
-    //   this.breads = sidebarGroup.getGroupItems(data[1].items[0]);
-    // });
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
     this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[1]);
   }
 
-  isLeafItem(item) {
-    return item && (item.items && item.items.length == 0 || !item.items);
+  getPage($scope, $location, $state, $log, dataService, currentPage) {
+
+    var searchParams = $location.search();
+
+    currentPage = currentPage ? currentPage : searchParams.currentPage ? parseInt(searchParams.currentPage): 1;
+
+    $scope.searchForm = {
+      keyWord: searchParams.keyWord,
+      doSearch: searchParams.doSearch
+    };
+
+    dataService.getPage(currentPage, $scope.searchForm).then((data)=> {
+      $scope.oData = data;
+      $scope.page = dataService.wrapperPage(data);
+
+      for(var i = 0, il = $scope.page.list.length; i < il; i++) {
+        $scope.page.list[i].ch = false;
+      }
+
+      $scope.page.chAll = false;
+
+      $scope.checkAll = function (page) {
+        for(var i in page.list) {
+          page.list[i].ch = page.chAll;
+        }
+      };
+
+      $scope.check = function(page, item) {
+        if(!item)
+          page.chAll = false;
+        else {
+          for(var i in page.list) {
+            if(!page.list[i].ch) {
+              page.chAll = false;
+              return;
+            }
+          }
+          page.chAll = true;
+        }
+      };
+
+      $scope.totalItems = $scope.page.totalCount;
+      $scope.currentPage = $scope.page.pageNumber;
+      $scope.itemsPerPage = $scope.page.pageSize;
+      $scope.pageCount = $scope.page.pageCount === 0 ? 1: $scope.page.pageCount;
+
+      $scope.loading = false;
+
+    });
+
+    $scope.setPage = function (pageNo) {
+      $scope.currentPage = pageNo;
+    };
+
+    $scope.pageChanged = function() {
+      $log.log('Page changed to: ' + $scope.currentPage);
+
+      //self.getPage($scope, $log, dataService, $scope.currentPage, $scope.searchForm);
+      $state.go($scope.searchForm.doSearch ? 'user.search' : 'user.page', {
+        keyWord: $scope.searchForm.keyWord,
+        doSearch: $scope.searchForm.doSearch,
+        currentPage: $scope.currentPage
+      }, {
+        reload: true
+      });
+    };
+
+    $scope.maxSize = 5;
   }
 
-  triggerSidebarItemClick($scope, $state, sidebarGroup, item) {
-    if(this.isLeafItem(item)) {
-      $state.go(item.sref);
-      //this.breads = sidebarGroup.getGroupItems(item);
-      //$scope.$broadcast('breadcrumb-change', data);
+  initSearch($scope, $location, $state, $log) {
+
+    var searchParams = $location.search();
+
+    $scope.searchForm = {
+      keyWord: searchParams.keyWord,
+      doSearch: searchParams.doSearch
+    };
+
+    $scope.currentPage = searchParams.currentPage;
+
+    $scope.searchSubmit = function () {
+      $scope.searchForm.doSearch = true;
+      $log.log($scope.searchForm);
+      $state.go('user.search', {
+        keyWord: $scope.searchForm.keyWord,
+        doSearch: $scope.searchForm.doSearch,
+        currentPage: 1
+      }, {
+        reload: true
+      });
+      //self.getPage($scope, $log, dataService, 1, $scope.searchForm);
     }
+  }
+
+  preParams(type, params) {
+
+    if(type === 'delete') {
+      return {
+        id: params.id
+      }
+    }
+
+  }
+
+  initOperation($scope, $state, $log, toastr) {
+
+    var self = this;
+
+    $scope.getRoleToArray = function(roles, key) {
+      if(angular.isArray(roles)) {
+        return roles.map(function(item) {
+          return item[key];
+        });
+      } else {
+        return [];
+      }
+    };
+
+    $scope.operation = function(type, item) {
+
+      if (type === 'delete') {
+        $log.log('delete： ' + item.id);
+
+        self.$http({
+          url: self.cfg.api.user.delete.url,
+          method: self.cfg.api.user.delete.type,
+          params: self.preParams('delete', item)
+        }).then((response) => {
+          if (response.data.result === 0) {
+            toastr.error('删除成功！');
+            $state.go($scope.searchForm.doSearch ? 'user.search' : 'user.page', {
+              keyWord: $scope.searchForm.keyWord,
+              doSearch: $scope.searchForm.doSearch,
+              currentPage: $scope.currentPage
+            }, {
+              reload: true
+            });
+          } else if (response.data.result === 1) {
+            toastr.error('处理失败，请重试');
+          }
+        }).catch((error) => {
+          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+          toastr.error('网络异常，请重试');
+        });
+      }
+    };
+
   }
 
   showToastr() {
