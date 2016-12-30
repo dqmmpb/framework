@@ -1,0 +1,74 @@
+﻿{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "legalColumn": [
+      "id",
+      "created_at"
+    ],
+    "legalSort": [
+      "desc",
+      "asc"
+    ],
+    "pageNumber": 4,
+    "pageSize": 10,
+    "totalCount": 129,
+    "pageCount": 13,
+    "orderBy": [
+      "id"
+    ],
+    "orderType": [
+      "desc"
+    ],
+    "list": [
+      {
+        "id": 1,
+        "name": "超级管理员",
+        "value": "superadmin",
+        "remark": "网吧钉钉管理中心最高权限",
+        "resourcesSet": [{
+          "id": 2
+        },{
+          "id": 3
+        },{
+          "id": 4
+        }]
+      },
+      {
+        "id": 2,
+        "name": "代理商主管理员",
+        "value": "proxyadmin",
+        "remark": "代理商管理主管理员，可设置代理商以下层级使用人员的角色及权限",
+        "resourcesSet": [{
+          "id": 2
+        },{
+          "id": 3
+        },{
+          "id": 4
+        }]
+      },
+      {
+        "id": 3,
+        "name": "代理商业务员",
+        "value": "proxyuser",
+        "remark": "代理商业务员，可设置代理商以下层级使用人员的角色及权限",
+        "resourcesSet": [{
+          "id": 2
+        },{
+          "id": 3
+        },{
+          "id": 4
+        }]
+      },
+      {
+        "id": 4,
+        "name": "网吧业主",
+        "value": "netuser",
+        "remark": "对应网吧管理主管理员，可设置对应网吧以下使用人员的权限",
+        "resourcesSet": []
+      }
+
+    ],
+    "startRecord": 0
+  }
+}

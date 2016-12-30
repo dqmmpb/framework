@@ -1,0 +1,709 @@
+﻿{
+  "result": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 31,
+      "name": "登录模块",
+      "value": "/home",
+      "pid": 0,
+      "roleSet": [],
+      "childSet": [
+        {
+          "id": 32,
+          "name": "登录首页",
+          "value": "/home/login.do",
+          "pid": 31,
+          "roleSet": [],
+          "childSet": []
+        },
+        {
+          "id": 35,
+          "name": "登录处理逻辑",
+          "value": "/home/processLogin.do",
+          "pid": 31,
+          "roleSet": [],
+          "childSet": []
+        },
+        {
+          "id": 33,
+          "name": "登录登出2",
+          "value": "/home/logout.do",
+          "pid": 31,
+          "roleSet": [],
+          "childSet": []
+        },
+        {
+          "id": 36,
+          "name": "登录验证码",
+          "value": "/home/verpic.do",
+          "pid": 31,
+          "roleSet": [],
+          "childSet": []
+        },
+        {
+          "id": 34,
+          "name": "登录登出1",
+          "value": "/home/logoutman.do",
+          "pid": 31,
+          "roleSet": [],
+          "childSet": []
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "name": "渠道管理",
+      "value": "/qudao",
+      "pid": 0,
+      "roleSet": [],
+      "childSet": [
+        {
+          "id": 17,
+          "name": "分润模块",
+          "value": "/bacProfits",
+          "pid": 79,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 22,
+              "name": "分润更新",
+              "value": "/bacProfits/updateProfit.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 18,
+              "name": "分润删除",
+              "value": "/bacProfits/delete.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 19,
+              "name": "分润首页",
+              "value": "/bacProfits/index.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 21,
+              "name": "分润查看",
+              "value": "/bacProfits/showProfit.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 20,
+              "name": "分润保存",
+              "value": "/bacProfits/save.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 9527,
+              "name": "分润查询",
+              "value": "/bacProfits/search.json",
+              "pid": 17,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "name": "代理商模块",
+          "value": "/agents",
+          "pid": 79,
+          "roleSet": [
+            {
+              "id": 2,
+              "name": "普通的用户",
+              "value": "user",
+              "remark": "",
+              "resourcesSet": null
+            }
+          ],
+          "childSet": [
+            {
+              "id": 3,
+              "name": "代理商删除",
+              "value": "/agents/delete.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 4,
+              "name": "代理商详情",
+              "value": "/agents/detail.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 8,
+              "name": "代理商搜索",
+              "value": "/agents/search.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 6,
+              "name": "代理商首页",
+              "value": "/agents/index.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 2,
+              "name": "代理商审核",
+              "value": "/agents/audit.json",
+              "pid": 1,
+              "roleSet": [
+                {
+                  "id": 2,
+                  "name": "普通的用户",
+                  "value": "user",
+                  "remark": "",
+                  "resourcesSet": null
+                }
+              ],
+              "childSet": []
+            },
+            {
+              "id": 9,
+              "name": "代理商更新",
+              "value": "/agents/update.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 5,
+              "name": "代理商haha",
+              "value": "/agents/haha1211212212.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 7,
+              "name": "代理商保存",
+              "value": "/agents/save.json",
+              "pid": 1,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "name": "网吧部署",
+      "value": "/bushu",
+      "pid": 0,
+      "roleSet": [],
+      "childSet": [
+        {
+          "id": 60,
+          "name": "部署模块",
+          "value": "/tickets",
+          "pid": 80,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 61,
+              "name": "部署启禁用",
+              "value": "/tickets/active.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 67,
+              "name": "部署更新",
+              "value": "/tickets/update.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 66,
+              "name": "部署保存",
+              "value": "/tickets/save.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 63,
+              "name": "部署详情",
+              "value": "/tickets/detail.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 64,
+              "name": "部署首页",
+              "value": "/tickets/index.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 65,
+              "name": "部署二维码",
+              "value": "/tickets/qrcode.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 62,
+              "name": "部署删除",
+              "value": "/tickets/delete.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 911,
+              "name": "部署查询",
+              "value": "/tickets/search.json",
+              "pid": 60,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "网吧模块",
+          "value": "/wangbas",
+          "pid": 80,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 77,
+              "name": "网吧保存",
+              "value": "/wangbas/save.json",
+              "pid": 74,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 78,
+              "name": "网吧更新",
+              "value": "/wangbas/update.json",
+              "pid": 74,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 75,
+              "name": "网吧删除",
+              "value": "/wangbas/delete.json",
+              "pid": 74,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 76,
+              "name": "网吧首页",
+              "value": "/wangbas/index.json",
+              "pid": 74,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 9528,
+              "name": "网吧查询",
+              "value": "/wangbas/search.json",
+              "pid": 74,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": "后台网吧模块",
+          "value": "/bacWangbas",
+          "pid": 80,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 26,
+              "name": "后台网吧详情",
+              "value": "/bacWangbas/detail.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 27,
+              "name": "后台网吧首页",
+              "value": "/bacWangbas/index.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 28,
+              "name": "后台网吧保存",
+              "value": "/bacWangbas/save.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 25,
+              "name": "后台网吧删除",
+              "value": "/bacWangbas/delete.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 30,
+              "name": "后台网吧更新",
+              "value": "/bacWangbas/update.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 29,
+              "name": "后台网吧搜索",
+              "value": "/bacWangbas/search.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 24,
+              "name": "后台网吧审核",
+              "value": "/bacWangbas/audit.json",
+              "pid": 23,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "name": "系统设置",
+      "value": "/system",
+      "pid": 0,
+      "roleSet": [],
+      "childSet": [
+        {
+          "id": 43,
+          "name": "权限资源角色关联关联",
+          "value": "/rightRoleResource",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 45,
+              "name": "权限资源角色关联首页",
+              "value": "/rightRoleResource/index.json",
+              "pid": 43,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 46,
+              "name": "权限资源角色关联保存",
+              "value": "/rightRoleResource/save.json",
+              "pid": 43,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 47,
+              "name": "权限资源角色关联更新",
+              "value": "/rightRoleResource/update.json",
+              "pid": 43,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 44,
+              "name": "权限资源角色关联删除",
+              "value": "/rightRoleResource/delete.json",
+              "pid": 43,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 68,
+          "name": "用户模块",
+          "value": "/users",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 69,
+              "name": "用户删除",
+              "value": "/users/delete.json",
+              "pid": 68,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 73,
+              "name": "用户更新",
+              "value": "/users/update.json",
+              "pid": 68,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 70,
+              "name": "用户首页",
+              "value": "/users/index.json",
+              "pid": 68,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 72,
+              "name": "用户搜索",
+              "value": "/users/search.json",
+              "pid": 68,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 71,
+              "name": "用户保存",
+              "value": "/users/save.json",
+              "pid": 68,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 55,
+          "name": "权限角色用户关联关联",
+          "value": "/rightUserRole",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 58,
+              "name": "权限角色用户关联保存",
+              "value": "/rightUserRole/save.json",
+              "pid": 55,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 59,
+              "name": "权限角色用户关联更新",
+              "value": "/rightUserRole/update.json",
+              "pid": 55,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 56,
+              "name": "权限角色用户关联删除",
+              "value": "/rightUserRole/delete.json",
+              "pid": 55,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 57,
+              "name": "权限角色用户关联首页",
+              "value": "/rightUserRole/index.json",
+              "pid": 55,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "name": "权限资源角色模块",
+          "value": "/rightRoles",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 51,
+              "name": "权限资源角色首页",
+              "value": "/rightRoles/index.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 52,
+              "name": "权限资源角色保存",
+              "value": "/rightRoles/save.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 49,
+              "name": "权限资源角色所有",
+              "value": "/rightRoles/all.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 54,
+              "name": "权限资源角色更新",
+              "value": "/rightRoles/update.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 50,
+              "name": "权限资源角色删除",
+              "value": "/rightRoles/delete.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 53,
+              "name": "权限资源角色搜索",
+              "value": "/rightRoles/search.json",
+              "pid": 48,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "区域字典模块",
+          "value": "/bacChina",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 12,
+              "name": "区域字典模块子集的",
+              "value": "/bacChina/childs.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 15,
+              "name": "区域字典保存",
+              "value": "/bacChina/save.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 13,
+              "name": "区域字典删除",
+              "value": "/bacChina/delete.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 11,
+              "name": "区域字典模块所有的",
+              "value": "/bacChina/all.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 16,
+              "name": "区域字典更新",
+              "value": "/bacChina/update.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 14,
+              "name": "区域字典首页",
+              "value": "/bacChina/index.json",
+              "pid": 10,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "权限资源模块",
+          "value": "/rightResources",
+          "pid": 81,
+          "roleSet": [],
+          "childSet": [
+            {
+              "id": 40,
+              "name": "权限资源首页",
+              "value": "/rightResources/index.json",
+              "pid": 37,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 39,
+              "name": "权限资源删除",
+              "value": "/rightResources/delete.json",
+              "pid": 37,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 38,
+              "name": "权限资源所有",
+              "value": "/rightResources/all.json",
+              "pid": 37,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 41,
+              "name": "权限资源保存",
+              "value": "/rightResources/save.json",
+              "pid": 37,
+              "roleSet": [],
+              "childSet": []
+            },
+            {
+              "id": 42,
+              "name": "权限资源更新",
+              "value": "/rightResources/update.json",
+              "pid": 37,
+              "roleSet": [],
+              "childSet": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

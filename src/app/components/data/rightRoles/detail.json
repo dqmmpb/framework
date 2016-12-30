@@ -1,0 +1,17 @@
+﻿{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "id": 1,
+    "name": "超级管理员",
+    "value": "superadmin",
+    "remark": "网吧钉钉管理中心最高权限",
+    "resourcesSet": [{
+      "id": 2
+    },{
+      "id": 3
+    },{
+      "id": 4
+    }]
+  }
+}

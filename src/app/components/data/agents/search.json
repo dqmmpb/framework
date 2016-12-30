@@ -1,0 +1,77 @@
+{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "legalColumn": [
+      "id",
+      "created_at"
+    ],
+    "legalSort": [
+      "desc",
+      "asc"
+    ],
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalCount": 188,
+    "pageCount": 20,
+    "orderBy": [
+      "id"
+    ],
+    "orderType": [
+      "desc"
+    ],
+    "list": [
+      {
+        "id": 2,
+        "code": "80001293",
+        "name": "云顺大咖",
+        "address": "发大发大发",
+        "area": "浙江省,杭州市,西湖区",
+        "areaCode": "330000,330100,330106",
+        "corporName": "你妹",
+        "corporMobile": "13213213213",
+        "status": 0,
+        "createdAt": 1481892079000,
+        "updatedAt": null,
+        "remark": "北包包",
+        "licencePic": "ABC.jpg",
+        "corporIdPic": "ABC.jpg,jqueryapi.png",
+        "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png",
+        "isDeleted": 0,
+        "alipayAccount": null,
+        "realControlName": null,
+        "realControlMobile": null,
+        "realControlPic": null,
+        "isCorporReal": 0,
+        "usersSet": [],
+        "wangbasSet": []
+      },
+      {
+        "id": 1,
+        "code": "80001293",
+        "name": "民航大厦等",
+        "address": "或酷路七号旁边",
+        "area": "浙江省,杭州市,西湖区",
+        "areaCode": "330000,330100,330106",
+        "corporName": "放放风",
+        "corporMobile": "13213213211",
+        "status": 0,
+        "createdAt": 1481892079000,
+        "updatedAt": null,
+        "remark": "北包包",
+        "licencePic": "ABC.jpg",
+        "corporIdPic": "ABC.jpg,jqueryapi.png",
+        "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png",
+        "isDeleted": 0,
+        "alipayAccount": null,
+        "realControlName": null,
+        "realControlMobile": null,
+        "realControlPic": null,
+        "isCorporReal": 0,
+        "usersSet": [],
+        "wangbasSet": []
+      }
+    ],
+    "startRecord": 0
+  }
+}

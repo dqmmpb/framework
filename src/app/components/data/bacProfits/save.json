@@ -1,0 +1,26 @@
+{
+  "result": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "agentId": 1,
+      "percent": 2.67,
+      "catagory": 1,
+      "flag": 0,
+      "createdAt": null,
+      "updatedAt": null,
+      "remark": "vbp"
+    },
+    {
+      "id": 2,
+      "agentId": 1,
+      "percent": 3.14,
+      "catagory": 1,
+      "flag": 1,
+      "createdAt": null,
+      "updatedAt": null,
+      "remark": "vbp"
+    }
+  ]
+}

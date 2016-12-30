@@ -1,0 +1,37 @@
+{
+
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "id": 2313,
+    "name": "云顺网咖",
+    "address": "文一路296号物美超市旁汇合城5楼1",
+    "des": null,
+    "cover": "/upload/wangbaImgs/20160707/20160707095012925.jpg",
+    "x": 120122765,
+    "y": 30288153,
+    "distance": 0,
+    "status": 1,
+    "isDelete": 0,
+    "hot": 0,
+    "seatSize": 0,
+    "phone": "13758290252",
+    "createdAt": 1456309481000,
+    "updatedAt": 1470204348000,
+    "isAuth": 1,
+    "alipayAccount": null,
+    "areaCode": "330000,330100,330106",
+    "area": "浙江省,杭州市,西湖区",
+    "business_areaCode": "330000",
+    "business_area": "浙江省",
+    "licencePic": "ABC.jpg",
+    "corporIdPic": "ABC.jpg,jqueryapi.png",
+    "dingCertifyPic": "jqueryapi.png",
+    "branchName": "门店名称",
+    "companyName": "网吧公司名称",
+    "corporName": "你妹",
+    "corporMobile": "13213213213",
+    "remark": null
+  }
+
+}

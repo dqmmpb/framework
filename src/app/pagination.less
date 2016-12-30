@@ -1,0 +1,22 @@
+
+@import "variables";
+
+//
+// Pagination (multiple pages)
+// --------------------------------------------------
+.pagination {
+  display: inline-block;
+  padding-left: 0;
+  margin: @line-height-computed 0;
+  border-radius: @border-radius-base;
+
+  > li {
+    display: inline; // Remove list-style and block-level defaults
+    > a,
+    > span {
+      outline: none;
+      line-height: @line-height-base;
+      height: @line-height-computed + 2 * @padding-base-vertical + 2px;
+    }
+  }
+}

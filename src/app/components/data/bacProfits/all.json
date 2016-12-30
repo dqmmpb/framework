@@ -1,0 +1,70 @@
+{
+  "result": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "agentId": 1,
+      "percent": 2.67,
+      "catagory": 1,
+      "flag": 0,
+      "createdAt": null,
+      "updatedAt": null,
+      "remark": "vbp",
+      "agents": {
+        "id": 1,
+        "code": "123",
+        "name": "民航大厦等",
+        "address": "或酷路七号旁边",
+        "area": "台湾省",
+        "corporName": null,
+        "corporMobile": null,
+        "status": 0,
+        "createdAt": null,
+        "updatedAt": null,
+        "remark": "北包包",
+        "licencePic": null,
+        "corporIdPic": null,
+        "dingCertifyPic": null,
+        "isDeleted": null,
+        "alipayAccount": null,
+        "realControlName": null,
+        "realControlMobile": null,
+        "realControlPic": null,
+        "isCorporReal": null
+      }
+    },
+    {
+      "id": 2,
+      "agentId": 1,
+      "percent": 3.14,
+      "catagory": 2,
+      "flag": 1,
+      "createdAt": null,
+      "updatedAt": null,
+      "remark": "vbp",
+      "agents": {
+        "id": 1,
+        "code": "123",
+        "name": "民航大厦等",
+        "address": "或酷路七号旁边",
+        "area": "台湾省",
+        "corporName": null,
+        "corporMobile": null,
+        "status": 0,
+        "createdAt": null,
+        "updatedAt": null,
+        "remark": "北包包",
+        "licencePic": null,
+        "corporIdPic": null,
+        "dingCertifyPic": null,
+        "isDeleted": null,
+        "alipayAccount": null,
+        "realControlName": null,
+        "realControlMobile": null,
+        "realControlPic": null,
+        "isCorporReal": null
+      }
+    }
+  ]
+}

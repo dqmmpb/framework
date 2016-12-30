@@ -1,0 +1,93 @@
+{
+
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "legalColumn": [
+      "id",
+      "created_at"
+    ],
+    "legalSort": [
+      "desc",
+      "asc"
+    ],
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalCount": 49,
+    "pageCount": 5,
+    "orderBy": [
+      "id"
+    ],
+    "orderType": [
+      "desc"
+    ],
+    "list": [
+      {
+        "id": 3145,
+        "name": "嘉兴市壹号竞技网咖",
+        "address": "嘉兴市中山路1254号",
+        "des": null,
+        "cover": null,
+        "x": 120923358,
+        "y": 30839980,
+        "distance": 0,
+        "status": 1,
+        "isDelete": 0,
+        "hot": 0,
+        "seatSize": 0,
+        "phone": null,
+        "createdAt": 1481666837000,
+        "updatedAt": 1481666837000,
+        "isAuth": 1,
+        "alipayAccount": null,
+        "areaCode": "330000,330100,330106",
+        "area": "浙江省,杭州市,西湖区",
+        "business_areaCode": "330000",
+        "business_area": "浙江省",
+        "dingCertifyPic": "jqueryapi.png",
+        "licencePic": "ABC.jpg",
+        "corporIdPic": "ABC.jpg,jqueryapi.png",
+        "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png,ABC.jpg",
+        "branchName": null,
+        "companyName": null,
+        "corporName": "哈喽",
+        "corporMobile": "15687879865",
+        "remark": null
+      },
+      {
+        "id": 3117,
+        "name": "anke",
+        "address": "adddddddddddddddddddddddddddd",
+        "des": null,
+        "cover": null,
+        "x": 0,
+        "y": 0,
+        "distance": 0,
+        "status": 1,
+        "isDelete": 0,
+        "hot": 0,
+        "seatSize": 0,
+        "phone": null,
+        "createdAt": 1480279177000,
+        "updatedAt": 1480279177000,
+        "isAuth": 1,
+        "alipayAccount": null,
+        "areaCode": "330000,330100,330106",
+        "area": "浙江省,杭州市,西湖区",
+        "business_areaCode": "330000",
+        "business_area": "浙江省",
+        "dingCertifyPic": "jqueryapi.png",
+        "licencePic": "ABC.jpg",
+        "corporIdPic": "ABC.jpg,jqueryapi.png",
+        "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png,ABC.jpg",
+        "branchName": null,
+        "companyName": null,
+        "corporName": "abc",
+        "corporMobile": "15279873658",
+        "remark": null
+      }
+    ],
+    "startRecord": 0
+  }
+
+}
