@@ -1,0 +1,9 @@
+{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "code": 12031203,
+    "chargePercent": 1.2,
+    "waterbaPercent": 2
+  }
+}

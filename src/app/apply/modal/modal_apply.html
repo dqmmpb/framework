@@ -1,0 +1,77 @@
+<div class="modal-header">
+  <h3 class="modal-title" id="modal-title">部署</h3>
+</div>
+<form name="form" ng-submit="$ctrl.submit($ctrl.type, form.$valid)" novalidate>
+  <div class="modal-body" id="modal-body">
+    <div class="form form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger">*</span>CorpID:</label>
+        <div class="col-sm-10">
+          <input type="text" ng-model="$ctrl.infoForm.corpId" name="corpId" class="form-control" placeholder="CorpID必须以单词ding开头" required minlength="1" ng-minlength="1" maxlength="256" ng-maxlength="256" ng-pattern="/^ding.+/">
+          <div class="error-messages" ng-messages="form.corpId.$error">
+            <small class="error" ng-message="required">CorpID（*必填）</small>
+            <small class="error" ng-message="pattern">CorpID必须以单词ding开头,如ding123456</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger">*</span>CorpSecret:</label>
+        <div class="col-sm-10">
+          <input type="text" ng-model="$ctrl.infoForm.corpsecret" name="corpsecret" class="form-control" placeholder="CorpSecret" required minlength="1" ng-minlength="1" maxlength="256" ng-maxlength="256">
+          <div class="error-messages" ng-messages="form.corpsecret.$error">
+            <small class="error" ng-message="required">CorpSecret（*必填）</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger">*</span>应用ID:</label>
+        <div class="col-sm-10">
+          <input type="text" ng-model="$ctrl.infoForm.apply_id" name="apply_id" class="form-control" placeholder="应用ID" required minlength="1" ng-minlength="1" maxlength="30" ng-maxlength="30">
+          <div class="error-messages" ng-messages="form.apply_id.$error">
+            <small class="error" ng-message="required">应用ID（*必填）</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger">*</span>部门ID:</label>
+        <div class="col-sm-10">
+          <input type="text" ng-model="$ctrl.infoForm.department_id" name="department_id" class="form-control" placeholder="部门ID" required minlength="1" ng-minlength="1" maxlength="32" ng-maxlength="32">
+          <div class="error-messages" ng-messages="form.department_id.$error">
+            <small class="error" ng-message="required">部门ID（*必填）</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger">*</span>收银部门ID:</label>
+        <div class="col-sm-10">
+          <input type="text" ng-model="$ctrl.infoForm.cashier_dept_id" name="cashier_dept_id" class="form-control" placeholder="收银部门ID" required minlength="1" ng-minlength="1" maxlength="32" ng-maxlength="32">
+          <div class="error-messages" ng-messages="form.cashier_dept_id.$error">
+            <small class="error" ng-message="required">收银部门ID（*必填）</small>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"><span class="span-danger"></span>二维码地址:</label>
+        <div class="col-sm-10">
+          <div class="input-group input-group-success">
+            <input type="text" ng-model="$ctrl.infoForm.qrcode_path" name="qrcode_path" class="form-control" placeholder="二维码地址">
+            <span class="input-group-addon" ng-click="$ctrl.createQrcode($event)">生成二维码</span>
+          </div>
+          <!--<div class="error-messages" ng-messages="form.qrcode_path.$error">-->
+          <!--<small class="error" ng-message="required">二维码地址（*必填）</small>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="btn-group" role="group" aria-label="">
+        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
+      </div>
+      <div class="btn-group" role="group" aria-label="">
+        <button type="button" class="btn btn-default btn-danger" ng-click="$ctrl.cancel()"><i class="fa fa-fw fa-mail-forward"></i> 取消</button>
+      </div>
+    </div>
+  </div>
+</form>

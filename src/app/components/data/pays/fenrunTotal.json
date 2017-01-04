@@ -1,0 +1,10 @@
+﻿{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "fenrunTotalTheAlls": 94607.19,
+    "fenrunTotalThisMonth": 33112.33,
+    "fenrunTotalTheLastMonth": 61494.61,
+    "ticketFinishedCount": 188
+  }
+}
