@@ -1,5 +1,5 @@
 export class ApplyController {
-  constructor ($scope, $log, $http, $timeout, $location, $state, $stateParams, toastr, sidebarGroup, cfg, city, apply, profile) {
+  constructor ($scope, $log, $http, $timeout, $location, $state, $stateParams, toastr, sidebarGroup, cfg, city, apply, $uibModal, profile) {
     'ngInject';
 
     this.cfg = cfg;
@@ -22,7 +22,7 @@ export class ApplyController {
 
       this.goView($scope, $state, $stateParams);
 
-      this.initOperation($scope, $state, $log, toastr);
+      this.initOperation($scope, $state, $log, toastr, $uibModal);
 
     });
 
@@ -229,6 +229,7 @@ export class ApplyController {
     }
   }
 
+
   preParams(type, params) {
 
     if(type === 'start') {
@@ -260,9 +261,52 @@ export class ApplyController {
 
   }
 
-  initOperation($scope, $state, $log, toastr) {
-
+  initOperation($scope, $state, $log, toastr, $uibModal) {
     var self = this;
+    $scope.operation = function(type, item) {
+
+      if(type === 'create') {
+        var modalInstance = $uibModal.open({
+          animation: false,
+          component: 'modalComponentApply',
+          backdrop: 'static',
+          resolve: {
+            type: function() {
+              return type;
+            },
+            info: function() {
+              return item;
+            }
+          }
+        });
+
+        modalInstance.result.then(function (result) {
+          $log.log(result);
+        }, function () {
+          $log.info('modal-component dismissed at: ' + new Date());
+        });
+      } else if(type === 'edit') {
+        var modalInstance = $uibModal.open({
+          animation: false,
+          component: 'modalComponentApply',
+          backdrop: 'static',
+          resolve: {
+            type: function() {
+              return type;
+            },
+            info: function() {
+              return item;
+            }
+          }
+        });
+
+        modalInstance.result.then(function (result) {
+          $log.log(result);
+        }, function () {
+          $log.info('modal-component dismissed at: ' + new Date());
+        });
+      }
+    }
 
     $scope.start = function(row, id) {
       $log.log('start: ' + id);
@@ -276,6 +320,7 @@ export class ApplyController {
         })
       }).then((response) => {
         $log.log(response);
+        toastr.success('启用成功');
         row.ticket_status = response.data.data;
         return response.data;
       }).catch((error) => {
@@ -295,6 +340,7 @@ export class ApplyController {
         })
       }).then((response) => {
         $log.log(response);
+        toastr.success('停用成功');
         row.ticket_status = response.data.data;
         return response.data;
       }).catch((error) => {

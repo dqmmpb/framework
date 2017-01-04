@@ -11,7 +11,14 @@ export var RSAKEY = {
 
 //var remoteServer = 'http://172.16.0.119:8080';
 
-var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
+var remoteServer = 'http://172.16.0.150:3000';
+
+
+//var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
+
+
+var uploadServer = 'http://yfl2.taofairy.com';
+
 
 var allCfg = {
   debug: true,
@@ -28,7 +35,7 @@ var allCfg = {
   upload: {
     local: true,
     localServer: location.protocol + '//' + location.host,
-    remoteServer: remoteServer,
+    remoteServer: uploadServer,
     localPath: '/assets/images/upload',
     remotePath: ''
   }
@@ -38,11 +45,11 @@ var api = allCfg.api;
 
 api.localAPI = {
   login: {
-    url: api.localServer  + '/',
+    url: api.localServer  + '/home/login.json',
     type: HTTP_TYPE.GET
   },
   logout: {
-    url: api.localServer  + '/logout.json',
+    url: api.localServer  + '/home/logoutman.json',
     type: HTTP_TYPE.GET
   },
   upload:  {
@@ -99,15 +106,15 @@ api.localAPI = {
       type: HTTP_TYPE.GET
     },
     detail: {
-      url: api.localServer + '/bacProfits/detail.json',
+      url: api.localServer + '/bacProfits/showProfit.json',
       type: HTTP_TYPE.GET
     },
     save: {
-      url: api.localServer + '/bacProfits/save.json',
+      url: api.localServer + '/bacProfits/updateProfit.json',
       type: HTTP_TYPE.POST
     },
     update: {
-      url: api.localServer + '/bacProfits/update.json',
+      url: api.localServer + '/bacProfits/updateProfit.json',
       type: HTTP_TYPE.POST
     },
     delete: {
@@ -255,13 +262,13 @@ api.localAPI = {
   },
   main: {
     all: {
-      url: api.localServer + '/main/fenrunTotal.json',
+      url: api.localServer + '/pays/fenrunTotal.json',
       type: HTTP_TYPE.GET
     }
   },
   profile: {
     detail: {
-      url: api.localServer + '/hqh.json',
+      url: api.localServer + '/home/hqh.json',
       type: HTTP_TYPE.GET
     }
   }
@@ -330,7 +337,7 @@ api.remoteAPI = {
       type: HTTP_TYPE.GET
     },
     detail: {
-      url: api.remoteServer + '/bacProfits/detail.json',
+      url: api.remoteServer + '/bacProfits/showProfit.json',
       type: HTTP_TYPE.GET
     },
     save: {
@@ -480,20 +487,19 @@ api.remoteAPI = {
       type: HTTP_TYPE.GET
     },
     newqrcode: {
-      url: "http://yfl2.taofairy.com/ticketapi/createQrcode.json",
+      url: api.remoteServer + '/tickets/qrcode.json',
       type: HTTP_TYPE.GET
     }
   },
   main: {
     all: {
-      //url: api.remoteServer + '/pays/fenrunTotal.json',
-      url: api.localServer + '/main/fenrunTotal.json',
+      url: api.remoteServer + '/pays/fenrunTotal.json',
       type: HTTP_TYPE.GET
     }
   },
   profile: {
     detail: {
-      url: api.remoteServer + '/hqh.json',
+      url: api.remoteServer + '/home/hqh.json',
       type: HTTP_TYPE.GET
     }
   }
@@ -612,6 +618,7 @@ cfg.sidebarData = [
 ];
 
 cfg.hasAuth = function(profile, url) {
+  //return true;
   var self = this;
   var resourcesMap = profile && profile.resourcesMap;
 

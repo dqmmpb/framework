@@ -1,5 +1,5 @@
 export class UserViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, role, user, RSAKEY, profile) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, role, user, RSAKEY, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -40,14 +40,14 @@ export class UserViewController {
       };
 
       if($scope.type === 'create') {
-        this.initForm($scope, $log, toastr, RSAKEY);
+        this.initForm($scope, $log, toastr, RSAKEY, $uibModal);
         this.getRoles($scope, $log, $timeout, role);
 
         this.initValidation($scope);
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.id);
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.id, $uibModal);
       }
 
     });
@@ -139,7 +139,7 @@ export class UserViewController {
     });
   }
 
-  getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, id) {
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, id, $uibModal) {
     var self = this;
     user.getDetail(id).then((data)=> {
       if(data) {
@@ -147,7 +147,7 @@ export class UserViewController {
         $scope.info = user.wrapper(data);
         $scope.info.roles = $scope.getRoleToArray($scope.info.role, 'id');
 
-        self.initForm($scope, $log, toastr, RSAKEY);
+        self.initForm($scope, $log, toastr, RSAKEY, $uibModal);
 
         self.getRoles($scope, $log, $timeout, role);
 
@@ -192,7 +192,7 @@ export class UserViewController {
 
   }
 
-  initForm($scope, $log, toastr, RSAKEY) {
+  initForm($scope, $log, toastr, RSAKEY, $uibModal) {
     var self = this;
 
     // Encrypt with the public key...
@@ -265,20 +265,35 @@ export class UserViewController {
     $scope.deleteSubmit = function(id) {
       $log.log('delete： ' + id);
 
-      self.$http({
-        url: self.cfg.api.user.delete.url,
-        method: self.cfg.api.user.delete.type,
-        params: self.preParams('delete', $scope.info, encrypt)
-      }).then((response) => {
-        if (response.data.result === 0) {
-          toastr.error('删除成功！');
-          $scope.goview('user');
-        } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+      var modalInstance = $uibModal.open({
+        animation: false,
+        component: 'modalComponentConfirm',
+        backdrop: 'static'
+      });
+
+      modalInstance.result.then(function (result) {
+        $log.log(result);
+        if(result === 'ok') {
+
+          self.$http({
+            url: self.cfg.api.user.delete.url,
+            method: self.cfg.api.user.delete.type,
+            params: self.preParams('delete', $scope.info, encrypt)
+          }).then((response) => {
+            if (response.data.result === 0) {
+              toastr.success('删除成功！');
+              $scope.goview('user');
+            } else if (response.data.result === 1) {
+              toastr.error('处理失败，请重试');
+            }
+          }).catch((error) => {
+            $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+            toastr.error('网络异常，请重试');
+          });
+
         }
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        toastr.error('网络异常，请重试');
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
       });
     };
 

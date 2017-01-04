@@ -69,10 +69,18 @@
                     <button ng-if="cfg.hasAuth(profile, cfg.api.apply.active.url) && row.ticket_status === 0" type="button" class="btn btn-danger btn-sm" ng-click="stop(row, row.id)">停用</button>
                     <button ng-if="cfg.hasAuth(profile, cfg.api.apply.active.url) && row.ticket_status === 1" type="button" class="btn btn-success btn-sm" ng-click="start(row, row.id)">启用</button>
                     <button ng-if="cfg.hasAuth(profile, cfg.api.apply.active.url) && row.ticket_status === 2" type="button" class="btn btn-success btn-sm" ng-click="start(row, row.id)">启用</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.save.url) && row.ticket_status === 3" type="button" class="btn btn-info btn-sm" ng-click="goview('applyview', 'create', row.id)">部署</button>
-                    <button ng-if="row.ticket_status != 3" type="button" class="btn btn-primary btn-sm" ng-click="goview('applyview', 'view', row.id)">详情</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status != 3" type="button" class="btn btn-warning btn-sm" ng-click="goview('applyview', 'edit', row.id)">编辑</button>
-                    <button ng-if="row.ticket_status != 3" type="button" class="btn btn-danger btn-sm" ng-click="download(row.id)">下载二维码</button>
+
+                    <!--<button ng-if="cfg.hasAuth(profile, cfg.api.apply.save.url) && row.ticket_status === 3" type="button" class="btn btn-info btn-sm" ng-click="goview('applyview', 'create', row.id)">部署</button>-->
+                    <!--<button ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>-->
+
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status === 3" type="button" class="btn btn-primary btn-sm" ng-click="operation('create', row, row.id)">部署</button>
+
+                    <button ng-if="row.ticket_status!= 3" type="button" class="btn btn-info btn-sm" ng-click="goview('applyview', 'view', row.id)">详情</button>
+                    <!--<button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status != 3" type="button" class="btn btn-warning btn-sm" ng-click="goview('applyview', 'edit', row.id)">编辑</button>-->
+                    <!--<button ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>-->
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status !== 3" type="button" class="btn btn-warning btn-sm" ng-click="operation('edit', row, row.id)">编辑</button>
+                    <!--<a ng-if="row.ticket_status != 3 && row.qrcodeImgPath" type="button" class="btn btn-danger btn-sm" href="{{row.qrcodeImgPath}}" target="_blank">下载二维码</a>-->
+                    <a ng-if="row.ticket_status!= 3 && row.qrcodeImgPath" type="button" class="btn btn-danger btn-sm" href="{{row.qrcodeImgPath}}" target="_blank">下载二维码</a>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>
                 </td>

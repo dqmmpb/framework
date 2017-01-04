@@ -9,11 +9,13 @@ import { MainController } from './main/main.controller';
 import { ProxyController } from './proxy/proxy.controller';
 import { ProxyViewController } from './proxy/view/proxyview.controller';
 import { ProfitController } from './profit/profit.controller';
-import { ModalProfitController } from './profit/modal_profit.controller';
+import { ModalProfitController } from './profit/modal/modal_profit.controller.js';
 import { ProfitViewController } from './profit/view/profitview.controller';
 import { DeployController } from './deploy/deploy.controller';
 import { DeployViewController } from './deploy/view/deployview.controller';
 import { ApplyController } from './apply/apply.controller';
+import { ModalApplyController } from './apply/modal/modal_apply.controller';
+import { ModalConfirmController } from '../app/components/modal/modal_confirm.controller';
 import { ApplyViewController } from './apply/view/applyview.controller';
 import { RoleController } from './role/role.controller';
 import { RoleViewController } from './role/view/roleview.controller';
@@ -74,15 +76,35 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .controller('UserController', UserController)
   .controller('UserViewController', UserViewController)
   .controller('ModalProfitController', ModalProfitController)
+  .controller('ModalApplyController', ModalApplyController)
   .controller('ProfileViewController', ProfileViewController)
+  .controller('ModalConfirmController', ModalConfirmController)
   .component('modalComponent', {
-    templateUrl: 'modal_profit.html',
+    templateUrl: 'app/profit/modal/modal_profit.html',
     bindings: {
       resolve: '<',
       close: '&',
       dismiss: '&'
     },
     controller: 'ModalProfitController'
+  })
+  .component('modalComponentApply', {
+    templateUrl: 'app/apply/modal/modal_apply.html',
+    bindings: {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    },
+    controller: 'ModalApplyController'
+  })
+  .component('modalComponentConfirm', {
+    templateUrl: 'app/components/modal/modal_confirm.html',
+    bindings: {
+      resolve: '<',
+      close: '&',
+      dismiss: '&'
+    },
+    controller: 'ModalConfirmController'
   });
 
 

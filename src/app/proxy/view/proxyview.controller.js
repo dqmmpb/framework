@@ -1,5 +1,5 @@
 export class ProxyViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, proxy, city, Upload, profile) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, proxy, city, Upload, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -72,7 +72,7 @@ export class ProxyViewController {
 
       if($scope.type === 'create') {
 
-        this.initForm($scope, $log, toastr);
+        this.initForm($scope, $log, toastr, $uibModal);
         this.viewFile($scope);
 
         this.getCities($scope, $log, $timeout, city);
@@ -82,7 +82,7 @@ export class ProxyViewController {
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, $scope.id);
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, $scope.id, $uibModal);
       }
 
     });
@@ -227,14 +227,15 @@ export class ProxyViewController {
 
   }
 
-  getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, id) {
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, proxy, city, Upload, id, $uibModal) {
     var self = this;
     proxy.getDetail(id).then((data)=> {
       if(data) {
         $scope.oData = data;
         $scope.info = proxy.wrapper(data);
 
-        self.initForm($scope, $log, toastr);
+        $scope.loading = false;
+        self.initForm($scope, $log, toastr, $uibModal);
         self.viewFile($scope);
 
         self.getCities($scope, $log, $timeout, city);
@@ -351,11 +352,18 @@ export class ProxyViewController {
 
   upload($scope, $log, Upload) {
     var self = this;
+
+    console.log(1233);
     // upload on file select or drop
     $scope.upload = function (file) {
+      console.log(Upload);
       Upload.upload({
         url: self.cfg.api.upload.url,
-        data: {file: file}
+        data: {file: file},
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        withCredentials: true
       }).then(function (resp) {
         $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
         file.serverData = {
@@ -544,7 +552,7 @@ export class ProxyViewController {
 
   }
 
-  initForm($scope, $log, toastr) {
+  initForm($scope, $log, toastr, $uibModal) {
     var self = this;
 
     $scope.createSubmit = function(isValid) {
@@ -558,7 +566,10 @@ export class ProxyViewController {
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('新建成功！');
-            $scope.goview('proxy');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('proxy');
           } else if(response.data.result === 1) {
             toastr.error('处理失败，请重试');
           }
@@ -581,7 +592,10 @@ export class ProxyViewController {
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('编辑成功！');
-            $scope.goview('proxy');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('proxy');
           } else if(response.data.result === 1) {
             toastr.error('处理失败，请重试');
           }
@@ -595,21 +609,40 @@ export class ProxyViewController {
     $scope.deleteSubmit = function(id) {
       $log.log('delete： ' + id);
 
-      self.$http({
-        url: self.cfg.api.proxy.delete.url,
-        method: self.cfg.api.proxy.delete.type,
-        params: self.preParams('delete', $scope.info)
-      }).then((response) => {
-        if (response.data.result === 0) {
-          toastr.error('删除成功！');
-          $scope.goview('proxy');
-        } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
-        }
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        toastr.error('网络异常，请重试');
+      var modalInstance = $uibModal.open({
+        animation: false,
+        component: 'modalComponentConfirm',
+        backdrop: 'static'
       });
+
+      modalInstance.result.then(function (result) {
+        $log.log(result);
+        if(result === 'ok') {
+
+          self.$http({
+            url: self.cfg.api.proxy.delete.url,
+            method: self.cfg.api.proxy.delete.type,
+            params: self.preParams('delete', $scope.info)
+          }).then((response) => {
+            if (response.data.result === 0) {
+              toastr.success('删除成功！');
+              if($scope.redirect_url)
+                location.href = $scope.redirect_url;
+              else
+                $scope.goview('proxy');
+            } else if (response.data.result === 1) {
+              toastr.error('处理失败，请重试');
+            }
+          }).catch((error) => {
+            $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+            toastr.error('网络异常，请重试');
+          });
+
+        }
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+      });
+
     };
 
     $scope.applySubmit = function(id, isValid) {

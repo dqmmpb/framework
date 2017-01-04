@@ -1,5 +1,5 @@
 export class DeployViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, deploy, city, Upload, profile) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, deploy, city, Upload, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -60,7 +60,7 @@ export class DeployViewController {
 
       if($scope.type === 'create') {
 
-        this.initForm($scope, $log, toastr);
+        this.initForm($scope, $log, toastr, $uibModal);
         this.viewFile($scope);
 
         this.getCities($scope, $log, $timeout, city);
@@ -70,7 +70,7 @@ export class DeployViewController {
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, deploy, city, Upload, $scope.id);
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, deploy, city, Upload, $scope.id, $uibModal);
       }
 
     });
@@ -215,14 +215,14 @@ export class DeployViewController {
 
   }
 
-  getData($scope, $log, $timeout, $state, $stateParams, toastr, deploy, city, Upload, id) {
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, deploy, city, Upload, id, $uibModal) {
     var self = this;
     deploy.getDetail(id).then((data)=> {
       if(data) {
         $scope.oData = data;
         $scope.info = deploy.wrapper(data);
 
-        self.initForm($scope, $log, toastr);
+        self.initForm($scope, $log, toastr, $uibModal);
         self.viewFile($scope);
 
         self.getCities($scope, $log, $timeout, city);
@@ -343,7 +343,8 @@ export class DeployViewController {
     $scope.upload = function (file) {
       Upload.upload({
         url: self.cfg.api.upload.url,
-        data: {file: file}
+        data: {file: file},
+        withCredentials: true
       }).then(function (resp) {
         $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
         file.serverData = {
@@ -532,7 +533,7 @@ export class DeployViewController {
 
   }
 
-  initForm($scope, $log, toastr) {
+  initForm($scope, $log, toastr, $uibModal) {
     var self = this;
 
     $scope.createSubmit = function(isValid) {
@@ -583,21 +584,38 @@ export class DeployViewController {
     $scope.deleteSubmit = function(id) {
       $log.log('delete： ' + id);
 
-      self.$http({
-        url: self.cfg.api.deploy.delete.url,
-        method: self.cfg.api.deploy.delete.type,
-        params: self.preParams('delete', $scope.info)
-      }).then((response) => {
-        if (response.data.result === 0) {
-          toastr.error('删除成功！');
-          $scope.goview('deploy');
-        } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
-        }
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        toastr.error('网络异常，请重试');
+
+      var modalInstance = $uibModal.open({
+        animation: false,
+        component: 'modalComponentConfirm',
+        backdrop: 'static'
       });
+
+      modalInstance.result.then(function (result) {
+        $log.log(result);
+        if(result === 'ok') {
+
+          self.$http({
+            url: self.cfg.api.deploy.delete.url,
+            method: self.cfg.api.deploy.delete.type,
+            params: self.preParams('delete', $scope.info)
+          }).then((response) => {
+            if (response.data.result === 0) {
+              toastr.success('删除成功！');
+              $scope.goview('deploy');
+            } else if (response.data.result === 1) {
+              toastr.error('处理失败，请重试');
+            }
+          }).catch((error) => {
+            $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+            toastr.error('网络异常，请重试');
+          });
+
+        }
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+      });
+
     };
 
     $scope.applySubmit = function(id, isValid) {

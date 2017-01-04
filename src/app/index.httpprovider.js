@@ -5,6 +5,7 @@ export function httpProvider ($httpProvider) {
   $httpProvider.defaults.headers.post = {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'};
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
+  $httpProvider.defaults.withCredentials = true;
 
   /**
    * The workhorse; converts an object to x-www-form-urlencoded serialization.

@@ -18,43 +18,43 @@ angular.module('ui.framework.auth', [])
         sM.auth[i].ch = sM.ch;
       }
 
-      if (!sM.ch)
-        mM.ch = false;
+      if (sM.ch)
+        mM.ch = true;
       else {
         for (var j in mM.sub) {
-          if (!mM.sub[j].ch) {
-            mM.ch = false;
+          if (mM.sub[j].ch) {
+            mM.ch = true;
             return;
           }
         }
-        mM.ch = true;
+        mM.ch = false;
       }
 
     };
 
     vm.checkAT = function (mM, sM, aT) {
-      if (!aT.ch)
-        sM.ch = false;
+      if (aT.ch)
+        sM.ch = true;
       else {
         for (var i in sM.auth) {
-          if (!sM.auth[i].ch) {
-            sM.ch = false;
-            mM.ch = false;
+          if (sM.auth[i].ch) {
+            sM.ch = true;
+            mM.ch = true;
             return;
           }
         }
-        sM.ch = true;
+        sM.ch = false;
       }
-      if (!sM.ch)
-        mM.ch = false;
+      if (sM.ch)
+        mM.ch = true;
       else {
         for (var j in mM.sub) {
-          if (!mM.sub[j].ch) {
-            mM.ch = false;
+          if (mM.sub[j].ch) {
+            mM.ch = true;
             return;
           }
         }
-        mM.ch = true;
+        mM.ch = false;
       }
     };
 

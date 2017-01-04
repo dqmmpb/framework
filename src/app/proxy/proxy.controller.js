@@ -1,5 +1,5 @@
 export class ProxyController {
-  constructor ($scope, $log, $http, $timeout, $location, $state, $stateParams, toastr, sidebarGroup, cfg, city, proxy, profile) {
+  constructor ($scope, $log, $http, $timeout, $location, $state, $stateParams, toastr, sidebarGroup, cfg, city, proxy, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -22,7 +22,7 @@ export class ProxyController {
 
       this.goView($scope, $state, $stateParams);
 
-      this.initOperation($scope, $state, $log, toastr);
+      this.initOperation($scope, $state, $log, toastr, $uibModal);
 
     });
 
@@ -234,7 +234,7 @@ export class ProxyController {
 
   }
 
-  initOperation($scope, $state, $log, toastr) {
+  initOperation($scope, $state, $log, toastr, $uibModal) {
 
     var self = this;
 
@@ -243,26 +243,41 @@ export class ProxyController {
       if (type === 'delete') {
         $log.log('delete： ' + item.id);
 
-        self.$http({
-          url: self.cfg.api.proxy.delete.url,
-          method: self.cfg.api.proxy.delete.type,
-          params: self.preParams('delete', item)
-        }).then((response) => {
-          if (response.data.result === 0) {
-            toastr.error('删除成功！');
-            $state.go($scope.searchForm.doSearch ? 'proxy.search' : 'proxy.page', {
-              keyWord: $scope.searchForm.keyWord,
-              doSearch: $scope.searchForm.doSearch,
-              currentPage: $scope.currentPage
-            }, {
-              reload: true
+        var modalInstance = $uibModal.open({
+          animation: false,
+          component: 'modalComponentConfirm',
+          backdrop: 'static'
+        });
+
+        modalInstance.result.then(function (result) {
+          $log.log(result);
+          if(result === 'ok') {
+
+            self.$http({
+              url: self.cfg.api.proxy.delete.url,
+              method: self.cfg.api.proxy.delete.type,
+              params: self.preParams('delete', item)
+            }).then((response) => {
+              if (response.data.result === 0) {
+                toastr.success('删除成功！');
+                $state.go($scope.searchForm.doSearch ? 'proxy.search' : 'proxy.page', {
+                  keyWord: $scope.searchForm.keyWord,
+                  doSearch: $scope.searchForm.doSearch,
+                  currentPage: $scope.currentPage
+                }, {
+                  reload: true
+                });
+              } else if (response.data.result === 1) {
+                toastr.error('处理失败，请重试');
+              }
+            }).catch((error) => {
+              $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+              toastr.error('网络异常，请重试');
             });
-          } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+
           }
-        }).catch((error) => {
-          $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-          toastr.error('网络异常，请重试');
+        }, function () {
+          $log.info('modal-component dismissed at: ' + new Date());
         });
       }
     };

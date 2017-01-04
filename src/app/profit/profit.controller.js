@@ -155,7 +155,7 @@ export class ProfitController {
         name: "全部状态"
       },{
         value: 0,
-        name: "未设置"
+        name: "待设置"
       },
       {
         value: 1,

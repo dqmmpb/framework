@@ -1,5 +1,5 @@
 export class ApplyViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, apply, city, Upload, profile) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, apply, city, Upload, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -31,13 +31,13 @@ export class ApplyViewController {
 
       if($scope.type === 'create') {
 
-        this.initForm($scope, $log, toastr);
+        this.initForm($scope, $log, toastr, $uibModal);
 
         this.initValidation($scope);
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, apply, city, Upload, $scope.id);
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, apply, city, Upload, $scope.id, $uibModal);
       }
 
     });
@@ -98,7 +98,7 @@ export class ApplyViewController {
 
   }
 
-  getData($scope, $log, $timeout, $state, $stateParams, toastr, apply, city, Upload, id) {
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, apply, city, Upload, id, $uibModal) {
     var self = this;
     $scope.loading = false;
 
@@ -107,7 +107,7 @@ export class ApplyViewController {
         $scope.oData = data;
         $scope.info = apply.wrapper(data);
 
-        self.initForm($scope, $log, toastr);
+        self.initForm($scope, $log, toastr, $uibModal);
         //self.viewFile($scope);
 
         self.initValidation($scope);
@@ -132,6 +132,7 @@ export class ApplyViewController {
       };
     } else if(type === 'edit') {
       return {
+        id: params.ticket_id,
         wangbaId: wangbaId,
         corpId: params.corpId,
         secret: params.corpsecret,
@@ -151,13 +152,13 @@ export class ApplyViewController {
 
     } else if(type === 'createQrcode') {
       return {
-        wangbaId: params.wangbaId,
+        id: params.id,
       };
     }
 
   }
 
-  initForm($scope, $log, toastr) {
+  initForm($scope, $log, toastr, $uibModal) {
     var self = this;
 
     $scope.createSubmit = function(isValid) {
@@ -208,38 +209,56 @@ export class ApplyViewController {
     $scope.deleteSubmit = function(id) {
       $log.log('delete： ' + id);
 
-      self.$http({
-        url: self.cfg.api.apply.delete.url,
-        method: self.cfg.api.apply.delete.type,
-        data: self.preParams('delete', $scope.info, $scope.id)
-      }).then((response) => {
-        if (response.data.result === 0) {
-          toastr.error('删除成功！');
-          $scope.goview('apply');
-        } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
-        }
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        toastr.error('网络异常，请重试');
+
+      var modalInstance = $uibModal.open({
+        animation: false,
+        component: 'modalComponentConfirm',
+        backdrop: 'static'
       });
+
+      modalInstance.result.then(function (result) {
+        $log.log(result);
+        if(result === 'ok') {
+
+          self.$http({
+            url: self.cfg.api.apply.delete.url,
+            method: self.cfg.api.apply.delete.type,
+            data: self.preParams('delete', $scope.info, $scope.id)
+          }).then((response) => {
+            if (response.data.result === 0) {
+              toastr.success('删除成功！');
+              $scope.goview('apply');
+            } else if (response.data.result === 1) {
+              toastr.error('处理失败，请重试');
+            }
+          }).catch((error) => {
+            $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+            toastr.error('网络异常，请重试');
+          });
+
+        }
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+      });
+
+
     };
 
     $scope.createQrcode = function($event) {
       $event.stopPropagation();
       $event.preventDefault();
       $log.log(self.preParams('createQrcode', {
-        wangbaId: $scope.id
+        id: $scope.id
       }));
       self.$http({
         url: self.cfg.api.apply.newqrcode.url,
         method: self.cfg.api.apply.newqrcode.type,
         params: self.preParams('createQrcode', {
-          wangbaId: $scope.id
+          id: $scope.id
         })
       }).then((response) => {
-        if(response.data.result === 0) {
-          $scope.info.qrcode_path = response.data.data.codeImg;
+        if(response.data.data.result === 0) {
+          $scope.info.qrcode_path = response.data.data.data.codeImg;
           toastr.success('生成二维码成功！');
           //$scope.goview('apply');
         } else if(response.data.result === 1) {

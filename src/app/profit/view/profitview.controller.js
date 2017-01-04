@@ -1,5 +1,5 @@
 export class ProfitViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, proxy, profile) {
+  constructor ($scope, $log, $http, $state, $stateParams, toastr, sidebarGroup, cfg, profit, profile) {
     'ngInject';
 
     this.cfg = cfg;
@@ -70,10 +70,21 @@ export class ProfitViewController {
           }]
       };
 
+      $scope.mform = {
+        name: $scope.info.name,
+        code: $scope.info.code
+      };
+      $scope.mform.profits = {
+        code: $scope.info.code,
+        pct_charge: null,
+        pct_consume: null
+      };
+
+
       if($scope.type === 'create') {
-        this.getData($scope, $log, $state, $stateParams, toastr, proxy, $scope.id);
+        this.getData($scope, $log, $state, $stateParams, toastr, profit, $scope.id);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'apply') {
-        this.getData($scope, $log, $state, $stateParams, toastr, proxy, $scope.id);
+        this.getData($scope, $log, $state, $stateParams, toastr, profit, $scope.id);
       }
 
     });
@@ -121,19 +132,35 @@ export class ProfitViewController {
 
   }
 
-  getData($scope, $log, $state, $stateParams, toastr, proxy, id) {
+  getData($scope, $log, $state, $stateParams, toastr, profit, id) {
     var self = this;
-    proxy.getDetail(id).then((data)=> {
+    profit.getDetail(id).then((data)=> {
       if(data) {
         $scope.oData = data;
-        $scope.info = proxy.wrapper(data);
+        $scope.info = profit.wrapper(data);
+
+        $scope.mform.profits = {
+          code: $scope.info.code,
+          pct_charge: null,
+          pct_consume: null
+        };
+
+        var profitsSet = $scope.info.profitsSet;
+
+        for (var i in profitsSet) {
+          if (profitsSet[i].catagory === 0) {
+            $scope.mform.profits.pct_charge = profitsSet[i].percent;
+          } else if (profitsSet[i].catagory === 1) {
+            $scope.mform.profits.pct_consume = profitsSet[i].percent
+          }
+        }
 
         self.initForm($scope, $log, toastr);
         self.viewFile($scope);
 
         $scope.loading = false;
 
-        self.initValidation($scope, proxy);
+        self.initValidation($scope, profit);
 
         self.goView($scope, $state, $stateParams);
       }
@@ -249,65 +276,46 @@ export class ProfitViewController {
     return null;
   }
 
-  preParams(type, params) {
+  preParams(type, params, info) {
     var self = this;
 
     if(type === 'create') {
       return {
-        name: params.name,
-        areaCode: params.areaCode.join(','),
-        area: params.area.join(','),
-        // business_areaCode: params.business_areaCode.join(','),
-        // business_area: params.business_area.join(','),
-        address: params.address,
-        corporName: params.legal,
-        corporMobile: params.cellphone,
-        isCorporReal: params.is_same ? 0 : 1,
-        realControlName: params.real_name,
-        realControlMobile: params.real_cellphone,
-        corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
-        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
-        licencePic: self.restructureFile(self.getFiles(params.blfile)),
-        dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
+        agentId: info.id,
+        code: params.code,
+        chargePercent: params.profits.pct_charge,
+        waterbaPercent: params.profits.pct_consume
       };
     } else if(type === 'edit') {
       return {
-        id: params.id,
-        name: params.name,
-        areaCode: params.areaCode.join(','),
-        area: params.area.join(','),
-        // business_areaCode: params.business_areaCode.join(','),
-        // business_area: params.business_area.join(','),
-        address: params.address,
-        corporName: params.legal,
-        corporMobile: params.cellphone,
-        isCorporReal: params.is_same ? 0 : 1,
-        realControlName: params.real_name,
-        realControlMobile: params.real_cellphone,
-        corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
-        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
-        licencePic: self.restructureFile(self.getFiles(params.blfile)),
-        dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
+        agentId: info.id,
+        code: params.code,
+        chargePercent: params.profits.pct_charge,
+        waterbaPercent: params.profits.pct_consume
       };
     }
 
   }
 
   initForm($scope, $log, toastr) {
+
     var self = this;
 
     $scope.createSubmit = function(isValid) {
       $log.log('create. isValid: ' + isValid);
       if(isValid) {
-        $log.log(self.preParams('create', $scope.info));
+        $log.log(self.preParams('create', $scope.mform, $scope.info));
         self.$http({
           url: self.cfg.api.profit.save.url,
           method: self.cfg.api.profit.save.type,
-          data: self.preParams('create', $scope.info)
+          data: self.preParams('create', $scope.mform, $scope.info)
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('新建成功！');
-            $scope.goview('profit');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('profit');
           } else if(response.data.result === 1) {
             toastr.error('处理失败，请重试');
           }
@@ -322,15 +330,18 @@ export class ProfitViewController {
       $log.log('edit： ' + id + '. isValid: ' + isValid);
 
       if(isValid) {
-        $log.log(self.preParams('edit', $scope.info));
+        $log.log(self.preParams('edit', $scope.mform, $scope.info));
         self.$http({
           url: self.cfg.api.profit.update.url,
           method: self.cfg.api.profit.update.type,
-          data: self.preParams('edit', $scope.info)
+          data: self.preParams('edit', $scope.mform, $scope.info)
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('编辑成功！');
-            $scope.goview('proxy');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('profit');
           } else if(response.data.result === 1) {
             toastr.error('处理失败，请重试');
           }

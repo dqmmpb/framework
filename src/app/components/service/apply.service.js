@@ -72,6 +72,7 @@ export class ApplyService {
 
     var x;
 
+
     if (o.tickets) {
       x = {
         id: o.id,
@@ -94,14 +95,16 @@ export class ApplyService {
         affile: null,
         company_name: o.companyName,
         branch_name: o.branchName,
+        ticket_id: o.tickets.id,
         ticket_status: o.tickets ? o.tickets.status : 3,
         corpId: o.tickets.corpId,
-        corpsecret: o.tickets.corpsecret,
+        corpsecret: o.tickets.secret,
         department_id: o.tickets.departmentId,
         wangba_id: o.tickets.wangbaId,
         cashier_dept_id: o.tickets.cashierDeptId,
-        apply_id: o.tickets.apply_id,
-        qrcode_path: o.tickets.qrcode_path
+        apply_id: o.tickets.agentId,
+        qrcode_path: o.tickets.alipayQrcode,
+        qrcodeImgPath: o.tickets.qrcodeImgPath
       };
     } else {
       x = {
@@ -132,7 +135,8 @@ export class ApplyService {
         wangba_id: null,
         cashier_dept_id: null,
         apply_id: null,
-        qrcode_path: null
+        qrcode_path: null,
+        qrcodeImgPath: null
       };
     }
 
@@ -216,7 +220,7 @@ export class ApplyService {
         oo.file = {
           serverData: {
             name: fileArray[i],
-            url: self.cfg.uploadPath + '/' + fileArray[i]
+            url: self.cfg.uploadViewServer + '/' + fileArray[i]
           },
           noedit: true
         }

@@ -31,11 +31,11 @@ export class AuthService {
             row.aT.ch = false;
             rsAuthes.push(row);
           }
-          if (rsAuthes.length > 0 && rsAuthes.length >= data[i].sub[j].auth.length) {
+          if (rsAuthes.length > 0 && rsAuthes.length >= data[i].sub[j].auth.length && data[i].sub[j].auth.length > 0) {
             rsAuthes[rsAuthes.length - data[i].sub[j].auth.length].sM.rowspan = data[i].sub[j].auth.length;
           }
         }
-        if (rsAuthes.length > 0 && rsAuthes.length >= jc) {
+        if (rsAuthes.length > 0 && rsAuthes.length >= jc && jc > 0) {
           rsAuthes[rsAuthes.length - jc].mM.rowspan = jc;
         }
       }

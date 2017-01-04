@@ -22,7 +22,7 @@
                 <div class="panel-title">代理商分润信息</div>
               </div>
               <div class="panel-body">
-                <form class="form form-horizontal" ng-submit="createSubmit(id)">
+                <form name="form" class="form form-horizontal" ng-submit="createSubmit(form.$valid)" novalidate>
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -39,7 +39,7 @@
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
-                          <input type="text" ng-model="info.profit.channel" class="form-control" placeholder="渠道码">
+                          <input type="text" ng-model="mform.code" class="form-control" placeholder="渠道码">
                         </div>
                       </div>
                     </div>
@@ -48,8 +48,12 @@
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
                           <div class="input-group input-group-info">
-                            <input type="text" ng-model="info.profit.pct_charge" class="form-control" placeholder="比例">
+                            <input type="text" ng-model="mform.profits.pct_charge" name="pct_charge" class="form-control" placeholder="比例" required ng-pattern="/^\d+\.*\d{0,2}$/">
                             <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_charge.$error">
+                            <small class="error" ng-message="required">会员充值分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比必须为2位小数</small>
                           </div>
                         </div>
                       </div>
@@ -59,8 +63,12 @@
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>水吧零食分润比:</label>
                         <div class="col-sm-6">
                           <div class="input-group input-group-info">
-                            <input type="text" ng-model="info.profit.pct_consume" class="form-control" placeholder="比例">
+                            <input type="text" ng-model="mform.profits.pct_consume" name="pct_charge" class="form-control" placeholder="比例" required ng-pattern="/^\d+\.*\d{0,2}$/">
                             <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_consume.$error">
+                            <small class="error" ng-message="required">水吧零食分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比必须为2位小数</small>
                           </div>
                         </div>
                       </div>
@@ -70,7 +78,7 @@
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
-                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存设置</button>
+                        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存设置</button>
                       </div>
                       <div class="btn-group" role="group" aria-label="">
                         <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 暂不设置</a>
@@ -223,11 +231,11 @@
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.save.url)" class="btn-group" role="group" aria-label="">
-            <a ng-if="!info.profit" ng-click="goview('profitview', 'create', id)" class="btn btn-default btn-info" uib-tooltip="设置" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-cog"></i><span class="hidden-xs"> 设置</span></a>
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.save.url) && !(info.profitsSet && info.profitsSet.length)" class="btn-group" role="group" aria-label="">
+            <a ng-click="goview('profitview', 'create', id)" class="btn btn-default btn-info" uib-tooltip="设置" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-cog"></i><span class="hidden-xs"> 设置</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" class="btn-group" role="group" aria-label="">
-            <a ng-if="info.profit" ng-click="goview('profitview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url) && (info.profitsSet && info.profitsSet.length)" class="btn-group" role="group" aria-label="">
+            <a ng-click="goview('profitview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
         </div>
 
@@ -254,7 +262,7 @@
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
-                          <p class="form-control-static">{{info.profit.channel || '未设置'}}</p>
+                          <p class="form-control-static">{{mform.code}}</p>
                         </div>
                       </div>
                     </div>
@@ -262,7 +270,7 @@
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
-                          <p class="form-control-static">{{info.profit.pct_charge? (info.profit.pct_charge + '%') : '未设置'}}</p>
+                          <p class="form-control-static">{{(mform.profits.pct_charge !== undefined && mform.profits.pct_charge !== null) ? (mform.profits.pct_charge + '%') : '待设置'}}</p>
                         </div>
                       </div>
                     </div>
@@ -270,7 +278,7 @@
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>水吧零食分润比:</label>
                         <div class="col-sm-6">
-                          <p class="form-control-static">{{info.profit.pct_consume ? (info.profit.pct_consume + '%') : '未设置'}}</p>
+                          <p class="form-control-static">{{(mform.profits.pct_consume !== undefined && mform.profits.pct_consume !== null) ? (mform.profits.pct_consume + '%') : '待设置'}}</p>
                         </div>
                       </div>
                     </div>
@@ -430,7 +438,7 @@
                 <div class="panel-title">代理商分润信息</div>
               </div>
               <div class="panel-body">
-                <form class="form form-horizontal" ng-submit="editSubmit(id)">
+                <form name="form" class="form form-horizontal" ng-submit="editSubmit(id, form.$valid)" novalidate>
                   <div class="row">
                     <div class="col-sm-12">
                       <div class="form-group">
@@ -447,17 +455,25 @@
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
-                          <input type="text" ng-model="info.profit.channel" class="form-control" placeholder="渠道码">
+                          <input type="text" ng-model="mform.code" class="form-control" placeholder="渠道码" required>
+                          <div class="error-messages" ng-messages="form.code.$error">
+                            <small class="error" ng-message="required">渠道码（*必填）</small>
+                          </div>
                         </div>
                       </div>
                     </div>
+
                     <div class="col-sm-4">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
                           <div class="input-group input-group-info">
-                            <input type="text" ng-model="info.profit.pct_charge" class="form-control" placeholder="比例">
+                            <input type="text" ng-model="mform.profits.pct_charge" name="pct_charge" class="form-control" placeholder="比例" required ng-pattern="/^\d+\.*\d{0,2}$/">
                             <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_charge.$error">
+                            <small class="error" ng-message="required">会员充值分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比必须为2位小数</small>
                           </div>
                         </div>
                       </div>
@@ -467,8 +483,12 @@
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>水吧零食分润比:</label>
                         <div class="col-sm-6">
                           <div class="input-group input-group-info">
-                            <input type="text" ng-model="info.profit.pct_consume" class="form-control" placeholder="比例">
+                            <input type="text" ng-model="mform.profits.pct_consume" name="pct_consume" class="form-control" placeholder="比例" required ng-pattern="/^\d+\.*\d{0,2}$/">
                             <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_consume.$error">
+                            <small class="error" ng-message="required">水吧零食分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比必须为2位小数</small>
                           </div>
                         </div>
                       </div>
@@ -478,7 +498,7 @@
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
-                        <button class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 保存修改</button>
+                        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存修改</button>
                       </div>
                       <div class="btn-group" role="group" aria-label="">
                         <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃修改</a>

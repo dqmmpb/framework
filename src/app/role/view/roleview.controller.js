@@ -1,5 +1,5 @@
 export class RoleViewController {
-  constructor ($scope, $log, $http, $state, $stateParams, toastr, sidebarGroup, cfg, role, auth, profile) {
+  constructor ($scope, $log, $http, $state, $stateParams, toastr, sidebarGroup, cfg, role, auth, profile, $uibModal) {
     'ngInject';
 
     this.cfg = cfg;
@@ -37,13 +37,13 @@ export class RoleViewController {
       };
 
       if($scope.type === 'create') {
-        this.initForm($scope, $log, toastr);
+        this.initForm($scope, $log, toastr, $uibModal);
 
         this.getAuthes($scope, $log, auth);
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
-        this.getData($scope, $log, $state, $stateParams, toastr, role, auth, $scope.id);
+        this.getData($scope, $log, $state, $stateParams, toastr, role, auth, $scope.id, $uibModal);
       }
 
     });
@@ -97,7 +97,7 @@ export class RoleViewController {
     });
   }
 
-  getData($scope, $log, $state, $stateParams, toastr, role, auth, id) {
+  getData($scope, $log, $state, $stateParams, toastr, role, auth, id, $uibModal) {
     var self = this;
     role.getDetail(id).then((data)=> {
       if(data) {
@@ -105,7 +105,7 @@ export class RoleViewController {
         $scope.info = role.wrapper(data);
         $scope.info.authes = $scope.getAuthIdArray($scope.info.auth);
 
-        self.initForm($scope, $log, toastr);
+        self.initForm($scope, $log, toastr, $uibModal);
 
         self.getAuthes($scope, $log, auth);
 
@@ -118,6 +118,12 @@ export class RoleViewController {
 
     var newAuth = [];
     for(var auth in authes) {
+      if(authes[auth].mM.ch) {
+        newAuth.push(authes[auth].mM.id);
+      }
+      if(authes[auth].sM.ch) {
+        newAuth.push(authes[auth].sM.id);
+      }
       if(authes[auth].aT.ch) {
         newAuth.push(authes[auth].aT.id);
       }
@@ -151,7 +157,7 @@ export class RoleViewController {
 
   }
 
-  initForm($scope, $log, toastr) {
+  initForm($scope, $log, toastr, $uibModal) {
     var self = this;
 
     $scope.createSubmit = function(isValid) {
@@ -208,24 +214,40 @@ export class RoleViewController {
     $scope.deleteSubmit = function(id) {
       $log.log('delete： ' + id);
 
-      self.$http({
-        url: self.cfg.api.role.delete.url,
-        method: self.cfg.api.role.delete.type,
-        params: self.preParams('delete', $scope.info, $scope.authes)
-      }).then((response) => {
-        if (response.data.result === 0) {
-          toastr.error('删除成功！');
-          if($scope.redirect_url)
-            location.href = $scope.redirect_url;
-          else
-            $scope.goview('role');
-        } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
-        }
-      }).catch((error) => {
-        $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
-        toastr.error('网络异常，请重试');
+      var modalInstance = $uibModal.open({
+        animation: false,
+        component: 'modalComponentConfirm',
+        backdrop: 'static'
       });
+
+      modalInstance.result.then(function (result) {
+        $log.log(result);
+        if(result === 'ok') {
+
+          self.$http({
+            url: self.cfg.api.role.delete.url,
+            method: self.cfg.api.role.delete.type,
+            params: self.preParams('delete', $scope.info, $scope.authes)
+          }).then((response) => {
+            if (response.data.result === 0) {
+              toastr.success('删除成功！');
+              if($scope.redirect_url)
+                location.href = $scope.redirect_url;
+              else
+                $scope.goview('role');
+            } else if (response.data.result === 1) {
+              toastr.error('处理失败，请重试');
+            }
+          }).catch((error) => {
+            $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+            toastr.error('网络异常，请重试');
+          });
+
+        }
+      }, function () {
+        $log.info('modal-component dismissed at: ' + new Date());
+      });
+
     };
   }
 

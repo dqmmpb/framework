@@ -15,11 +15,15 @@ export class ProfileService {
       method: self.cfg.api.profile.detail.type
     }).then((response) => {
       if (response.data.result === 0) {
+        console.log("profile2:+ response.data.data")
+        console.log(response.data.data)
         return self.wrapper(response.data.data);
       } else {
+        //console.log("profile2: "+ response.data.data)
         location.href = self.cfg.api.login.url;
       }
     }).catch((error) => {
+      //console.log("profile3");
       location.href = self.cfg.api.login.url;
       this.$log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
     });
@@ -56,6 +60,7 @@ export class ProfileService {
       cellphone: o.mobile,
       resourcesMap: self.restructRoleSet(o.roleSet ? o.roleSet : [], {})
     };
+    //console.log(x.resourcesMap);
 
     console.log(x);
     return x;
