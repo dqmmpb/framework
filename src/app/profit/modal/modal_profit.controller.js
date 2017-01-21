@@ -16,8 +16,9 @@ export class ModalProfitController {
     };
     $ctrl.form.profits = {
       code: $ctrl.info.code,
-      pct_charge: null,
-      pct_consume: null
+      //pct_charge: null,
+      //pct_consume: null,
+      pct_quick: null
     };
 
     if ($ctrl.type == 'edit') {
@@ -32,8 +33,9 @@ export class ModalProfitController {
 
     $scope.form.profits = {
       code: $scope.info.code,
-      pct_charge: null,
-      pct_consume: null
+      //pct_charge: null,
+      //pct_consume: null,
+      pct_quick: null
     };
 
     var profitsSet = $scope.info.profitsSet;
@@ -43,6 +45,8 @@ export class ModalProfitController {
         $scope.form.profits.pct_charge = profitsSet[profit].percent;
       } else if (profitsSet[profit].catagory === 1) {
         $scope.form.profits.pct_consume = profitsSet[profit].percent
+      } else if (profitsSet[profit].catagory === 2) {
+        $scope.form.profits.pct_quick = profitsSet[profit].percent
       }
     }
   }
@@ -89,6 +93,24 @@ export class ModalProfitController {
       }
     }
 
+    if(typeof result.quickPercent !== 'undefined' && result.quickPercent !== null) {
+      flag = true;
+      for (profit in profitsSet) {
+        if (profitsSet[profit].catagory === 2) {
+          profitsSet[profit].percent = result.quickPercent;
+          flag = false;
+          break;
+        }
+      }
+      if(flag) {
+        profitsSet.push({
+          catagory: 2,
+          percent: result.quickPercent
+        })
+      }
+    }
+
+
   }
   ok(result) {
 
@@ -107,15 +129,17 @@ export class ModalProfitController {
       return {
         agentId: info.id,
         code: params.code,
-        chargePercent: params.profits.pct_charge,
-        waterbaPercent: params.profits.pct_consume
+        //chargePercent: params.profits.pct_charge,
+        //waterbaPercent: params.profits.pct_consume,
+        quickPercent: params.profits.pct_quick
       };
     } else if (type === 'edit') {
       return {
         agentId: info.id,
         code: params.code,
-        chargePercent: params.profits.pct_charge,
-        waterbaPercent: params.profits.pct_consume
+        //chargePercent: params.profits.pct_charge,
+        //waterbaPercent: params.profits.pct_consume,
+        quickPercent: params.profits.pct_quick
       };
     }
 
@@ -146,7 +170,7 @@ export class ModalProfitController {
             toastr.success('处理成功！');
             self.ok(response.data.data);
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -168,7 +192,7 @@ export class ModalProfitController {
             toastr.success('处理成功！');
             self.ok(response.data.data);
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));

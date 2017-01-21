@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="proxyview.isCollapse" groups="proxyview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="proxyview.isCollapse" groups="proxyview.sidebarGroups" item-selected="proxyview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="proxyview.breads"></uib-breadcrumb>
@@ -68,11 +68,12 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required ng-pattern="/^1\d{10}$/">
                           <div class="error-messages" ng-messages="form.cellphone.$error">
                             <small class="error" ng-message="required">手机号（*必填）</small>
                             <small class="error" ng-message="minlength">请输入11位手机号</small>
                             <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                            <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                           </div>
                         </div>
                       </div>
@@ -89,7 +90,7 @@
                                     <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.pcfile', item.file)"></i></div>
                                   </div>
                                 </div>
-                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="legal_file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="legal_file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
@@ -125,11 +126,12 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.real_cellphone" name="real_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <input type="text" ng-model="info.real_cellphone" name="real_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required ng-pattern="/^1\d{10}$/">
                           <div class="error-messages" ng-messages="form.real_cellphone.$error">
                             <small class="error" ng-message="required">手机号（*必填）</small>
                             <small class="error" ng-message="minlength">请输入11位手机号</small>
                             <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                            <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                           </div>
                         </div>
                       </div>
@@ -145,7 +147,7 @@
                                     <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.rpcfile', item.file)"></i></div>
                                   </div>
                                 </div>
-                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                                <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
@@ -184,7 +186,7 @@
                                 <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
                               </div>
                             </div>
-                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
@@ -208,7 +210,7 @@
                                 <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.affile', item.file)"></i></div>
                               </div>
                             </div>
-                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                            <div class="image-upload" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
@@ -242,10 +244,13 @@
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.proxy.update.url)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.proxy.apply.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" class="btn-group" role="group" aria-label="">
+            <a ng-click="goview('proxyview', 'apply', id)" class="btn btn-default btn-success" uib-tooltip="审核" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 审核</span></a>
+          </div>
+          <div ng-if="cfg.hasAuth(profile, cfg.api.proxy.apply.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('proxyview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.proxy.delete.url)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.proxy.delete.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" class="btn-group" role="group" aria-label="">
             <a ng-click="deleteSubmit(id)" class="btn btn-default btn-danger" uib-tooltip="删除" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-trash"></i><span class="hidden-xs"> 删除</span></a>
           </div>
         </div>
@@ -381,6 +386,18 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">审核状态:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.status === 0 ? '待审核' : info.status === 1 ? '审核通过': info.status === 2 ? '审核未通过':''}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">审核意见:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.remark}}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -448,11 +465,12 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <input type="tel" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required ng-pattern="/^1\d{10}$/">
                           <div class="error-messages" ng-messages="form.cellphone.$error">
                             <small class="error" ng-message="required">手机号（*必填）</small>
                             <small class="error" ng-message="minlength">请输入11位手机号</small>
                             <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                            <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                           </div>
                         </div>
                       </div>
@@ -475,7 +493,7 @@
                                     <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.pcfile', item.file)"></i></div>
                                   </div>
                                 </div>
-                                <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="pcfile{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                                <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="pcfile{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
@@ -511,11 +529,12 @@
                       <div class="form-group">
                         <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
                         <div class="col-sm-8">
-                          <input type="text" ng-model="info.real_cellphone" name="real_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required>
+                          <input type="text" ng-model="info.real_cellphone" name="real_cellphone" class="form-control" placeholder="手机号" maxlength="11" ng-minlength="11" ng-maxlength="11" required ng-pattern="/^1\d{10}$/">
                           <div class="error-messages" ng-messages="form.real_cellphone.$error">
                             <small class="error" ng-message="required">手机号（*必填）</small>
                             <small class="error" ng-message="minlength">请输入11位手机号</small>
                             <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                            <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                           </div>
                         </div>
                       </div>
@@ -537,7 +556,7 @@
                                     <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.rpcfile', item.file)"></i></div>
                                   </div>
                                 </div>
-                                <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="rpcfile{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                                <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="rpcfile{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                               </div>
                               <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                             </div>
@@ -582,7 +601,7 @@
                                 <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.blfile', item.file)"></i></div>
                               </div>
                             </div>
-                            <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                            <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
@@ -612,7 +631,7 @@
                                 <div class="operation-header"><i class="fa fa-fw fa-close" ng-click="removeFile('info.affile', item.file)"></i></div>
                               </div>
                             </div>
-                            <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/*'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
+                            <div class="image-upload" ng-if="!item.file.noedit" ngf-select ng-model="item.file" ngf-change="uploadFiles($files, $file, $newFiles, $duplicateFiles, $invalidFiles, $event)" name="file{{$index}}" ngf-pattern="'image/*'" ngf-accept="'image/jpeg,image/jpg,image/png'" ngf-max-size="20MB"><i class="fa fa-fw fa-plus"></i></div>
                           </div>
                           <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
                         </div>
@@ -621,6 +640,18 @@
                       <div class="error-messages" ng-messages="form.validator_affile.$error">
                         <small class="error" ng-message="required">{{ errorMessages.affile[0].text }}</small>
                       </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">审核状态:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.status === 0 ? '待审核' : info.status === 1 ? '审核通过': info.status === 2 ? '审核未通过':''}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">审核意见:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.remark}}</p>
                     </div>
                   </div>
 
@@ -658,7 +689,7 @@
                 <div class="panel-title">审核代理商</div>
               </div>
               <div class="panel-body">
-                <form class="form form-horizontal" ng-submit="applySubmit(id, applyResult)" >
+                <form name="form" class="form form-horizontal" ng-submit="applySubmit(id, form.$valid)" >
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司名称:</label>
                     <div class="col-sm-10">
@@ -774,12 +805,21 @@
                     </div>
                   </div>
                   <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger"></span>审核意见:</label>
+                    <div class="col-sm-10">
+                      <textarea ng-model="info.remark" name="remark" class="form-control" placeholder="审核意见"></textarea>
+                      <div class="error-messages" ng-messages="form.remark.$error">
+                        <small class="error" ng-message="required">请输入审核意见（*必填）</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
-                        <button ng-click="setApplyResult(true)" class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 审核通过</button>
+                        <button ng-click="setApplyResult(1)" class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i> 审核通过</button>
                       </div>
                       <div class="btn-group" role="group" aria-label="">
-                        <button ng-click="setApplyResult(false)"  class="btn btn-default btn-danger"><i class="fa fa-fw fa-close"></i> 审核不通过</button>
+                        <button ng-click="setApplyResult(2)"  class="btn btn-default btn-danger"><i class="fa fa-fw fa-close"></i> 审核不通过</button>
                       </div>
                     </div>
                   </div>

@@ -50,7 +50,8 @@ export class RoleController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[0]);
+    this.sidebarSelected = this.sidebarGroups[3].items[0];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
   }
 
   getPage($scope, $location, $state, $log, dataService, currentPage) {
@@ -190,7 +191,7 @@ export class RoleController {
                   reload: true
                 });
               } else if (response.data.result === 1) {
-                toastr.error('处理失败，请重试');
+                toastr.error(response.data.msg);
               }
             }).catch((error) => {
               $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -204,11 +205,6 @@ export class RoleController {
       }
     };
 
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

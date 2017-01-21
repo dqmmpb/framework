@@ -111,7 +111,8 @@ export class ProxyViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[0]);
+    this.sidebarSelected = this.sidebarGroups[1].items[0];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '新增代理商'
@@ -353,16 +354,12 @@ export class ProxyViewController {
   upload($scope, $log, Upload) {
     var self = this;
 
-    console.log(1233);
     // upload on file select or drop
     $scope.upload = function (file) {
       console.log(Upload);
       Upload.upload({
         url: self.cfg.api.upload.url,
         data: {file: file},
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
         withCredentials: true
       }).then(function (resp) {
         $log.log('Success ' + resp.config.data.file.name + ' uploaded. Response: ' + resp.data);
@@ -546,7 +543,9 @@ export class ProxyViewController {
       };
     } else if(type === 'apply') {
       return {
-        id: params.id
+        id: params.id,
+        remark: params.remark,
+        status: params.status
       };
     }
 
@@ -571,7 +570,7 @@ export class ProxyViewController {
             else
               $scope.goview('proxy');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -597,7 +596,7 @@ export class ProxyViewController {
             else
               $scope.goview('proxy');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -631,7 +630,7 @@ export class ProxyViewController {
               else
                 $scope.goview('proxy');
             } else if (response.data.result === 1) {
-              toastr.error('处理失败，请重试');
+              toastr.error(response.data.msg);
             }
           }).catch((error) => {
             $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -654,14 +653,16 @@ export class ProxyViewController {
           url: self.cfg.api.proxy.apply.url,
           method: self.cfg.api.proxy.apply.type,
           data: self.preParams('apply', {
-            id: $scope.info.id
+            id: $scope.applyResult.id,
+            remark: $scope.applyResult.remark,
+            status: $scope.applyResult.status
           })
         }).then((response) => {
           if (response.data.result === 0) {
-            toastr.error('处理成功！');
+            toastr.success('处理成功！');
             $scope.goview('proxy');
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -670,16 +671,13 @@ export class ProxyViewController {
       }
     };
 
-    $scope.setApplyResult = function(applyResult) {
+    $scope.setApplyResult = function(flag) {
       $scope.applyResult = {
-        result: applyResult
+        id: $scope.id,
+        remark: $scope.info.remark,
+        status: flag
       };
     }
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

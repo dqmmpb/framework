@@ -2,9 +2,14 @@
   "result": 0,
   "msg": "ok",
   "data": {
-    "fenrunTotalTheAlls": 94607.19,
-    "fenrunTotalThisMonth": 33112.33,
-    "fenrunTotalTheLastMonth": 61494.61,
-    "ticketFinishedCount": 188
+    "fenrunTotalTheLastMonth": 11,
+    "fenrunTotalThisMonth": 12,
+    "fenrunTotalTheAlls": 13,
+    "moneyLastMonth": 21,
+    "moneyThisMonth": 22,
+    "moneyAlls": 23,
+    "ticketFinishedCountLastMonth": 31,
+    "ticketFinishedCountThisMonth": 32,
+    "ticketFinishedCount": 33
   }
 }

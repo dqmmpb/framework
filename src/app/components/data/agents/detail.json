@@ -19,10 +19,10 @@
     "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png,ABC.jpg,",
     "isDeleted": 0,
     "alipayAccount": null,
-    "realControlName": null,
-    "realControlMobile": null,
-    "realControlPic": null,
-    "isCorporReal": 0,
+    "realControlName": "张三",
+    "realControlMobile": "15555555555",
+    "realControlPic": "ABC.jpg,jqueryapi.png",
+    "isCorporReal": 1,
     "usersSet": [],
     "wangbasSet": []
   }

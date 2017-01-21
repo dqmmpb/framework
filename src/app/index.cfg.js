@@ -1,22 +1,20 @@
-export var HTTP_TYPE = {
+var HTTP_TYPE = {
   GET: "GET",
   POST: "POST",
   PUT: "PUT"
 };
 
-export var RSAKEY = {
+var RSAKEY = {
   RSA_KEY: 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCzwYuXTPEtWV49OS/Cb5QIbX2LtZBHhCi9hiR2hrJEcWA4vUmC8GsMMOKw933VxAurjw1Llhj4QXpKZi9hfOlc6bn7GoyAZpVgl+JAzwQFuTOSJyRacgGDef0BY0zW/kQZjILI7ovqXwAcSaOGhFQgy6OWAkNDeKqGQFXeMwr9owIDAQAB',
   PRI_KEY: 'MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALPBi5dM8S1ZXj05L8JvlAhtfYu1kEeEKL2GJHaGskRxYDi9SYLwawww4rD3fdXEC6uPDUuWGPhBekpmL2F86VzpufsajIBmlWCX4kDPBAW5M5InJFpyAYN5/QFjTNb+RBmMgsjui+pfABxJo4aEVCDLo5YCQ0N4qoZAVd4zCv2jAgMBAAECgYEAjlxHMEFodFDluLkUoPl7FJ2aI05dALajCU42jIQqpNfhq64FjSTYsqP4tMydJPIJiApYLjemeN5qeoepGJ0ztuU/QM56Q59c6S4nBxDhc619dvt9jABsompCl6yrPYzi3FG1TmJa4ugBOln+KS/Pw/aSaEu4E1CUOYgYuIljT1kCQQDWo9fwnEpdH2WoW4E1ARwuV++SfsV7szJtSIBEKuhIzRDLMEB97yoEffWVYgncou+XYXdMn5Eb0dkRP4u07ZUvAkEA1mThgvhz0gyM08GxaXIT/+9JskCuCvvcDTVJVhVebeK/y0rZGBsvIMuPux+6wy4S2qqj+BwjSfP+71JLrPopzQJAFx2aGe2bDKBfAFyqc5zk/hC2Wl6QwhuwaJiQR8cfMQf0sQ1HRMjHC6jNFAN08HATwYfbo0LkC8zzxanET/3uPQJBAKYaPJmzElC/xm/dVi2C47nbU3aWJAGAhkl5alsWbTWngr7nO3Ewxn+bFr18ZL8JODRQFn+IlVKbhn02fkkC/FUCQDD7cPsWeab+iJlam4gooS/suDryNqWQFFsuZDAuseDzQKpa7Qvd/5TH5eiiWpUoKCySjQapO+JXHjIb1PQm4Rw='
-};
+}
 
-//var remoteServer = 'http://172.16.0.119:8080';
+//var remoteServer = 'http://172.16.0.251:8080';
 
-var remoteServer = 'http://172.16.0.150:3000';
+//var remoteServer = 'http://172.16.0.1:3000';
+//var uploadServer = remoteServer;
 
-
-//var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
-
-
+var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
 var uploadServer = 'http://yfl2.taofairy.com';
 
 
@@ -28,12 +26,12 @@ var allCfg = {
     remoteServer: remoteServer
   },
   api: {
-    local: true,
+    local: false,
     localServer: 'app/components/data',
     remoteServer: remoteServer
   },
   upload: {
-    local: true,
+    local: false,
     localServer: location.protocol + '//' + location.host,
     remoteServer: uploadServer,
     localPath: '/assets/images/upload',
@@ -92,7 +90,7 @@ api.localAPI = {
       type: HTTP_TYPE.GET
     },
     apply: {
-      url: api.localServer + '/agents/apply.json',
+      url: api.localServer + '/agents/audit.json',
       type: HTTP_TYPE.POST
     }
   },
@@ -128,7 +126,7 @@ api.localAPI = {
   },
   role: {
     all: {
-      url: api.localServer + '/rightRoles/all.json',
+      url: api.localServer + '/users/all.json',
       type: HTTP_TYPE.GET
     },
     list: {
@@ -194,6 +192,10 @@ api.localAPI = {
     search: {
       url: api.localServer + '/users/search.json',
       type: HTTP_TYPE.POST
+    },
+    mobilephone: {
+      url: api.localServer + '/users/checkMobile.json',
+      type: HTTP_TYPE.GET
     }
   },
   deploy: {
@@ -222,8 +224,12 @@ api.localAPI = {
       type: HTTP_TYPE.GET
     },
     apply: {
-      url: api.localServer + '/wangbas/apply.json',
+      url: api.localServer + '/wangbas/audit.json',
       type: HTTP_TYPE.POST
+    },
+    all: {
+      url: api.localServer + '/wangbas/all.json',
+      type: HTTP_TYPE.GET
     }
   },
   apply: {
@@ -323,7 +329,7 @@ api.remoteAPI = {
       type: HTTP_TYPE.GET
     },
     apply: {
-      url: api.remoteServer + '/agents/apply.json',
+      url: api.remoteServer + '/agents/audit.json',
       type: HTTP_TYPE.POST
     }
   },
@@ -359,72 +365,76 @@ api.remoteAPI = {
   },
   role: {
     all: {
-      url: api.remoteServer + '/rightRoles/all.json',
-        type: HTTP_TYPE.GET
+      url: api.remoteServer + '/users/all.json',
+      type: HTTP_TYPE.GET
     },
     list: {
       url: api.remoteServer + '/rightRoles/index.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     detail: {
       url: api.remoteServer + '/rightRoles/detail.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     save: {
       url: api.remoteServer + '/rightRoles/save.json',
-        type: HTTP_TYPE.POST
+      type: HTTP_TYPE.POST
     },
     update: {
       url: api.remoteServer + '/rightRoles/update.json',
-        type: HTTP_TYPE.POST
+      type: HTTP_TYPE.POST
     },
     delete: {
       url: api.remoteServer + '/rightRoles/delete.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     search: {
       url: api.remoteServer + '/rightRoles/search.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     }
   },
   auth: {
     all: {
       url: api.remoteServer + '/rightResources/all.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     }
   },
   user: {
     all: {
       url: api.remoteServer + '/users/all.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     list: {
       url: api.remoteServer + '/users/index.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     detail: {
       url: api.remoteServer + '/users/detail.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     save: {
       url: api.remoteServer + '/users/save.json',
-        type: HTTP_TYPE.POST
+      type: HTTP_TYPE.POST
     },
     update: {
       url: api.remoteServer + '/users/update.json',
-        type: HTTP_TYPE.POST
+      type: HTTP_TYPE.POST
     },
     delete: {
       url: api.remoteServer + '/users/delete.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     search: {
       url: api.remoteServer + '/users/search.json',
-        type: HTTP_TYPE.GET
+      type: HTTP_TYPE.GET
     },
     reset: {
       url: api.remoteServer + '/users/changePasswordForOther.json',
       type: HTTP_TYPE.POST
+    },
+    mobilephone: {
+      url: api.remoteServer + '/users/checkMobile.json',
+      type: HTTP_TYPE.GET
     }
   },
   deploy: {
@@ -453,8 +463,12 @@ api.remoteAPI = {
       type: HTTP_TYPE.GET
     },
     apply: {
-      url: api.remoteServer + '/wangbas/apply.json',
+      url: api.remoteServer + '/wangbas/audit.json',
       type: HTTP_TYPE.POST
+    },
+    all: {
+      url: api.remoteServer + '/wangbas/all.json',
+      type: HTTP_TYPE.GET
     }
   },
   apply: {
@@ -547,14 +561,14 @@ cfg.sidebarData = [
     items: [
       {
         title: '代理商管理',
-        icon: 'fa-phone-square',
+        icon: 'fa-user-secret',
         sref: 'proxy',
         resource: '/agents',
         leaf: true
       },
       {
         title: '分润设置',
-        icon: 'fa-cubes',
+        icon: 'fa-rmb',
         sref: 'profit',
         resource: '/bacProfits',
         leaf: true
@@ -570,14 +584,14 @@ cfg.sidebarData = [
     items: [
       {
         title: '网吧管理',
-        icon: 'fa-pencil',
+        icon: 'fa-desktop',
         sref: 'deploy',
         resource: '/wangbas',
         leaf: true
       },
       {
         title: '应用部署',
-        icon: 'fa-shield',
+        icon: 'fa-cloud-upload',
         sref: 'apply',
         resource: '/tickets',
         leaf: true
@@ -600,7 +614,7 @@ cfg.sidebarData = [
       },
       {
         title: '用户管理',
-        icon: 'fa-shield',
+        icon: 'fa-user-circle',
         sref: 'user',
         resource: '/users',
         leaf: true
@@ -633,4 +647,38 @@ cfg.hasAuth = function(profile, url) {
   return false;
 };
 
-export { cfg };
+cfg.hasRoleId = function(roles, id) {
+  if(angular.isArray(roles))
+    return roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false;
+  else
+    return false;
+};
+
+cfg.countDown = function(options) {
+  var self = this;
+  var before = options.before;
+  var step = options.step;
+  var end = options.end;
+  var count = options.count || 3000;
+  var interval = options.interval || 1000;
+
+
+  if(typeof before === 'function')
+    before.apply(self, [count / interval]);
+
+  var counter = setInterval(function() {
+    if(count / interval > 1) {
+      count -= interval;
+      if(typeof step === 'function')
+        step.apply(self, [count / interval]);
+    } else {
+      clearInterval(counter);
+      if(typeof end === 'function')
+        end.apply(this, [count / interval]);
+    }
+  }, interval);
+
+  return counter;
+};
+
+export { HTTP_TYPE, RSAKEY, cfg };

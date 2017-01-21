@@ -3,22 +3,22 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profileview.isCollapse" groups="profileview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profileview.isCollapse" groups="profileview.sidebarGroups" item-selected="profileview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="profileview.breads"></uib-breadcrumb>
 
       <div ng-if="type === 'view' && !loading">
-        <div class="tools">
+<!--        <div class="tools">
           <div ng-if="cfg.hasAuth(profile, cfg.api.profile.update.url)" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('profileview', 'edit')" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
           <div ng-if="cfg.hasAuth(profile, cfg.api.profit.reset.url)" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('profileview', 'reset')" class="btn btn-default btn-danger" uib-tooltip="重置密码" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 重置密码</span></a>
           </div>
-        </div>
+        </div>-->
 
-        <div class="row mt-10">
+        <div class="row <!--mt-10-->">
           <div class="col-md-12">
             <div class="panel panel-default panel-csc">
               <div class="panel-heading">
@@ -48,6 +48,18 @@
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>用户角色:</label>
                     <div class="col-sm-10">
                       <p class="form-control-static">{{getRoleToArray(info.role, 'name').join(",")}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group" ng-if="hasRoleId(info.roles,'4') && info.bossWangbas">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>网吧名称:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.bossWangbas ? info.bossWangbas.name: ''}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group" ng-if="hasRoleId(info.roles,'9')">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>渠道邀请码:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.code ? info.code: ''}}</p>
                     </div>
                   </div>
                 </div>
@@ -92,11 +104,12 @@
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>手机号:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11">
+                      <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11" ng-pattern="/^1\d{10}$/">
                       <div class="error-messages" ng-messages="form.cellphone.$error">
                         <small class="error" ng-message="required">手机号（*必填）</small>
                         <small class="error" ng-message="minlength">请输入11位手机号</small>
                         <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                        <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                       </div>
                     </div>
                   </div>

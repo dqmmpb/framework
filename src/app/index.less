@@ -39,3 +39,62 @@ acme-navbar {
  */
 // injector
 // endinjector
+
+.modal-profit .modal-dialog,
+.modal-apply .modal-dialog,
+.modal-tips .modal-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin:0 auto;
+  -webkit-transform: translate(-50%, -50%)!important;
+  transform: translate(-50%, -50%)!important;
+}
+
+.input-group-addon-btn {
+  padding: 0;
+  & .btn {
+    border: none;
+    outline: none;
+    width: 120px;
+  }
+}
+
+
+.panel-main {
+
+  border: none;
+  box-shadow: none;
+  margin-bottom: 5px;
+
+  & .panel-heading {
+    padding: 5px 15px;
+  }
+
+  &.panel-main-inverse .panel-heading {
+    background-color: @gray-dark;
+    color: @white;
+  }
+
+  & .panel-body {
+    padding-top: 10px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  & .thumbnail {
+    margin-bottom: 10px;
+    & .caption {
+      h3 {
+        margin-top: 15px;
+        margin-bottom: 5px;
+      }
+      & p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+    }
+
+  }
+}

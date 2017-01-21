@@ -26,12 +26,48 @@ export class ApplyViewController {
         apply_id: null,
         department_id: null,
         cashier_dept_id: null,
-        qrcode_path: null
+        qrcode_path: null,
+        areaCode: null,
+        area: null,
+        area_label: null,
+        address: null,
+        cellphone: null,
+        legal: null,
+        is_same: true,
+        real_cellphone: null,
+        real_name: null,
+        // 法人代表身份证照片
+        pcfile: [{
+          file: null,
+          caption: '正面'
+        },
+          {
+            file: null,
+            caption: '反面'
+          }],
+        // 实际经营者
+        rpcfile: [{
+          file: null,
+          caption: '正面'
+        },
+          {
+            file: null,
+            caption: '反面'
+          }],
+        // 营业执照正本扫描件
+        blfile: [{
+          file: null
+        }],
+        // 代理商申请表扫描件
+        affile: [{
+          file: null
+        }]
       };
 
       if($scope.type === 'create') {
 
         this.initForm($scope, $log, toastr, $uibModal);
+        this.viewFile($scope);
 
         this.initValidation($scope);
 
@@ -66,7 +102,8 @@ export class ApplyViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[1]);
+    this.sidebarSelected = this.sidebarGroups[2].items[1];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '部署'
@@ -108,13 +145,102 @@ export class ApplyViewController {
         $scope.info = apply.wrapper(data);
 
         self.initForm($scope, $log, toastr, $uibModal);
-        //self.viewFile($scope);
+        self.viewFile($scope);
 
         self.initValidation($scope);
 
         self.goView($scope, $state, $stateParams);
       }
     });
+  }
+
+  getCityString(cities, separator) {
+    if(cities) {
+      if(separator)
+        return cities.join(separator);
+      else
+        return cities.join(' ');
+    }
+  }
+
+  // 根据Key 查找$scope中的变量
+  getKeyValue($scope, key) {
+    var obj = $scope;
+
+    if(key) {
+      var keyPath = key.split('.');
+      for(var tempKey in keyPath) {
+        if(obj[keyPath[tempKey]])
+          obj = obj[keyPath[tempKey]];
+        else
+          return null;
+      }
+      if(obj)
+        return obj;
+      else
+        return null;
+    } else
+      return obj;
+  }
+
+  viewFile($scope) {
+    var self = this;
+
+    $scope.viewFile = function ($event, key, file) {
+      var obj = $event.currentTarget;
+      if(file) {
+        if(angular.isObject(file)) {
+          var value = self.getKeyValue($scope, key);
+          // 查找元素
+          if(value) {
+            for(var o in value) {
+              if(angular.isArray(value[o].file)) {
+                var idx = value[o].file.indexOf(file);
+                if(idx !== -1) {
+                  // To do
+                  if(!file.viewer) {
+                    file.viewer = angular.element(obj).viewer({
+                      navbar: false,
+                      title: false,
+                      transition: false,
+                      fullscreen: false,
+                      scalable: false,
+                      slidable: false,
+                      playable: false,
+                      onetooneable: false,
+                      url: function() {
+                        return file.serverData.url;
+                      }
+                    });
+                    angular.element(obj).viewer('show');
+                  }
+                }
+              } else if(angular.isObject(value[o].file)) {
+                if(value[o].file == file) {
+                  // To do
+                  if(!file.viewer) {
+                    file.viewer = angular.element(obj).viewer({
+                      navbar: false,
+                      title: false,
+                      transition: false,
+                      fullscreen: false,
+                      scalable: false,
+                      slidable: false,
+                      playable: false,
+                      onetooneable: false,
+                      url: function() {
+                        return file.serverData.url;
+                      }
+                    });
+                    angular.element(obj).viewer('show');
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    };
   }
 
   preParams(type, params, wangbaId) {
@@ -152,7 +278,7 @@ export class ApplyViewController {
 
     } else if(type === 'createQrcode') {
       return {
-        id: params.id,
+        id: Number(params.id)
       };
     }
 
@@ -174,7 +300,7 @@ export class ApplyViewController {
             toastr.success('部署成功！');
             $scope.goview('apply');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -194,10 +320,16 @@ export class ApplyViewController {
           data: self.preParams('edit', $scope.info, $scope.id)
         }).then((response) => {
           if(response.data.result === 0) {
-            toastr.success('保存成功！');
-            $scope.goview('apply');
+            toastr.success('编辑成功！');
+            if($scope.redirect_url) {
+              location.href = $scope.redirect_url;
+            } else {
+              $scope.goview('apply');
+            }
+            //console.log(response.data.data.tickets);
+            //$scope.info.qrcode_path = response.data.data.tickets.qrcodeImgPath;
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -229,7 +361,7 @@ export class ApplyViewController {
               toastr.success('删除成功！');
               $scope.goview('apply');
             } else if (response.data.result === 1) {
-              toastr.error('处理失败，请重试');
+              toastr.error(response.data.msg);
             }
           }).catch((error) => {
             $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -245,8 +377,6 @@ export class ApplyViewController {
     };
 
     $scope.createQrcode = function($event) {
-      $event.stopPropagation();
-      $event.preventDefault();
       $log.log(self.preParams('createQrcode', {
         id: $scope.id
       }));
@@ -257,23 +387,18 @@ export class ApplyViewController {
           id: $scope.id
         })
       }).then((response) => {
-        if(response.data.data.result === 0) {
-          $scope.info.qrcode_path = response.data.data.data.codeImg;
+        if(response.data.result === 0) {
+          $scope.info.qrcode_path = response.data.data.codeImg;
           toastr.success('生成二维码成功！');
           //$scope.goview('apply');
         } else if(response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+          toastr.error(response.data.msg);
         }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
         toastr.error('网络异常，请重试');
       });
     };
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

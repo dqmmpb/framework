@@ -76,8 +76,9 @@ export class ProfitViewController {
       };
       $scope.mform.profits = {
         code: $scope.info.code,
-        pct_charge: null,
-        pct_consume: null
+        //pct_charge: null,
+        //pct_consume: null,
+        pct_quick: null
       };
 
 
@@ -113,7 +114,8 @@ export class ProfitViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[1]);
+    this.sidebarSelected = this.sidebarGroups[1].items[1];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '设置分润'
@@ -139,10 +141,13 @@ export class ProfitViewController {
         $scope.oData = data;
         $scope.info = profit.wrapper(data);
 
+        console.log($scope.info);
+
+        $scope.mform.code =  $scope.info.code;
         $scope.mform.profits = {
-          code: $scope.info.code,
-          pct_charge: null,
-          pct_consume: null
+          //pct_charge: null,
+          //pct_consume: null,
+          pct_quick: null
         };
 
         var profitsSet = $scope.info.profitsSet;
@@ -152,6 +157,8 @@ export class ProfitViewController {
             $scope.mform.profits.pct_charge = profitsSet[i].percent;
           } else if (profitsSet[i].catagory === 1) {
             $scope.mform.profits.pct_consume = profitsSet[i].percent
+          } else if (profitsSet[i].catagory === 2) {
+            $scope.mform.profits.pct_quick = profitsSet[i].percent
           }
         }
 
@@ -165,6 +172,15 @@ export class ProfitViewController {
         self.goView($scope, $state, $stateParams);
       }
     });
+  }
+
+  getCityString(cities, separator) {
+    if(cities) {
+      if(separator)
+        return cities.join(separator);
+      else
+        return cities.join(' ');
+    }
   }
 
   // 根据Key 查找$scope中的变量
@@ -283,15 +299,17 @@ export class ProfitViewController {
       return {
         agentId: info.id,
         code: params.code,
-        chargePercent: params.profits.pct_charge,
-        waterbaPercent: params.profits.pct_consume
+        //chargePercent: params.profits.pct_charge,
+        //waterbaPercent: params.profits.pct_consume,
+        quickPercent: params.profits.pct_quick
       };
     } else if(type === 'edit') {
       return {
         agentId: info.id,
         code: params.code,
-        chargePercent: params.profits.pct_charge,
-        waterbaPercent: params.profits.pct_consume
+        //chargePercent: params.profits.pct_charge,
+        //waterbaPercent: params.profits.pct_consume,
+        quickPercent: params.profits.pct_quick
       };
     }
 
@@ -317,7 +335,7 @@ export class ProfitViewController {
             else
               $scope.goview('profit');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -343,7 +361,7 @@ export class ProfitViewController {
             else
               $scope.goview('profit');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -352,11 +370,6 @@ export class ProfitViewController {
       }
     };
 
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

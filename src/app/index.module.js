@@ -44,7 +44,7 @@ angular.module('ui.framework',[ 'ui.framework.navbar', 'ui.framework.sidebar', '
 angular.module('ui.framework.breadcrumb', [])
   .directive('uibBreadcrumb', BreadcrumbDirective);
 
-angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr', 'ngFileUpload', 'ui.framework', 'validation'])
+angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr', 'ngStorage', 'ngFileUpload', 'ui.framework', 'validation'])
   .constant('cfg', cfg)
   .constant('RSAKEY', RSAKEY)
   .config(config)

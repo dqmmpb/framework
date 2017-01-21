@@ -2,6 +2,7 @@ export class ProfileViewController {
   constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, role, user, RSAKEY, profile) {
     'ngInject';
 
+    var self = this;
     this.cfg = cfg;
     this.$http = $http;
     this.toastr = toastr;
@@ -29,7 +30,19 @@ export class ProfileViewController {
       };
 
       if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.profile.id);
+        //this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.profile.id);
+        //$scope.oData = data;
+        $scope.info = data;
+        console.log($scope.info);
+        $scope.info.roles = $scope.getRoleToArray($scope.info.role, 'id');
+
+        self.initForm($scope, $log, toastr, RSAKEY);
+
+        self.getRoles($scope, $log, $timeout, role);
+
+        self.initValidation($scope, user);
+
+        self.goView($scope, $state, $stateParams);
       }
 
     });
@@ -58,6 +71,7 @@ export class ProfileViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
+    this.sidebarSelected = null;
     this.breads = [];
 
     this.breads.push({
@@ -166,6 +180,11 @@ export class ProfileViewController {
 
   }
 
+  hasRoleId(roles, id) {
+    //console.log(roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false);
+    return roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false;
+  }
+
   initForm($scope, $log, toastr, RSAKEY) {
     var self = this;
 
@@ -185,6 +204,10 @@ export class ProfileViewController {
 
     $log.log(encrypt);
 
+    $scope.hasRoleId = function(roles, id) {
+      return self.hasRoleId(roles, id);
+    };
+
     $scope.createSubmit = function(isValid) {
       $log.log('create. isValid: ' + isValid);
       if(isValid) {
@@ -201,7 +224,7 @@ export class ProfileViewController {
             else
               $scope.goview('user');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -227,7 +250,7 @@ export class ProfileViewController {
             else
               $scope.goview('user');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -248,7 +271,7 @@ export class ProfileViewController {
           toastr.error('删除成功！');
           $scope.goview('user');
         } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+          toastr.error(response.data.msg);
         }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -268,18 +291,13 @@ export class ProfileViewController {
           toastr.success('重置成功！');
           $scope.goview('user');
         } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+          toastr.error(response.data.msg);
         }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
         toastr.error('网络异常，请重试');
       });
     };
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

@@ -1,0 +1,65 @@
+{
+  "result": 0,
+  "msg": "ok",
+  "data": {
+    "legalColumn": [
+      "id",
+      "created_at"
+    ],
+    "legalSort": [
+      "desc",
+      "asc"
+    ],
+    "pageNumber": 4,
+    "pageSize": 10,
+    "totalCount": 31,
+    "pageCount": 4,
+    "orderBy": [
+      "id"
+    ],
+    "orderType": [
+      "desc"
+    ],
+    "list": [
+      {
+        "id": 1,
+        "code": "123",
+        "name": "民航大厦等",
+        "address": "或酷路七号旁边",
+        "area": "河北省,唐山市,古冶区",
+        "areaCode": "130000,130200,130204",
+        "corporName": "放放风",
+        "corporMobile": "12321321222",
+        "status": 0,
+        "createdAt": null,
+        "updatedAt": 1482805254000,
+        "remark": "北包包",
+        "licencePic": "/temp/codeguide201612271482805224090.png",
+        "corporIdPic": "/temp/ABC201612271482805212581.jpg,/temp/ABC201612271482805215503.jpg",
+        "dingCertifyPic": "/temp/ABC201612271482805229235.jpg,/temp/jqueryapi201612271482805232350.png,/temp/codeguide201612271482805235297.png,/temp/ABC201612271482805238553.jpg",
+        "isDeleted": 0,
+        "alipayAccount": null,
+        "realControlName": "",
+        "realControlMobile": "",
+        "realControlPic": "",
+        "isCorporReal": 0,
+        "usersSet": [],
+        "wangbasSet": [],
+        "profitsSet": [
+          {
+            "id": 1,
+            "agentId": null,
+            "percent": 2.67,
+            "catagory": 1,
+            "flag": 0,
+            "createdAt": null,
+            "updatedAt": null,
+            "remark": "vbp",
+            "agents": null
+          }
+        ]
+      }
+    ],
+    "startRecord": 30
+  }
+}

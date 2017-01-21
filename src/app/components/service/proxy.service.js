@@ -82,13 +82,14 @@ export class ProxyService {
       cellphone: o.corporMobile,
       legal: o.corporName,
       status: o.status,
-      is_same: o.isCorporReal  === 0 ? true: false,
-      real_name: null,
-      real_cellphone: null,
+      is_same: o.isCorporReal === 0 ? true: false,
+      real_name: o.realControlName,
+      real_cellphone: o.realControlMobile,
       pcfile: null,
       rpcfile: null,
       blfile: null,
-      affile: null
+      affile: null,
+      remark: o.remark
     };
 
     // 法人照片

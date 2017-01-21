@@ -7,17 +7,31 @@ export class DeployService {
     this.cfg = cfg;
   }
 
+  getName() {
+    var self = this;
+    return self.$http({
+      url: self.cfg.api.deploy.all.url,
+      method: self.cfg.api.deploy.all.type
+    }).then((response) => {
+      if (response.data.result === 0) {
+        return response.data.data;
+      }
+    }).catch((error) => {
+      this.$log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    });
+  }
+
   getPage(pageNum = 1, searchForm) {
     var self = this;
 
-    if (searchForm && searchForm.doSearch) {
+    if(searchForm && searchForm.doSearch) {
       return self.$http({
         url: self.cfg.api.deploy.search.url,
         method: self.cfg.api.deploy.search.type,
         params: {
           pageNum: pageNum,
           keyWord: searchForm.keyWord,
-          area: searchForm.area,
+          areaCode: searchForm.areaCode,
           status: searchForm.status
         }
       }).then((response) => {
@@ -81,9 +95,9 @@ export class DeployService {
       cellphone: o.corporMobile,
       legal: o.corporName,
       status: o.status,
-      is_same: o.isAuth  === 1 ? true: false,
-      real_name: null,
-      real_cellphone: null,
+      is_same: o.isCorporReal  === 0 ? true: false,
+      real_name: o.realControlName,
+      real_cellphone: o.realControlMobile,
       pcfile: null,
       rpcfile: null,
       blfile: null,
@@ -91,6 +105,7 @@ export class DeployService {
       company_name: o.companyName,
       branch_name: o.branchName,
       wangba_id: o.wangbaId,
+      remark: o.remark
     };
 
     // 法人照片
@@ -125,6 +140,20 @@ export class DeployService {
     }
 
     return x;
+  }
+
+  wrapperAll(data) {
+
+    var self = this;
+
+    var all = [];
+    for (var i in data) {
+      var o = data[i];
+      var x = self.wrapper(o);
+      all.push(x);
+    }
+
+    return all;
   }
 
   wrapperPage(data) {

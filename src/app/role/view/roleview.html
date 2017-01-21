@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="roleview.isCollapse" groups="roleview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="roleview.isCollapse" groups="roleview.sidebarGroups" item-selected="roleview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="roleview.breads"></uib-breadcrumb>
@@ -80,11 +80,11 @@
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
           <div ng-if="cfg.hasAuth(profile, cfg.api.role.update.url)" class="btn-group" role="group" aria-label="">
-            <a ng-click="goview('roleview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
+            <a ng-click="goview('roleview', 'edit', id) && info.ticket_status !== 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && info.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && info.status !== 1))" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.role.delete.url)" class="btn-group" role="group" aria-label="">
+          <!--<div ng-if="cfg.hasAuth(profile, cfg.api.role.delete.url)" class="btn-group" role="group" aria-label="">
             <a ng-click="deleteSubmit(id)" class="btn btn-default btn-danger" uib-tooltip="删除" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-trash"></i><span class="hidden-xs"> 删除</span></a>
-          </div>
+          </div>-->
         </div>
 
         <div class="row mt-10">
@@ -141,7 +141,7 @@
               </div>
               <div class="panel-body">
                 <form name="form" class="form form-horizontal" ng-submit="editSubmit(id, form.$valid)" novalidate>
-                  <div class="form-group">
+                  <!--<div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色名称:</label>
                     <div class="col-sm-10">
                       <input type="text" ng-model="info.name" name="name" class="form-control" placeholder="角色名称" required>
@@ -157,6 +157,18 @@
                       <div class="error-messages" ng-messages="form.value.$error">
                         <small class="error" ng-message="required">请输入角色键值（*必填）</small>
                       </div>
+                    </div>
+                  </div>-->
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色名称:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.name}}</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>角色键值:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.value || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group form-select-group">

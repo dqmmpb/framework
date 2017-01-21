@@ -3,41 +3,102 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="main.isCollapse" groups="main.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="main.isCollapse" groups="main.sidebarGroups" item-selected="main.sidebarSelected"></div>
 
-    <div class="framework-body">
+    <div class="framework-body" ng-if="!cfg.hasRoleId(profile.roles,'4')">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="main.breads"></uib-breadcrumb>
 
-      <div ng-if="!loading" class="row">
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail alert-success">
-            <div class="caption">
-              <h3>上月分润</h3>
-              <p>{{mainData.fenrunTotalTheAlls | currency: "￥"}}</p>
+      <div class="panel panel-default panel-main" ng-if="!cfg.hasRoleId(profile.roles,'10') && !cfg.hasRoleId(profile.roles,'4')">
+        <div class="panel-heading">分润</div>
+        <div class="panel-body">
+          <div ng-if="!loading" class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-success">
+                <div class="caption">
+                  <h3>上月分润</h3>
+                  <p>{{(mainData.fenrunTotalTheLastMonth ? mainData.fenrunTotalTheLastMonth : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-info">
+                <div class="caption">
+                  <h3>本月分润</h3>
+                  <p>{{(mainData.fenrunTotalThisMonth ? mainData.fenrunTotalThisMonth : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-danger">
+                <div class="caption">
+                  <h3>累计分润</h3>
+                  <p>{{(mainData.fenrunTotalTheAlls ? mainData.fenrunTotalTheAlls : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail alert-info">
-            <div class="caption">
-              <h3>本月分润</h3>
-              <p>{{mainData.fenrunTotalThisMonth | currency: "￥"}}</p>
+      </div>
+
+      <div class="panel panel-default panel-main">
+        <div class="panel-heading">交易额</div>
+        <div class="panel-body">
+          <div ng-if="!loading" class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-success">
+                <div class="caption">
+                  <h3>上月交易额</h3>
+                  <p>{{(mainData.moneyLastMonth ? mainData.moneyLastMonth : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-info">
+                <div class="caption">
+                  <h3>本月交易额</h3>
+                  <p>{{(mainData.moneyThisMonth ? mainData.moneyThisMonth : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-danger">
+                <div class="caption">
+                  <h3>累计交易额</h3>
+                  <p>{{(mainData.moneyAlls ? mainData.moneyAlls : 0) | currency: "￥"}}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail alert-danger">
-            <div class="caption">
-              <h3>分润累计</h3>
-              <p>{{mainData.fenrunTotalTheLastMonth | currency: "￥"}}</p>
+      </div>
+
+      <div class="panel panel-default panel-main">
+        <div class="panel-heading">网吧部署数量</div>
+        <div class="panel-body">
+          <div ng-if="!loading" class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-success">
+                <div class="caption">
+                  <h3>上月网吧部署数量</h3>
+                  <p>{{mainData.ticketFinishedCountLastMonth ? mainData.ticketFinishedCountLastMonth : 0}}</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-4">
-          <div class="thumbnail alert-warning">
-            <div class="caption">
-              <h3>部署网吧数量</h3>
-              <p>{{mainData.ticketFinishedCount}}</p>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-info">
+                <div class="caption">
+                  <h3>本月网吧部署数量</h3>
+                  <p>{{mainData.ticketFinishedCountThisMonth ? mainData.ticketFinishedCountThisMonth : 0}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail alert-danger">
+                <div class="caption">
+                  <h3>累计网吧部署数量</h3>
+                  <p>{{mainData.ticketFinishedCount ? mainData.ticketFinishedCount : 0}}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

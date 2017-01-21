@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="proxy.isCollapse" groups="proxy.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="proxy.isCollapse" groups="proxy.sidebarGroups" item-selected="proxy.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="proxy.breads"></uib-breadcrumb>
@@ -64,15 +64,23 @@
                 </td>-->
                 <td>{{row.name}}</td>
                 <!--<td>{{row.business_area && proxy.getCityString(row.business_area)}}</td>-->
-                <td>{{row.legal}}</td>
-                <td>{{row.cellphone}}</td>
-                <td>{{row.status === 0 ? '待审核' : row.status === 1 ? '审核通过': row.status === 2 ? '审核未通过':''}}</td>
+                <td ng-class="{'row-br': row.legal && row.real_name}">
+                  <span ng-if="row.legal">{{row.legal}}<span class="legal"> (法人代表)</span></span>
+                  <br ng-if="row.legal && row.real_name">
+                  <span ng-if="row.real_name">{{row.real_name}}<span class="real_name"> (实际控制人)</span></span>
+                </td>
+                <td ng-class="{'row-br': row.cellphone && row.real_cellphone}">
+                  {{row.cellphone}}
+                  <br ng-if="row.cellphone && row.real_cellphone">
+                  {{row.real_cellphone}}
+                </td>
+                <td class="{{row.status === 0 ? 'text-info' : row.status === 1 ? 'text-success': row.status === 2 ? 'text-danger':''}}">{{row.status === 0 ? '待审核' : row.status === 1 ? '审核通过': row.status === 2 ? '审核未通过':''}}</td>
                 <td>
                   <div ng-if="!row.empty">
                     <button type="button" class="btn btn-primary btn-sm" ng-click="goview('proxyview', 'view', row.id)">详情</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.apply.url)" type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']"ng-click="goview('proxyview', 'apply', row.id)">审核</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.update.url)" type="button" class="btn btn-warning btn-sm" ng-click="goview('proxyview', 'edit', row.id)">编辑</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.delete.url)" type="button" class="btn btn-danger btn-sm" ng-click="operation('delete', row)">删除</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.apply.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-success btn-sm" ng-click="goview('proxyview', 'apply', row.id)">审核</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.update.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-warning btn-sm" ng-click="goview('proxyview', 'edit', row.id)">编辑</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.proxy.delete.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-danger btn-sm" ng-click="operation('delete', row)">删除</button>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>
                 </td>

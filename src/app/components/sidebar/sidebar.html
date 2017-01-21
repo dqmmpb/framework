@@ -15,9 +15,9 @@
     <uib-accordion class="sidebar-accordion" dir="ltr" close-others="false">
       <div class="panel-default" ng-if="hasAuth(group)" ng-repeat="group in groups" uib-accordion-group is-open="true" template-url="group-template.html">
         <uib-accordion-heading>
-          <div class="panel-heading" ng-class="{main: !group.leaf}" uib-tooltip="{{group.title}}" tooltip-enable="{{tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right">
+          <div class="panel-heading" ng-class="{main: !group.leaf, active: group === itemSelected}" uib-tooltip="{{group.title}}" tooltip-enable="{{tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right">
             <h4 class="panel-title" ng-click="select(group)">
-              <a href tabindex="0" class="accordion-toggle" >
+              <a href="javascript:void(0);" tabindex="0" class="accordion-toggle" >
               <span ng-class="{'text-muted': isDisabled}">
                 <i class="fa fa-fw {{group.icon}}"></i><span class="nav-title"> {{group.title}}</span>
                 <span class="pull-right config hidden" ng-if="!group.leaf" ng-click="groupConfig($event)" uib-tooltip="自定义{{group.title}}" tooltip-enable="{{!tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right"><i class="fa fa-fw fa-cog"></i></span>
@@ -28,9 +28,9 @@
         </uib-accordion-heading>
         <div ng-if="!group.leaf && hasAuth(item)" class="panel-default" ng-repeat="item in group.items" uib-accordion-group is-open="true" template-url="group-template.html">
           <uib-accordion-heading>
-            <div class="panel-heading" uib-tooltip="{{item.title}}" tooltip-enable="{{tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right">
+            <div class="panel-heading" ng-class="{active: item === itemSelected}" uib-tooltip="{{item.title}}" tooltip-enable="{{tooltipEnable}}" tooltip-append-to-body="true" tooltip-placement="right">
               <h4 class="panel-title" ng-click="select(item)">
-                <a href tabindex="0" class="accordion-toggle">
+                <a href="javascript:void(0);" tabindex="0" class="accordion-toggle">
                 <span ng-class="{'text-muted': isDisabled}">
                   <i class="fa fa-fw {{item.icon}}"></i><span class="nav-title"> {{item.title}}</span>
                 </span>

@@ -15,8 +15,6 @@ export class ProfileService {
       method: self.cfg.api.profile.detail.type
     }).then((response) => {
       if (response.data.result === 0) {
-        console.log("profile2:+ response.data.data")
-        console.log(response.data.data)
         return self.wrapper(response.data.data);
       } else {
         //console.log("profile2: "+ response.data.data)
@@ -47,6 +45,16 @@ export class ProfileService {
     return resourceMap;
   }
 
+  getRoleToArray(roles, key) {
+    if(angular.isArray(roles)) {
+      return roles.map(function(item) {
+        return item[key];
+      });
+    } else {
+      return [];
+    }
+  }
+
   wrapper(data) {
 
     var self = this;
@@ -57,12 +65,14 @@ export class ProfileService {
       name: o.name,
       ding_id: o.dingId,
       role: o.roleSet ? o.roleSet : [],
+      roles: self.getRoleToArray(o.roleSet ? o.roleSet : [], 'id'),
       cellphone: o.mobile,
+      code: o.code,
+      bossWangbas: o.bossWangbas ? o.bossWangbas : null,
       resourcesMap: self.restructRoleSet(o.roleSet ? o.roleSet : [], {})
     };
     //console.log(x.resourcesMap);
 
-    console.log(x);
     return x;
   }
 

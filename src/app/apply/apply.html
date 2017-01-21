@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="apply.isCollapse" groups="apply.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="apply.isCollapse" groups="apply.sidebarGroups" item-selected="apply.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="apply.breads"></uib-breadcrumb>
@@ -61,8 +61,16 @@
                 </td>-->
                 <td>{{row.name}}</td>
                 <td>{{row.id}}</td>
-                <td>{{row.legal}}</td>
-                <td>{{row.cellphone}}</td>
+                <td ng-class="{'row-br': row.legal && row.real_name}">
+                  <span ng-if="row.legal">{{row.legal}}<span class="legal"> (法人代表)</span></span>
+                  <br ng-if="row.legal && row.real_name">
+                  <span ng-if="row.real_name">{{row.real_name}}<span class="real_name"> (实际控制人)</span></span>
+                </td>
+                <td ng-class="{'row-br': row.cellphone && row.real_cellphone}">
+                  {{row.cellphone}}
+                  <br ng-if="row.cellphone && row.real_cellphone">
+                  {{row.real_cellphone}}
+                </td>
                 <td>{{row.ticket_status === 0 ? '启用' : row.ticket_status === 1 ? '停用': row.ticket_status === 2 ? '已部署': row.ticket_status === 3 ? '待部署': ''}}</td>
                 <td>
                   <div ng-if="!row.empty">
@@ -73,14 +81,14 @@
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.apply.save.url) && row.ticket_status === 3" type="button" class="btn btn-info btn-sm" ng-click="goview('applyview', 'create', row.id)">部署</button>-->
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>-->
 
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status === 3" type="button" class="btn btn-primary btn-sm" ng-click="operation('create', row, row.id)">部署</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status === 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || cfg.hasRoleId(profile.roles,'9') || cfg.hasRoleId(profile.roles,'10'))" type="button" class="btn btn-primary btn-sm" ng-click="operation('create', row, row.id)">部署</button>
 
                     <button ng-if="row.ticket_status!= 3" type="button" class="btn btn-info btn-sm" ng-click="goview('applyview', 'view', row.id)">详情</button>
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status != 3" type="button" class="btn btn-warning btn-sm" ng-click="goview('applyview', 'edit', row.id)">编辑</button>-->
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>-->
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status !== 3" type="button" class="btn btn-warning btn-sm" ng-click="operation('edit', row, row.id)">编辑</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status !== 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || cfg.hasRoleId(profile.roles,'9') || cfg.hasRoleId(profile.roles,'10'))" type="button" class="btn btn-warning btn-sm" ng-click="operation('edit', row, row.id)">编辑</button>
                     <!--<a ng-if="row.ticket_status != 3 && row.qrcodeImgPath" type="button" class="btn btn-danger btn-sm" href="{{row.qrcodeImgPath}}" target="_blank">下载二维码</a>-->
-                    <a ng-if="row.ticket_status!= 3 && row.qrcodeImgPath" type="button" class="btn btn-danger btn-sm" href="{{row.qrcodeImgPath}}" target="_blank">下载二维码</a>
+                    <a ng-if="row.ticket_status!== 3 && row.qrcode_path" type="button" class="btn btn-danger btn-sm" href="{{row.qrcode_path}}" target="_blank">下载二维码</a>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>
                 </td>

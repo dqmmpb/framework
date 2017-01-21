@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profit.isCollapse" groups="profit.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profit.isCollapse" groups="profit.sidebarGroups" item-selected="profit.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="profit.breads"></uib-breadcrumb>
@@ -63,14 +63,22 @@
                 <td>{{row.name}}</td>
                 <td>{{row.code}}</td>
                 <!--<td>{{row.business_area && profit.getCityString(row.business_area)}}</td>-->
-                <td>{{row.legal}}</td>
-                <td>{{row.cellphone}}</td>
-                <td>{{(row.profitsSet && row.profitsSet.length) ? '已设置' : '待设置'}}</td>
+                <td ng-class="{'row-br': row.legal && row.real_name}">
+                  <span ng-if="row.legal">{{row.legal}}<span class="legal"> (法人代表)</span></span>
+                  <br ng-if="row.legal && row.real_name">
+                  <span ng-if="row.real_name">{{row.real_name}}<span class="real_name"> (实际控制人)</span></span>
+                </td>
+                <td ng-class="{'row-br': row.cellphone && row.real_cellphone}">
+                  {{row.cellphone}}
+                  <br ng-if="row.cellphone && row.real_cellphone">
+                  {{row.real_cellphone}}
+                </td>
+                <td class="{{(row.profitsSet && row.profitsSet.length) ? 'text-success' : 'text-primary'}}">{{!row.empty ? ((row.profitsSet && row.profitsSet.length) ? '已设置' : '待设置') : ''}}</td>
                 <td>
                   <div ng-if="!row.empty">
                     <button type="button" class="btn btn-primary btn-sm" ng-click="goview('profitview', 'view', row.id)">详情</button>
-                    <button ng-if="!(row.profitsSet && row.profitsSet.length) && cfg.hasAuth(profile, cfg.api.profit.save.url)" type="button" ng-if="!(row.profitsSet && row.profitsSet.length > 0)" class="btn btn-info btn-sm" ng-click="operation('create', row)">设置</button>
-                    <button ng-if="row.profitsSet && row.profitsSet.length && cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>
+                    <button ng-if="!(row.profitsSet && row.profitsSet.length) && cfg.hasAuth(profile, cfg.api.profit.save.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-info btn-sm" ng-click="operation('create', row)">设置</button>
+                    <button ng-if="row.profitsSet && row.profitsSet.length && cfg.hasAuth(profile, cfg.api.profit.update.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>
                 </td>

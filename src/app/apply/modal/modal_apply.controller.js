@@ -38,8 +38,8 @@ export class ModalApplyController {
       corpId: $scope.info.corpId,
       ticket_id: $scope.info.ticket_id,
       corpsecret: $scope.info.corpsecret,
-      department_id : $scope.info.department_id,
-      wangba_id : $scope.info.id,
+      department_id: $scope.info.department_id,
+      wangba_id: $scope.info.id,
       cashier_dept_id: $scope.info.cashier_dept_id,
       apply_id: $scope.info.apply_id,
       qrcode_path: $scope.info.qrcode_path
@@ -48,18 +48,18 @@ export class ModalApplyController {
 
   setData($scope, result) {
 
-    $scope.info.ticket_status = result.status;
-    //corpId: result.corpId,
-    //corpsecret: result.corpsecret,
-    //department_id: result.departmentId,
-    //wangba_id: result.wangbaId,
-    //cashier_dept_id: result.cashierDeptId,
-    //apply_id: result.apply_id,
-    //qrcode_path: result.qrcode_path,
-    //qrcodeImgPath: result.qrcodeImgPath
-
+    console.log(result.tickets)
+    $scope.info.ticket_status = result.tickets.status;
+    $scope.info.corpId = result.tickets.corpId;
+    $scope.info.corpsecret = result.tickets.secret;
+    $scope.info.department_id = result.tickets.departmentId;
+    $scope.info.wangba_id = result.tickets.wangbaId;
+    $scope.info.cashier_dept_id = result.tickets.cashierDeptId;
+    $scope.info.apply_id = result.tickets.agentId;
+    $scope.info.qrcode_path = result.tickets.qrcodeImgPath;
 
   }
+
   ok(result) {
 
     this.setData(this, result);
@@ -94,7 +94,7 @@ export class ModalApplyController {
         agentId: params.apply_id,
         qrcodeImgPath: params.qrcode_path
       };
-    }else if(type === 'createQrcode') {
+    } else if (type === 'createQrcode') {
       return {
         id: params.id
       };
@@ -128,7 +128,7 @@ export class ModalApplyController {
             toastr.success('处理成功！');
             self.ok(response.data.data);
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -151,7 +151,7 @@ export class ModalApplyController {
             toastr.success('处理成功！');
             self.ok(response.data.data);
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -160,7 +160,7 @@ export class ModalApplyController {
       }
     }
 
-    self.createQrcode = function($event) {
+    self.createQrcode = function ($event) {
       $log.log(self.preParams('createQrcode', {
         id: self.info.id
       }));
@@ -171,19 +171,18 @@ export class ModalApplyController {
           id: self.info.id
         })
       }).then((response) => {
-        if(response.data.result === 0) {
+        if (response.data.result === 0) {
           self.infoForm.qrcode_path = response.data.data.codeImg;
           toastr.success('生成二维码成功！');
           //$scope.goview('apply');
-        } else if(response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+        } else if (response.data.result === 1) {
+          toastr.error(response.data.msg);
         }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
         toastr.error('网络异常，请重试');
       });
     };
-
   }
 
 }

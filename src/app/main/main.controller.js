@@ -33,7 +33,8 @@ export class MainController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[0]);
+    this.sidebarSelected = this.sidebarGroups[0];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
   }
 
   getData($scope, main) {
@@ -45,11 +46,6 @@ export class MainController {
         $scope.mainData = data;
       }
     });
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

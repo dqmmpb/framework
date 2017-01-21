@@ -86,9 +86,10 @@ export class UserService {
       name: o.name,
       ding_id: o.dingId,
       role: o.roleSet ? o.roleSet : [],
-      cellphone: o.mobile
+      cellphone: o.mobile,
+      code: o.code,
+      bossWangbas: o.bossWangbas ? o.bossWangbas : null
     };
-
     return x;
   }
 
@@ -97,8 +98,8 @@ export class UserService {
     var self = this;
 
     var all = [];
-    for (var i in data.list) {
-      var o = data.list[i];
+    for (var i in data) {
+      var o = data[i];
       var x = self.wrapper(o);
       all.push(x);
     }

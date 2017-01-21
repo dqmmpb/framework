@@ -3,238 +3,11 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="applyview.isCollapse" groups="applyview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="applyview.isCollapse" groups="applyview.sidebarGroups" item-selected="applyview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="applyview.breads"></uib-breadcrumb>
 
-      <div ng-if="type === 'create' && !loading">
-        <div class="tools">
-          <div class="btn-group" role="group" aria-label="">
-            <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
-          </div>
-        </div>
-
-        <div class="row mt-10">
-          <div class="col-md-12">
-            <div class="panel panel-default panel-csc">
-              <div class="panel-heading">
-                <div class="panel-title">新建部署</div>
-              </div>
-              <div class="panel-body">
-                <form name="form" class="form form-horizontal" ng-submit="createSubmit(form.$valid)" novalidate>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>CorpID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.corpId" name="corpId" class="form-control" placeholder="CorpID" required minlength="1" ng-minlength="1" maxlength="256" ng-maxlength="256">
-                      <div class="error-messages" ng-messages="form.corpId.$error">
-                        <small class="error" ng-message="required">CorpID（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>CorpSecret:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.corpsecret" name="corpsecret" class="form-control" placeholder="CorpSecret" required minlength="1" ng-minlength="1" maxlength="256" ng-maxlength="256">
-                      <div class="error-messages" ng-messages="form.corpsecret.$error">
-                        <small class="error" ng-message="required">CorpSecret（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>应用ID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.apply_id" name="apply_id" class="form-control" placeholder="应用ID" required minlength="1" ng-minlength="1" maxlength="30" ng-maxlength="30">
-                      <div class="error-messages" ng-messages="form.apply_id.$error">
-                        <small class="error" ng-message="required">应用ID（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>部门ID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.department_id" name="department_id" class="form-control" placeholder="部门ID" required minlength="1" ng-minlength="1" maxlength="32" ng-maxlength="32">
-                      <div class="error-messages" ng-messages="form.department_id.$error">
-                        <small class="error" ng-message="required">部门ID（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>收银部门ID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.cashier_dept_id" name="cashier_dept_id" class="form-control" placeholder="收银部门ID" required ng-minlength="1" maxlength="32" ng-maxlength="32">
-                      <div class="error-messages" ng-messages="form.cashier_dept_id.$error">
-                        <small class="error" ng-message="required">收银部门ID（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger"></span>二维码地址:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.qrcode_path" name="qrcode_path" class="form-control" placeholder="二维码地址">
-                      <!--<div class="error-messages" ng-messages="form.qrcode_path.$error">-->
-                        <!--<small class="error" ng-message="required">二维码地址（*必填）</small>-->
-                      <!--</div>-->
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                      <div class="btn-group" role="group" aria-label="">
-                        <button ng-click="createQrcode($event)" ng-disabled="form.$invalid" class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i>生成二维码</button>
-                      </div>
-                      <div class="btn-group" role="group" aria-label="">
-                        <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
-                      </div>
-                      <div class="btn-group" role="group" aria-label="">
-                        <a href="{{redirect_url}}" class="btn btn-default btn-danger"><i class="fa fa-fw fa-mail-forward"></i> 放弃修改</a>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="panel panel-default panel-csc">
-              <div class="panel-heading">
-                <div class="panel-title">查看网吧管理</div>
-              </div>
-              <div class="panel-body">
-                <div class="form form-horizontal">
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>网吧公司<br />名称:</label>
-                        <div class="col-sm-4">
-                          <p class="form-control-static">{{info.company_name}}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>门店名称:</label>
-                        <div class="col-sm-8">
-                          <p class="form-control-static">{{info.name}}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group form-select-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>网吧地址:</label>
-                    <div class="col-sm-10">
-                      <p class="form-control-static">{{info.area && deployview.getCityString(info.area) || '未填写'}}</p>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                      <p class="form-control-static">{{info.address || '未填写'}}</p>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>法定代表:</label>
-                        <div class="col-sm-8">
-                          <p class="form-control-static">{{info.legal || '未填写'}}</p>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
-                        <div class="col-sm-8">
-                          <p class="form-control-static">{{info.cellphone || '未填写'}}</p>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label control-label-double"><span class="span-danger">*</span>法人代表<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
-                        <div class="col-sm-8">
-                          <div class="image-group">
-                            <div class="input-image input-image-add" ng-repeat="item in info.pcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                              <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.pcfile', item.file)">
-                                </div>
-                              </div>
-                              <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-sm-6" ng-if="!info.is_same">
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>实际控制人:</label>
-                        <div class="col-sm-8">
-                          <p class="form-control-static">{{info.real_name || '未填写'}}</p>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>手机号:</label>
-                        <div class="col-sm-8">
-                          <p class="form-control-static">{{info.real_cellphone || '未填写'}}</p>
-                        </div>
-                      </div>
-
-                      <div class="form-group">
-                        <label class="col-sm-4 control-label control-label-double"><span class="span-danger">*</span>实际控制人<span class="visible-sm-inline"> <br/></span>身份证照片:</label>
-                        <div class="col-sm-8">
-                          <div class="image-group">
-                            <div class="input-image input-image-add" ng-repeat="item in info.rpcfile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                              <div class="image-wrapper">
-                                <div class="image-thumbnail" ng-hide="!item.file">
-                                  <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.rpcfile', item.file)">
-                                </div>
-                              </div>
-                              <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="image-group">
-                          <div class="input-image" ng-repeat="item in info.blfile" ng-class="{true: 'input-image-add'}[!item.file]">
-                            <div class="image-wrapper">
-                              <div class="image-thumbnail" ng-hide="!item.file">
-                                <img class="viewer-image" ng-src="{{item.file.serverData.url  || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.blfile', item.file)">
-                              </div>
-                            </div>
-                            <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>网络经营许可<span class="visible-sm-inline"> <br/></span>证照片/扫描件:</label>
-                    <div class="col-sm-10">
-                      <div class="image-group">
-                        <div class="input-image input-image-add" ng-repeat="item in info.affile" ng-class="{true: 'has-caption'}[!!item.caption]">
-                          <div class="image-wrapper">
-                            <div class="image-thumbnail" ng-hide="!item.file">
-                              <img class="viewer-image" ng-src="{{item.file.serverData.url || 'assets/images/loading.gif'}}" ng-click="viewFile($event, 'info.affile', item.file)">
-                            </div>
-                          </div>
-                          <div class="caption" ng-if="!!item.caption">{{item.caption}}</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div ng-if="type === 'edit' && !loading ">
         <div class="tools">
@@ -269,24 +42,31 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>应用ID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.apply_id" name="apply_id" class="form-control" placeholder="应用ID" required minlength="1" ng-minlength="1" maxlength="30" ng-maxlength="30">
-                      <div class="error-messages" ng-messages="form.apply_id.$error">
-                        <small class="error" ng-message="required">应用ID（*必填）</small>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>应用ID:</label>
+                        <div class="col-sm-8">
+                          <input type="text" ng-model="info.apply_id" name="apply_id" class="form-control" placeholder="应用ID" required minlength="1" ng-minlength="1" maxlength="30" ng-maxlength="30">
+                          <div class="error-messages" ng-messages="form.apply_id.$error">
+                            <small class="error" ng-message="required">应用ID（*必填）</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>部门ID:</label>
+                        <div class="col-sm-8">
+                          <input type="text" ng-model="info.department_id" name="department_id" class="form-control" placeholder="部门ID" required minlength="1" ng-minlength="1" maxlength="32" ng-maxlength="32">
+                          <div class="error-messages" ng-messages="form.department_id.$error">
+                            <small class="error" ng-message="required">部门ID（*必填）</small>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>部门ID:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.department_id" name="department_id" class="form-control" placeholder="部门ID" required minlength="1" ng-minlength="1" maxlength="32" ng-maxlength="32">
-                      <div class="error-messages" ng-messages="form.department_id.$error">
-                        <small class="error" ng-message="required">部门ID（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
+
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>收银部门ID:</label>
                     <div class="col-sm-10">
@@ -299,17 +79,21 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger"></span>二维码地址:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.qrcode_path" name="qrcode_path" class="form-control" placeholder="二维码地址">
+                      <!--<input type="text" ng-model="info.qrcode_path" name="qrcode_path" class="form-control" placeholder="二维码地址">-->
                       <!--<div class="error-messages" ng-messages="form.qrcode_path.$error">-->
                         <!--<small class="error" ng-message="required">二维码地址（*必填）</small>-->
                       <!--</div>-->
+                      <div class="input-group input-group-success">
+                        <input type="text" ng-model="info.qrcode_path" name="qrcode_path" class="form-control" placeholder="二维码地址">
+                        <span class="input-group-addon" ng-click="createQrcode($event)">生成二维码</span>
+                      </div>
                     </div>
                   </div>
                   <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                      <div class="btn-group" role="group" aria-label="">
-                        <button ng-click="createQrcode($event)" class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i>生成二维码</button>
-                      </div>
+                      <!--<div class="btn-group" role="group" aria-label="">-->
+                        <!--<button ng-click="createQrcode($event)" class="btn btn-default btn-success"><i class="fa fa-fw fa-save"></i>生成二维码</button>-->
+                      <!--</div>-->
                       <div class="btn-group" role="group" aria-label="">
                         <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
                       </div>
@@ -470,10 +254,10 @@
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && info.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && info.status !== 1))" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('applyview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.delete.url)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.delete.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && info.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && info.status !== 1))" class="btn-group" role="group" aria-label="">
             <a ng-click="deleteSubmit(id)" class="btn btn-default btn-danger" uib-tooltip="删除" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-trash"></i><span class="hidden-xs"> 删除</span></a>
           </div>
         </div>
@@ -498,18 +282,27 @@
                       <p class="form-control-static">{{info.corpsecret}}</p>
                     </div>
                   </div>
-                  <div class="form-group form-select-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>应用ID:</label>
-                    <div class="col-sm-10">
-                      <p class="form-control-static">{{info.apply_id}}</p>
+
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group form-select-group">
+                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>应用ID:</label>
+                        <div class="col-sm-8">
+                          <p class="form-control-static">{{info.apply_id}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group form-select-group">
+                        <label class="col-sm-4 control-label"><span class="span-danger">*</span>部门ID:</label>
+                        <div class="col-sm-8">
+                          <p class="form-control-static">{{info.department_id}}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="form-group form-select-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>部门ID:</label>
-                    <div class="col-sm-10">
-                      <p class="form-control-static">{{info.department_id}}</p>
-                    </div>
-                  </div>
+
+
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>收银部门ID:</label>
                     <div class="col-sm-10">
@@ -673,3 +466,4 @@
 
     </div>
   </div>
+</div>

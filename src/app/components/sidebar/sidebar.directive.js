@@ -1,7 +1,16 @@
 angular.module('ui.framework.sidebar', [])
-  .controller('UibSidebarController', function () {
+  .controller('UibSidebarController', ['$scope', '$sessionStorage', function ($scope, $sessionStorage) {
 
-  })
+    if($sessionStorage.isCollapse === false || $sessionStorage.isCollapse === true) {
+      $scope.$storage =  $sessionStorage.$default({
+        isCollapse: $sessionStorage.isCollapse
+      });
+    } else {
+      $scope.$storage =  $sessionStorage.$default({
+        isCollapse: false
+      });
+    }
+  }])
   .directive('uibSidebar', function (cfg) {
     return {
       controller: 'UibSidebarController',
@@ -14,6 +23,7 @@ angular.module('ui.framework.sidebar', [])
       scope: {
         profile: '=',
         groups: '=',
+        itemSelected: '=',
         isCollapse: '='
       },
       link: linkFunc
@@ -21,9 +31,12 @@ angular.module('ui.framework.sidebar', [])
 
     function linkFunc(scope, element, attrs) {
 
+      scope.isCollapse = scope.$storage.isCollapse;
+
       scope.collapse = function() {
         scope.isCollapse = !scope.isCollapse;
         scope.tooltipEnable = !scope.tooltipEnable;
+        scope.$storage.isCollapse = scope.isCollapse;
       };
 
       scope.tooltipEnable = scope.isCollapse;
@@ -52,7 +65,7 @@ angular.module('ui.framework.sidebar', [])
         return cfg.hasAuth(scope.profile, item.resource);
       };
 
-      scope.$watch('profile', function(newValue) {
-      });
+      // scope.$watch('profile', function(newValue) {
+      // });
     }
   });

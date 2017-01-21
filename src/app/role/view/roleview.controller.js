@@ -72,7 +72,8 @@ export class RoleViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[0]);
+    this.sidebarSelected = this.sidebarGroups[3].items[0];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '新增角色'
@@ -116,16 +117,27 @@ export class RoleViewController {
 
   restructureAuth(authes) {
 
+    var map = {};
     var newAuth = [];
     for(var auth in authes) {
       if(authes[auth].mM.ch) {
-        newAuth.push(authes[auth].mM.id);
+        if(!map[authes[auth].mM.id]) {
+          map[authes[auth].mM.id] = true;
+          newAuth.push(authes[auth].mM.id);
+        }
       }
       if(authes[auth].sM.ch) {
-        newAuth.push(authes[auth].sM.id);
+        if(!map[authes[auth].sM.id]) {
+          map[authes[auth].sM.id] = true;
+          newAuth.push(authes[auth].sM.id);
+        }
+
       }
       if(authes[auth].aT.ch) {
-        newAuth.push(authes[auth].aT.id);
+        if(!map[authes[auth].aT.id]) {
+          map[authes[auth].aT.id] = true;
+          newAuth.push(authes[auth].aT.id);
+        }
       }
     }
     return newAuth;
@@ -176,7 +188,7 @@ export class RoleViewController {
             else
               $scope.goview('role');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -202,7 +214,7 @@ export class RoleViewController {
             else
               $scope.goview('role');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -236,7 +248,7 @@ export class RoleViewController {
               else
                 $scope.goview('role');
             } else if (response.data.result === 1) {
-              toastr.error('处理失败，请重试');
+              toastr.error(response.data.msg);
             }
           }).catch((error) => {
             $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -249,11 +261,6 @@ export class RoleViewController {
       });
 
     };
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

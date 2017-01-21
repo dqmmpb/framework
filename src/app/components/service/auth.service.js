@@ -14,25 +14,45 @@ export class AuthService {
       for (var i = 0, il = data.length; i < il; i++) {
         var jc = 0;
         for (var j = 0, jl = data[i].sub.length; j < jl; j++) {
-          jc += data[i].sub[j].auth.length;
-          for (var k = 0, kl = data[i].sub[j].auth.length; k < kl; k++) {
+          var flag = data[i].sub[j].auth.length;
+          if(flag) {
+            for (var k = 0, kl = data[i].sub[j].auth.length; k < kl; k++) {
+              var row = {};
+              row.mM = data[i];
+              row.mM.ch = false;
+              if (k === 0) {
+                row.sMFirst = true;
+                if (j === 0) {
+                  row.mMFirst = true;
+                }
+              }
+              row.sM = data[i].sub[j];
+              row.sM.ch = false;
+              row.aT = data[i].sub[j].auth[k];
+              row.aT.ch = false;
+              rsAuthes.push(row);
+            }
+          } else {
+            flag = 1;
             var row = {};
             row.mM = data[i];
             row.mM.ch = false;
-            if (k === 0) {
-              row.sMFirst = true;
-              if (j === 0) {
-                row.mMFirst = true;
-              }
+            row.mM.colspan = 2;
+            row.sMFirst = true;
+            if (j === 0) {
+              row.mMFirst = true;
             }
             row.sM = data[i].sub[j];
+            row.sM.displayNone = true;
             row.sM.ch = false;
-            row.aT = data[i].sub[j].auth[k];
+            row.aT = data[i].sub[j];
             row.aT.ch = false;
             rsAuthes.push(row);
           }
-          if (rsAuthes.length > 0 && rsAuthes.length >= data[i].sub[j].auth.length && data[i].sub[j].auth.length > 0) {
-            rsAuthes[rsAuthes.length - data[i].sub[j].auth.length].sM.rowspan = data[i].sub[j].auth.length;
+          jc += flag;
+
+          if (rsAuthes.length > 0 && rsAuthes.length >= flag && flag > 0) {
+            rsAuthes[rsAuthes.length - flag].sM.rowspan = flag;
           }
         }
         if (rsAuthes.length > 0 && rsAuthes.length >= jc && jc > 0) {

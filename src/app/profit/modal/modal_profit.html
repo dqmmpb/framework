@@ -24,6 +24,20 @@
         </div>
       </div>
       <div class="form-group">
+        <label class="col-sm-3 control-label">快捷支付分润比:</label>
+        <div class="col-sm-9">
+          <div class="input-group input-group-info">
+            <input type="text" ng-model="$ctrl.form.profits.pct_quick" name="pct_quick" class="form-control" placeholder="请输入分润比例" required  ng-pattern="/^0(\.(([1-5]{1}\d?)|(0\d?)|(60?)))?$/">
+            <span class="input-group-addon">%</span>
+          </div>
+          <div class="error-messages" ng-messages="form.pct_quick.$error">
+            <small class="error" ng-message="required">快捷支付分润比（*必填）</small>
+            <small class="error" ng-message="pattern">分润比例在0.00%-0.60%之间</small>
+          </div>
+        </div>
+      </div>
+      <!--
+      <div class="form-group">
         <label class="col-sm-3 control-label">会员充值分润比:</label>
         <div class="col-sm-9">
           <div class="input-group input-group-info">
@@ -49,7 +63,7 @@
             <small class="error" ng-message="pattern">分润比必须为2位小数</small>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
   <div class="modal-footer">

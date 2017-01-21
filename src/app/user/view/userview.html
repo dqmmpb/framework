@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="userview.isCollapse" groups="userview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="userview.isCollapse" groups="userview.sidebarGroups" item-selected="userview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="userview.breads"></uib-breadcrumb>
@@ -23,62 +23,90 @@
               </div>
               <div class="panel-body">
                 <form name="form" class="form form-horizontal" ng-submit="createSubmit(form.$valid)" novalidate>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>用户姓名:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.name" name="name" class="form-control" placeholder="用户姓名" required>
-                      <div class="error-messages" ng-messages="form.name.$error">
-                        <small class="error" ng-message="required">用户姓名（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>登录密码:</label>
-                    <div class="col-sm-10">
-                      <input type="password" ng-model="info.password" name="password" class="form-control" placeholder="登录密码" minlength="6" maxlength="10" ng-minlength="6" ng-maxlength="10" required ng-pattern="/(?=.*[a-zA-Z])(?=.*[^a-zA-Z])/">
-                      <div class="error-messages" ng-messages="form.password.$error">
-                        <small class="error" ng-message="required">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="minlength">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="maxlength">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="pattern">登录密码必须包含数字和英文字符</small>
-                      </div>
-                    </div>
-                  </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>用户姓名:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="text" ng-model="info.name" name="name" class="form-control" placeholder="用户姓名" required>-->
+                      <!--<div class="error-messages" ng-messages="form.name.$error">-->
+                        <!--<small class="error" ng-message="required">用户姓名（*必填）</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>登录密码:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="password" ng-model="info.password" name="password" class="form-control" placeholder="登录密码" minlength="6" maxlength="10" ng-minlength="6" ng-maxlength="10" required ng-pattern="/(?=.*[a-zA-Z])(?=.*[^a-zA-Z])/">-->
+                      <!--<div class="error-messages" ng-messages="form.password.$error">-->
+                        <!--<small class="error" ng-message="required">登录密码必须为6-10个字符（*数字或英文字符）</small>-->
+                        <!--<small class="error" ng-message="minlength">登录密码必须为6-10个字符（*数字或英文字符）</small>-->
+                        <!--<small class="error" ng-message="maxlength">登录密码必须为6-10个字符（*数字或英文字符）</small>-->
+                        <!--<small class="error" ng-message="pattern">登录密码必须包含数字和英文字符</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
 
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>确认登录密码:</label>
-                    <div class="col-sm-10">
-                      <input type="password" ng-model="info.confirm" name="confirm" class="form-control" placeholder="确认登录密码" required equal-to="info.password">
-                      <div class="error-messages" ng-messages="form.confirm.$error">
-                        <small class="error" ng-message="required">请确认登录密码（*必填）</small>
-                        <small class="error" ng-message="notEqual">两次输入的登录密码不一致</small>
-                      </div>
-                    </div>
-                  </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>确认登录密码:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="password" ng-model="info.confirm" name="confirm" class="form-control" placeholder="确认登录密码" required equal-to="info.password">-->
+                      <!--<div class="error-messages" ng-messages="form.confirm.$error">-->
+                        <!--<small class="error" ng-message="required">请确认登录密码（*必填）</small>-->
+                        <!--<small class="error" ng-message="notEqual">两次输入的登录密码不一致</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
 
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label">钉钉账号:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.ding_id" class="form-control" placeholder="钉钉账号">
-                    </div>
-                  </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label">钉钉账号:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="text" ng-model="info.ding_id" class="form-control" placeholder="钉钉账号">-->
+                    <!--</div>-->
+                  <!--</div>-->
+                  <!--<div class="form-group form-select-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>手机号:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11" ng-pattern="/^1\d{10}$/">-->
+                      <!--<div class="error-messages" ng-messages="form.cellphone.$error">-->
+                        <!--<small class="error" ng-message="required">手机号（*必填）</small>-->
+                        <!--<small class="error" ng-message="minlength">请输入11位手机号</small>-->
+                        <!--<small class="error" ng-message="maxlength">请输入11位手机号</small>-->
+                        <!--<small class="error" ng-message="pattern">请输入正确格式的手机号</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>手机号:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11">
+                      <div class="input-group input-group-warning">
+                        <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11" ng-pattern="/^1\d{10}$/">
+                        <span class="input-group-addon input-group-addon-btn"><button type="button" ng-click="mobilephoneExists($event)" class="btn btn-warning">手机号验证</button></span>
+                      </div>
                       <div class="error-messages" ng-messages="form.cellphone.$error">
                         <small class="error" ng-message="required">手机号（*必填）</small>
                         <small class="error" ng-message="minlength">请输入11位手机号</small>
                         <small class="error" ng-message="maxlength">请输入11位手机号</small>
+                        <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                       </div>
                     </div>
                   </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>用户角色:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<div class="form-control-select">-->
+                        <!--<select name="roleselect" class="input-select input-select-w100" placeholder="用户角色"></select>-->
+                      <!--</div>-->
+                      <!--<input type="hidden" ng-model="validator.role_string" name="role_string" class="form-control" placeholder="用户角色" required></input>-->
+                      <!--<div class="error-messages" ng-messages="form.role_string.$error">-->
+                        <!--<small class="error" ng-message="required">用户角色（*必填）</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
 
-                  <div class="form-group">
+                  <div class="form-group" ng-if="flagMobile">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>用户角色:</label>
                     <div class="col-sm-10">
                       <div class="form-control-select">
-                        <select name="roleselect" class="input-select input-select-w100" placeholder="用户角色"></select>
+                        <select name="roleselect" class="input-select input-select-role input-select-w100" placeholder="用户角色"></select>
                       </div>
                       <input type="hidden" ng-model="validator.role_string" name="role_string" class="form-control" placeholder="用户角色" required></input>
                       <div class="error-messages" ng-messages="form.role_string.$error">
@@ -87,7 +115,30 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" ng-if="hasRoleId(info.selectRoles,'4') && flagMobile">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>网吧名称:</label>
+                    <div class="col-sm-10">
+                      <div class="form-control-select">
+                        <select name="nameselect" class="input-select input-select-name input-select-w100" placeholder="网吧名称"></select>
+                      </div>
+                      <input type="hidden" ng-model="validator.deploy_barname" name="deploy_barname" class="form-control" placeholder="网吧名称" required></input>
+                      <div class="error-messages" ng-messages="form.deploy_barname.$error">
+                        <small class="error" ng-message="required">网吧名称（*必填）</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group" ng-if="hasRoleId(info.selectRoles,'9') && flagMobile">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>渠道邀请码:</label>
+                    <div class="col-sm-10">
+                      <input type="text" ng-model="info.code" name="code" class="form-control" placeholder="渠道邀请码" required></input>
+                      <div class="error-messages" ng-messages="form.code.$error">
+                      <small class="error" ng-message="required">渠道邀请码（*必填）</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group" ng-if="flagMobile">
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
                         <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
@@ -109,13 +160,13 @@
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.user.update.url)"  class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.user.update.url) && info.ticket_status !== 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && info.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && info.status !== 1))"  class="btn-group" role="group" aria-label="">
             <a ng-click="goview('userview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.user.reset.url)" class="btn-group" role="group" aria-label="">
+         <!-- <div ng-if="cfg.hasAuth(profile, cfg.api.user.reset.url)" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('userview', 'reset', id)" class="btn btn-default btn-success" uib-tooltip="重置密码" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 重置密码</span></a>
-          </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.role.delete.url)"  class="btn-group" role="group" aria-label="">
+          </div>-->
+          <div ng-if="cfg.hasAuth(profile, cfg.api.role.delete.url) && info.ticket_status !== 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && info.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && info.status !== 1))"  class="btn-group" role="group" aria-label="">
             <a ng-click="deleteSubmit(id)" class="btn btn-default btn-danger" uib-tooltip="删除" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-trash"></i><span class="hidden-xs"> 删除</span></a>
           </div>
         </div>
@@ -152,6 +203,26 @@
                       <p class="form-control-static">{{getRoleToArray(info.role, 'name').join(",")}}</p>
                     </div>
                   </div>
+                  <div class="form-group" ng-if="hasRoleId(info.selectRoles,'4') && info.bossWangbas">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>网吧名称:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.bossWangbas ? info.bossWangbas.name: ''}}</p>
+                    </div>
+                  </div>
+
+                  <!--<div class="form-group" ng-if="hasRoleId(info.roles,'9') && flagMobile">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>渠道邀请码:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<p class="form-control-static">{{info.code}}</p>-->
+                    <!--</div>-->
+                  <!--</div>-->
+
+                  <div class="form-group form-select-group" ng-if="hasRoleId(info.selectRoles,'9') && info.code">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>渠道邀请码:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.code}}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,32 +245,27 @@
               </div>
               <div class="panel-body">
                 <form name="form" class="form form-horizontal" ng-submit="editSubmit(id, form.$valid)" novalidate>
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>用户姓名:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.name" name="name" class="form-control" placeholder="用户姓名" required>
-                      <div class="error-messages" ng-messages="form.name.$error">
-                        <small class="error" ng-message="required">用户姓名（*必填）</small>
-                      </div>
-                    </div>
-                  </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>用户姓名:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="text" ng-model="info.name" name="name" class="form-control" placeholder="用户姓名" required>-->
+                      <!--<div class="error-messages" ng-messages="form.name.$error">-->
+                        <!--<small class="error" ng-message="required">用户姓名（*必填）</small>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                  <!--</div>-->
 
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>钉钉账号:</label>
-                    <div class="col-sm-10">
-                      <input type="text" ng-model="info.ding_id" class="form-control" placeholder="钉钉账号">
-                    </div>
-                  </div>
+                  <!--<div class="form-group">-->
+                    <!--<label class="col-sm-2 control-label"><span class="span-danger">*</span>钉钉账号:</label>-->
+                    <!--<div class="col-sm-10">-->
+                      <!--<input type="text" ng-model="info.ding_id" class="form-control" placeholder="钉钉账号">-->
+                    <!--</div>-->
+                  <!--</div>-->
 
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>手机号:</label>
                     <div class="col-sm-10">
-                      <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11">
-                      <div class="error-messages" ng-messages="form.cellphone.$error">
-                        <small class="error" ng-message="required">手机号（*必填）</small>
-                        <small class="error" ng-message="minlength">请输入11位手机号</small>
-                        <small class="error" ng-message="maxlength">请输入11位手机号</small>
-                      </div>
+                      <p class="form-control-static">{{info.cellphone}}</p>
                     </div>
                   </div>
 
@@ -207,7 +273,7 @@
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>用户角色:</label>
                     <div class="col-sm-10">
                       <div class="form-control-select">
-                        <select name="roleselect" class="input-select input-select-w100" placeholder="用户角色"></select>
+                        <select name="roleselect" class="input-select input-select-role input-select-w100" placeholder="用户角色"></select>
                       </div>
                       <input type="hidden" ng-model="validator.role_string" name="role_string" class="form-control" placeholder="用户角色" required></input>
                       <div class="error-messages" ng-messages="form.role_string.$error">
@@ -216,7 +282,27 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
+                  <div class="form-group" ng-if="info.selectRoles && hasRoleId(info.selectRoles,'4')">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>网吧名称:</label>
+                    <div class="col-sm-10">
+                      <div class="form-control-select">
+                        <select name="nameselect" class="input-select input-select-name input-select-w100" placeholder="网吧名称"></select>
+                      </div>
+                      <input type="hidden" ng-model="validator.deploy_barname" name="deploy_barname" class="form-control" placeholder="网吧名称" required></input>
+                      <div class="error-messages" ng-messages="form.deploy_barname.$error">
+                        <small class="error" ng-message="required">网吧名称（*必填）</small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group form-select-group" ng-if="info.selectRoles && hasRoleId(info.selectRoles,'9') && info.code">
+                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>渠道邀请码:</label>
+                    <div class="col-sm-10">
+                      <p class="form-control-static">{{info.code}}</p>
+                    </div>
+                  </div>
+
+                  <div class="form-group" >
                     <div class="col-sm-offset-2 col-sm-10">
                       <div class="btn-group" role="group" aria-label="">
                         <button class="btn btn-default btn-success" ng-disabled="form.$invalid"><i class="fa fa-fw fa-save"></i> 保存</button>
@@ -302,10 +388,10 @@
                     <div class="col-sm-10">
                       <input type="password" ng-model="info.password" name="password" class="form-control" placeholder="操作人员密码" minlength="6" maxlength="10" ng-minlength="6" ng-maxlength="10" required ng-pattern="/(?=.*[a-zA-Z])(?=.*[^a-zA-Z])/">
                       <div class="error-messages" ng-messages="form.password.$error">
-                        <small class="error" ng-message="required">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="minlength">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="maxlength">登录密码必须为6-10个字符（*数字或英文字符）</small>
-                        <small class="error" ng-message="pattern">登录密码必须包含数字和英文字符</small>
+                        <small class="error" ng-message="required">操作人员密码必须为6-10个字符（*数字或英文字符）</small>
+                        <small class="error" ng-message="minlength">操作人员密码必须为6-10个字符（*数字或英文字符）</small>
+                        <small class="error" ng-message="maxlength">操作人员密码必须为6-10个字符（*数字或英文字符）</small>
+                        <small class="error" ng-message="pattern">操作人员密码必须包含数字和英文字符</small>
                       </div>
                     </div>
                   </div>

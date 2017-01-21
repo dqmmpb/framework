@@ -50,7 +50,8 @@ export class ProfitController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[1].items[1]);
+    this.sidebarSelected = this.sidebarGroups[1].items[1];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
   }
 
   getPage($scope, $location, $state, $log, dataService, currentPage) {
@@ -267,11 +268,6 @@ export class ProfitController {
       }
     }
 
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

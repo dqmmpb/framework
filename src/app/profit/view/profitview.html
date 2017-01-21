@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profitview.isCollapse" groups="profitview.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="profitview.isCollapse" groups="profitview.sidebarGroups" item-selected="profitview.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="profitview.breads"></uib-breadcrumb>
@@ -35,7 +35,7 @@
                   </div>
 
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
@@ -43,7 +43,22 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="col-sm-6 control-label"><span class="span-danger">*</span>快捷支付分润比:</label>
+                        <div class="col-sm-6">
+                          <div class="input-group input-group-info">
+                            <input type="text" ng-model="mform.profits.pct_quick" name="pct_quick" class="form-control" placeholder="请输入分润比例" required ng-pattern="/^0(\.(([1-5]{1}\d?)|(0\d?)|(60?)))?$/">
+                            <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_quick.$error">
+                            <small class="error" ng-message="required">快捷支付分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比例在0.00%-0.60%之间</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--<div class="col-sm-4">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
@@ -72,7 +87,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
 
                   <div class="form-group">
@@ -105,7 +120,7 @@
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.area_label && proxyview.getCityString(info.area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area && profitview.getCityString(info.area) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
@@ -179,13 +194,13 @@
                       </div>
                     </div>
                   </div>
-
+<!--
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.business_area && profitview.getCityString(info.business_area) || '未填写'}}</p>
                     </div>
-                  </div>
+                  </div>-->
 
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
@@ -231,10 +246,10 @@
           <div class="btn-group" role="group" aria-label="">
             <a href="{{redirect_url}}" class="btn btn-default btn-info" uib-tooltip="返回" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-chevron-left"></i><span class="hidden-xs"> 返回</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.save.url) && !(info.profitsSet && info.profitsSet.length)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.save.url) && !(info.profitsSet && info.profitsSet.length) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('profitview', 'create', id)" class="btn btn-default btn-info" uib-tooltip="设置" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-cog"></i><span class="hidden-xs"> 设置</span></a>
           </div>
-          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url) && (info.profitsSet && info.profitsSet.length)" class="btn-group" role="group" aria-label="">
+          <div ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url) && (info.profitsSet && info.profitsSet.length) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" class="btn-group" role="group" aria-label="">
             <a ng-click="goview('profitview', 'edit', id)" class="btn btn-default btn-warning" uib-tooltip="编辑" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-edit"></i><span class="hidden-xs"> 编辑</span></a>
           </div>
         </div>
@@ -258,7 +273,7 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
@@ -266,7 +281,15 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="col-sm-6 control-label"><span class="span-danger">*</span>快捷支付分润比:</label>
+                        <div class="col-sm-6">
+                          <p class="form-control-static">{{(mform.profits.pct_quick !== undefined && mform.profits.pct_quick !== null) ? (mform.profits.pct_quick+ '%') : '待设置'}}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <!--<div class="col-sm-4">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
@@ -281,7 +304,7 @@
                           <p class="form-control-static">{{(mform.profits.pct_consume !== undefined && mform.profits.pct_consume !== null) ? (mform.profits.pct_consume + '%') : '待设置'}}</p>
                         </div>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                 </div>
               </div>
@@ -303,7 +326,7 @@
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.area_label && proxyview.getCityString(info.area_label) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area && profitview.getCityString(info.area) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
@@ -377,13 +400,13 @@
                       </div>
                     </div>
                   </div>
-
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
-                    <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
-                    </div>
-                  </div>
+                  <!--
+                                    <div class="form-group">
+                                      <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
+                                      <div class="col-sm-10">
+                                        <p class="form-control-static">{{info.business_area && profitview.getCityString(info.business_area) || '未填写'}}</p>
+                                      </div>
+                                    </div>-->
 
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>
@@ -451,7 +474,7 @@
                   </div>
 
                   <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>渠道码:</label>
                         <div class="col-sm-6">
@@ -463,7 +486,23 @@
                       </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <label class="col-sm-6 control-label"><span class="span-danger">*</span>快捷支付分润比:</label>
+                        <div class="col-sm-6">
+                          <div class="input-group input-group-info">
+                            <input type="text" ng-model="mform.profits.pct_quick" name="pct_quick" class="form-control" placeholder="请输入分润比例" required ng-pattern="/^0(\.(([1-5]{1}\d?)|(0\d?)|(60?)))?$/">
+                            <span class="input-group-addon">%</span>
+                          </div>
+                          <div class="error-messages" ng-messages="form.pct_quick.$error">
+                            <small class="error" ng-message="required">快捷支付分润比（*必填）</small>
+                            <small class="error" ng-message="pattern">分润比例在0.00%-0.60%之间</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!--<div class="col-sm-4">
                       <div class="form-group">
                         <label class="col-sm-6 control-label"><span class="span-danger">*</span>会员充值分润比:</label>
                         <div class="col-sm-6">
@@ -492,7 +531,7 @@
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
 
                   <div class="form-group">
@@ -525,7 +564,7 @@
                   <div class="form-group form-select-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>公司地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.area && proxyview.getCityString(info.area) || '未填写'}}</p>
+                      <p class="form-control-static">{{info.area && profitview.getCityString(info.area) || '未填写'}}</p>
                     </div>
                   </div>
                   <div class="form-group">
@@ -599,12 +638,12 @@
                     </div>
                   </div>
 
-                  <div class="form-group">
-                    <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
-                    <div class="col-sm-10">
-                      <p class="form-control-static">{{info.business_area_label && proxyview.getCityString(info.business_area_label) || '未填写'}}</p>
-                    </div>
-                  </div>
+                  <!--                  <div class="form-group">
+                                      <label class="col-sm-2 control-label"><span class="span-danger">*</span>业务区域:</label>
+                                      <div class="col-sm-10">
+                                        <p class="form-control-static">{{info.business_area && profitview.getCityString(info.business_area) || '未填写'}}</p>
+                                      </div>
+                                    </div>-->
 
                   <div class="form-group">
                     <label class="col-sm-2 control-label control-label-double"><span class="span-danger">*</span>营业执照正本<span class="visible-sm-inline"> <br/></span>照片/扫描件:</label>

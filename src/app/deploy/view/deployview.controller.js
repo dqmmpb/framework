@@ -99,7 +99,8 @@ export class DeployViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[0]);
+    this.sidebarSelected = this.sidebarGroups[2].items[0];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '新增网吧管理'
@@ -491,6 +492,8 @@ export class DeployViewController {
         area: params.area.join(','),
         // business_areaCode: params.business_areaCode.join(','),
         // business_area: params.business_area.join(','),
+        companyName: params.company_name,
+        branchName: params.branch_name,
         address: params.address,
         corporName: params.legal,
         corporMobile: params.cellphone,
@@ -506,6 +509,8 @@ export class DeployViewController {
       return {
         id: params.id,
         name: params.name,
+        companyName: params.company_name,
+        branchName: params.branch_name,
         areaCode: params.areaCode.join(','),
         area: params.area.join(','),
         // business_areaCode: params.business_areaCode.join(','),
@@ -527,7 +532,9 @@ export class DeployViewController {
       };
     } else if(type === 'apply') {
       return {
-        id: params.id
+        id: params.id,
+        remark: params.remark,
+        status: params.status
       };
     }
 
@@ -547,9 +554,12 @@ export class DeployViewController {
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('新建成功！');
-            $scope.goview('deploy');
+            if($scope.redirect_url)
+              location.href = $scope.redirect_url;
+            else
+              $scope.goview('deploy');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -604,7 +614,7 @@ export class DeployViewController {
               toastr.success('删除成功！');
               $scope.goview('deploy');
             } else if (response.data.result === 1) {
-              toastr.error('处理失败，请重试');
+              toastr.error(response.data.msg);
             }
           }).catch((error) => {
             $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -627,14 +637,16 @@ export class DeployViewController {
           url: self.cfg.api.deploy.apply.url,
           method: self.cfg.api.deploy.apply.type,
           data: self.preParams('apply', {
-            id: $scope.info.id
+            id: $scope.applyResult.id,
+            remark: $scope.applyResult.remark,
+            status: $scope.applyResult.status
           })
         }).then((response) => {
           if (response.data.result === 0) {
-            toastr.error('处理成功！');
+            toastr.success('处理成功！');
             $scope.goview('deploy');
           } else if (response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -643,16 +655,13 @@ export class DeployViewController {
       }
     };
 
-    $scope.setApplyResult = function(applyResult) {
+    $scope.setApplyResult = function(flag) {
       $scope.applyResult = {
-        result: applyResult
+        id: $scope.id,
+        remark: $scope.info.remark,
+        status: flag
       };
     }
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

@@ -50,7 +50,8 @@ export class ApplyController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[2].items[1]);
+    this.sidebarSelected = this.sidebarGroups[2].items[1];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
   }
 
   getPage($scope, $location, $state, $log, dataService, currentPage) {
@@ -270,6 +271,7 @@ export class ApplyController {
           animation: false,
           component: 'modalComponentApply',
           backdrop: 'static',
+          windowClass: 'modal-apply',
           resolve: {
             type: function() {
               return type;
@@ -290,6 +292,7 @@ export class ApplyController {
           animation: false,
           component: 'modalComponentApply',
           backdrop: 'static',
+          windowClass: 'modal-apply',
           resolve: {
             type: function() {
               return type;
@@ -306,7 +309,7 @@ export class ApplyController {
           $log.info('modal-component dismissed at: ' + new Date());
         });
       }
-    }
+    };
 
     $scope.start = function(row, id) {
       $log.log('start: ' + id);
@@ -365,11 +368,6 @@ export class ApplyController {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
       });
     };
-  }
-
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
   }
 
 }

@@ -1,7 +1,8 @@
 export class UserViewController {
-  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, role, user, RSAKEY, profile, $uibModal) {
+  constructor ($scope, $log, $http, $timeout, $state, $stateParams, toastr, sidebarGroup, cfg, role, user, RSAKEY, profile, $uibModal, deploy) {
     'ngInject';
 
+    var self = this;
     this.cfg = cfg;
     this.$http = $http;
     this.toastr = toastr;
@@ -26,7 +27,11 @@ export class UserViewController {
         confirm: null,
         role: null,
         cellphone: null,
-        roles: []
+        roles: [],
+        selectRoles: [],
+        bossWangbas: null,
+        selectBossWangbas: [],
+        channel_code: null
       };
 
       $scope.getRoleToArray = function(roles, key) {
@@ -39,19 +44,28 @@ export class UserViewController {
         }
       };
 
+      $scope.hasRoleId = function(roles, id) {
+        return self.hasRoleId(roles, id);
+      };
+
       if($scope.type === 'create') {
-        this.initForm($scope, $log, toastr, RSAKEY, $uibModal);
-        this.getRoles($scope, $log, $timeout, role);
+        this.initForm($scope, $log, toastr, RSAKEY, $uibModal, cfg, $timeout, role, deploy);
+        this.getRoles($scope, $log, $timeout, role, deploy);
 
         this.initValidation($scope);
 
         this.goView($scope, $state, $stateParams);
       } else if($scope.type === 'view' || $scope.type === 'edit' || $scope.type === 'reset') {
-        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.id, $uibModal);
+        this.getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, $scope.id, $uibModal,deploy, cfg);
       }
 
     });
 
+  }
+
+  hasRoleId(roles, id) {
+    //console.log(roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false);
+    return roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false;
   }
 
   goView($scope, $state, $stateParams) {
@@ -76,7 +90,8 @@ export class UserViewController {
     });
 
     this.sidebarGroups = sidebarGroup.getGroupsWithoutPromise();
-    this.breads = sidebarGroup.getGroupItems(this.sidebarGroups[3].items[1]);
+    this.sidebarSelected = this.sidebarGroups[3].items[1];
+    this.breads = sidebarGroup.getGroupItems(this.sidebarSelected);
     if($scope.type === 'create')
       this.breads.push({
         title: '新增用户'
@@ -104,7 +119,8 @@ export class UserViewController {
 
   }
 
-  getRoles($scope, $log, $timeout, role) {
+  getRoles($scope, $log, $timeout, role, deploy) {
+    var self = this;
     role.getAll().then((data)=> {
       if(data) {
         $scope.validator.role_string = $scope.info.roles.join(',');
@@ -113,8 +129,17 @@ export class UserViewController {
 
         $scope.loading = false;
 
+        if(!$scope.info.roles)
+          $scope.info.selectRoles = [];
+        else
+          $scope.info.selectRoles = $scope.getRoleToArray($scope.info.role, 'id');
+
+        if($scope.hasRoleId($scope.info.roles, '4')) {
+          self.getBarname($scope, $log, $timeout, deploy);
+        }
+
         $timeout(function() {
-          angular.element('.input-select').each(function() {
+          angular.element('.input-select-role').each(function() {
             angular.element(this).selectize({
               options: $scope.roles,
               items: $scope.info.roles || [],
@@ -123,12 +148,59 @@ export class UserViewController {
               maxItems: 1,
               placeholder: '用户角色',
               onChange: function(value) {
-                $scope.info.roles = [value];
+
+                $scope.info.selectRoles = [value];
 
                 // 接受值的变化
                 if(!$scope.$$phase) {
                   $scope.$apply(function() {
                     $scope.validator.role_string = value;
+                    self.getBarname($scope, $log, $timeout, deploy);
+                  });
+                }
+              }
+            });
+          });
+        }, 10);
+
+      }
+    });
+  }
+
+  getBarname($scope, $log, $timeout, deploy) {
+    deploy.getName().then((data)=> {
+      if(data) {
+        //$scope.validator.role_barname = $scope.info.deploys.join(',');
+
+        $scope.deploys = deploy.wrapperAll(data);
+
+        if(!$scope.info.bossWangbas)
+          $scope.info.selectBossWangbas = [];
+        else
+          $scope.info.selectBossWangbas = [$scope.info.bossWangbas.id];
+
+        $scope.loading = false;
+
+        if($scope.info.bossWangbas)
+          $scope.validator.deploy_barname = $scope.info.bossWangbas.id;
+
+        $timeout(function() {
+          angular.element('.input-select-name').each(function() {
+            angular.element(this).selectize({
+              options: $scope.deploys,
+              items: $scope.info.bossWangbas ? [$scope.info.bossWangbas.id] : [],
+              labelField: 'name',
+              valueField: 'id',
+              maxItems: 1,
+              placeholder: '网吧名称',
+              onChange: function(value) {
+
+                $scope.info.selectBossWangbas = [value];
+
+                // 接受值的变化
+                if(!$scope.$$phase) {
+                  $scope.$apply(function() {
+                    $scope.validator.deploy_barname = value;
                   });
                 }
               }
@@ -139,7 +211,7 @@ export class UserViewController {
     });
   }
 
-  getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, id, $uibModal) {
+  getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, id, $uibModal, deploy, cfg) {
     var self = this;
     user.getDetail(id).then((data)=> {
       if(data) {
@@ -147,9 +219,11 @@ export class UserViewController {
         $scope.info = user.wrapper(data);
         $scope.info.roles = $scope.getRoleToArray($scope.info.role, 'id');
 
-        self.initForm($scope, $log, toastr, RSAKEY, $uibModal);
+        self.initForm($scope, $log, toastr, RSAKEY, $uibModal, cfg, $timeout, role, deploy);
 
-        self.getRoles($scope, $log, $timeout, role);
+        self.getRoles($scope, $log, $timeout, role, deploy);
+
+        self.getBarname($scope, $log, $timeout, deploy);
 
         self.initValidation($scope, user);
 
@@ -159,23 +233,26 @@ export class UserViewController {
   }
 
   preParams(type, params, encrypt) {
+    var self = this;
 
     if(type === 'create') {
       return {
-        name: params.name,
-        dingId: params.ding_id,
+        //name: params.name,
+        //dingId: params.ding_id,
         mobile: params.cellphone,
-        password: params.password,//encrypt.encrypt(params.password),
-        confirm: params.confirm,// encrypt.encrypt(params.confirm),
-        rolesArray: params.roles.join(',')
+        //password: params.password,//encrypt.encrypt(params.password),
+        //confirm: params.confirm,// encrypt.encrypt(params.confirm),
+        rolesArray: params.selectRoles.join(',') ? params.selectRoles.join(',') : null,
+        code: !self.hasRoleId(params.selectRoles, '9') ? null : params.code,
+        wangbaId: !self.hasRoleId(params.selectRoles, '4') ? null : params.selectBossWangbas ? params.selectBossWangbas.join(',') : null
       };
     } else if(type === 'edit') {
       return {
         id: params.id,
-        name: params.name,
-        dingId: params.ding_id,
-        mobile: params.cellphone,
-        rolesArray: params.roles.join(',')
+        //password: params.password,//encrypt.encrypt(params.password),
+        //confirm: params.confirm,// encrypt.encrypt(params.confirm),
+        rolesArray: params.selectRoles.join(',') ? params.selectRoles.join(',') : null,
+        wangbaId: !self.hasRoleId(params.selectRoles, '4') ? null : params.selectBossWangbas ? params.selectBossWangbas.join(',') : null
       };
     } else if(type === 'delete') {
       return {
@@ -188,11 +265,15 @@ export class UserViewController {
         confirm: encrypt.encrypt(params.confirm),
         password: encrypt.encrypt(params.password)
       }
+    } else if(type === 'mobilephoneExists') {
+      return {
+        mobile: params.mobile
+      }
     }
 
   }
 
-  initForm($scope, $log, toastr, RSAKEY, $uibModal) {
+  initForm($scope, $log, toastr, RSAKEY, $uibModal, cfg, $timeout, role, deploy) {
     var self = this;
 
     // Encrypt with the public key...
@@ -216,8 +297,8 @@ export class UserViewController {
       if(isValid) {
         $log.log(self.preParams('create', $scope.info, encrypt));
         self.$http({
-          url: self.cfg.api.user.save.url,
-          method: self.cfg.api.user.save.type,
+          url: self.cfg.api.user.update.url,
+          method: self.cfg.api.user.update.type,
           data: self.preParams('create', $scope.info, encrypt)
         }).then((response) => {
           if(response.data.result === 0) {
@@ -227,7 +308,7 @@ export class UserViewController {
             else
               $scope.goview('user');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -253,7 +334,7 @@ export class UserViewController {
             else
               $scope.goview('user');
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -284,7 +365,7 @@ export class UserViewController {
               toastr.success('删除成功！');
               $scope.goview('user');
             } else if (response.data.result === 1) {
-              toastr.error('处理失败，请重试');
+              toastr.error(response.data.msg);
             }
           }).catch((error) => {
             $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -309,18 +390,83 @@ export class UserViewController {
           toastr.success('重置成功！');
           $scope.goview('user');
         } else if (response.data.result === 1) {
-          toastr.error('处理失败，请重试');
+          toastr.error(response.data.msg);
         }
       }).catch((error) => {
         $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
         toastr.error('网络异常，请重试');
       });
     };
-  }
 
-  showToastr() {
-    this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-    this.classAnimation = '';
+    $scope.mobilephoneExists = function($event) {
+
+      var cellphone = $scope.info.cellphone;
+      var isValid = /^1\d{10}$/.test(cellphone);
+      if(isValid) {
+        $log.log(self.preParams('mobilephoneExists', $scope.info, encrypt));
+
+        var target = $event.currentTarget;
+        var element = angular.element(target);
+
+        var counter = cfg.countDown({
+          element: element,
+          before: function(count) {
+            self.$http({
+              url: self.cfg.api.user.mobilephone.url,
+              method: self.cfg.api.user.mobilephone.type,
+              params: self.preParams('mobilephoneExists', {
+                mobile: $scope.info.cellphone
+              })
+            }).then((response) => {
+              if(response.data.result === 0) {
+                if(response.data.data) {
+                   toastr.success('手机号存在！');
+                   clearInterval(counter);
+                   element.attr('disabled', false);
+                   element.text('手机号验证');
+                   $scope.flagMobile = true;
+                   self.getRoles($scope, $log, $timeout, role, deploy);
+                   //element.removeClass('btn-warning').addClass('btn-danger').text('已验证存在');
+                } else {
+                  clearInterval(counter);
+                  element.attr('disabled', false);
+                  element.text('手机号验证');
+                  toastr.error('手机号不存在！');
+                  $scope.flagMobile = false;
+                }
+                //$scope.goview('user');
+              } else if(response.data.result === 1) {
+                clearInterval(counter);
+                element.attr('disabled', false);
+                element.text('手机号验证');
+                toastr.error(response.data.msg);
+              }
+
+            }).catch((error) => {
+              $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+              toastr.error('网络异常，请重试');
+            });
+
+            element.attr('disabled', true);
+            element.addClass('btn-warning').removeClass('btn-danger');
+            element.text('正在验证');
+          },
+          step: function() {
+            element.attr('disabled', true);
+            element.addClass('btn-warning').removeClass('btn-danger');
+            element.text('正在验证');
+          },
+          end: function() {
+            element.attr('disabled', false);
+            element.addClass('btn-warning').removeClass('btn-danger');
+            element.text('手机号验证');
+          }
+        });
+
+
+      }
+    };
+
   }
 
 }

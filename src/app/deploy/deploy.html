@@ -3,7 +3,7 @@
   <div uib-navbar profile="profile"></div>
 
   <div class="framework-main">
-    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="deploy.isCollapse" groups="deploy.sidebarGroups"></div>
+    <div uib-sidebar profile="profile" class="sidebar-full" is-collapse="deploy.isCollapse" groups="deploy.sidebarGroups" item-selected="deploy.sidebarSelected"></div>
 
     <div class="framework-body">
       <uib-breadcrumb class="breadcrumb-wrapper" breads="deploy.breads"></uib-breadcrumb>
@@ -20,15 +20,15 @@
                   <div class="select-group select-group-area select-group-province"></div>
                 </div>
               </div>
-              <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.search.url)" class="form-group">
-                <div class="form-control-select form-control-select-w100">
-                  <select name="status" class="input-select input-select-w100" placeholder="全部状态"></select>
-                </div>
-              </div>
+              <!--<div ng-if="cfg.hasAuth(profile, cfg.api.deploy.search.url)" class="form-group">-->
+                <!--<div class="form-control-select form-control-select-w100">-->
+                  <!--<select name="status" class="input-select input-select-w100" placeholder="全部状态"></select>-->
+                <!--</div>-->
+              <!--</div>-->
               <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.search.url)" class="form-group">
                 <button type="submit" class="btn btn-default btn-warning"><i class="fa fa-fw fa-search sr-only"></i> 查询</button>
               </div>
-              <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.save.url)" class="form-group">
+              <div ng-if="cfg.hasAuth(profile, cfg.api.deploy.save.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || cfg.hasRoleId(profile.roles,'9') || cfg.hasRoleId(profile.roles,'10'))" class="form-group">
                 <a ng-click="goview('deployview', 'create')" class="btn btn-default btn-success" uib-tooltip="新增" tooltip-append-to-body="true" tooltip-placement="top" ><i class="fa fa-fw fa-plus"></i><span class="hidden-xs"> 新增</span></a>
               </div>
             </form>
@@ -50,7 +50,7 @@
                 <th width="10%">网吧ID</th>
                 <th width="10%">法人代表/实际控制人</th>
                 <th width="8%">手机号</th>
-                <th width="7%">状态</th>
+                <!--<th width="7%">状态</th>-->
                 <th width="15%">操作</th>
               </tr>
               </thead>
@@ -64,15 +64,23 @@
                 </td>-->
                 <td>{{row.name}}</td>
                 <td>{{row.id}}</td>
-                <td>{{row.legal}}</td>
-                <td>{{row.cellphone}}</td>
-                <td>{{row.status === 0 ? '待审核' : row.status === 1 ? '审核通过': row.status === 2 ? '审核未通过':''}}</td>
+                <td ng-class="{'row-br': row.legal && row.real_name}">
+                  <span ng-if="row.legal">{{row.legal}}<span class="legal"> (法人代表)</span></span>
+                  <br ng-if="row.legal && row.real_name">
+                  <span ng-if="row.real_name">{{row.real_name}}<span class="real_name"> (实际控制人)</span></span>
+                </td>
+                <td ng-class="{'row-br': row.cellphone && row.real_cellphone}">
+                  {{row.cellphone}}
+                  <br ng-if="row.cellphone && row.real_cellphone">
+                  {{row.real_cellphone}}
+                </td>
+                <!--<td class="{{row.status === 0 ? 'text-info' : row.status === 1 ? 'text-success': row.status === 2 ? 'text-danger':''}}">{{row.status === 0 ? '待审核' : row.status === 1 ? '审核通过': row.status === 2 ? '审核未通过':''}}</td>-->
                 <td>
                   <div ng-if="!row.empty">
                     <button type="button" class="btn btn-primary btn-sm" ng-click="goview('deployview', 'view', row.id)">详情</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.deploy.apply.url)" type="button" class="btn btn-success btn-sm" ng-class="{true: 'invisible'}[row.status === '审核通过']"ng-click="goview('deployview', 'apply', row.id)">审核</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.deploy.update.url)" type="button" class="btn btn-warning btn-sm" ng-click="goview('deployview', 'edit', row.id)">编辑</button>
-                    <button ng-if="cfg.hasAuth(profile, cfg.api.deploy.delete.url)" type="button" class="btn btn-danger btn-sm" ng-click="operation('delete', row)">删除</button>
+                    <!--<button ng-if="cfg.hasAuth(profile, cfg.api.deploy.apply.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8'))" type="button" class="btn btn-success btn-sm" ng-click="goview('deployview', 'apply', row.id)">审核</button>-->
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.deploy.update.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && row.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && row.status !== 1))" type="button" class="btn btn-warning btn-sm" ng-click="goview('deployview', 'edit', row.id)">编辑</button>
+                    <button ng-if="cfg.hasAuth(profile, cfg.api.deploy.delete.url) && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || (cfg.hasRoleId(profile.roles,'9') && row.status !== 1) || (cfg.hasRoleId(profile.roles,'10') && row.status !== 1))" type="button" class="btn btn-danger btn-sm" ng-click="operation('delete', row)">删除</button>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>
                 </td>

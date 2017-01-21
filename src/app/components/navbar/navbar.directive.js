@@ -19,7 +19,6 @@ angular.module('ui.framework.navbar',[])
     };
 
     function linkFunc(scope, element, attrs) {
-      console.log(scope.profile);
 
       scope.select = function(type) {
         scope.$emit('uib:navbar.item.select', type);

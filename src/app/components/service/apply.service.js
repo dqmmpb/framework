@@ -10,14 +10,14 @@ export class ApplyService {
   getPage(pageNum = 1, searchForm) {
     var self = this;
 
-    if (searchForm && searchForm.doSearch) {
+    if(searchForm && searchForm.doSearch) {
       return self.$http({
         url: self.cfg.api.apply.search.url,
         method: self.cfg.api.apply.search.type,
         params: {
           pageNum: pageNum,
           keyWord: searchForm.keyWord,
-          area: searchForm.area,
+          areaCode: searchForm.areaCode,
           status: searchForm.status
         }
       }).then((response) => {
@@ -87,8 +87,8 @@ export class ApplyService {
         legal: o.corporName,
         status: o.status,
         is_same: o.isCorporReal  === 0 ? true: false,
-        real_name: null,
-        real_cellphone: null,
+        real_name: o.realControlName,
+        real_cellphone: o.realControlMobile,
         pcfile: null,
         rpcfile: null,
         blfile: null,
@@ -103,8 +103,7 @@ export class ApplyService {
         wangba_id: o.tickets.wangbaId,
         cashier_dept_id: o.tickets.cashierDeptId,
         apply_id: o.tickets.agentId,
-        qrcode_path: o.tickets.alipayQrcode,
-        qrcodeImgPath: o.tickets.qrcodeImgPath
+        qrcode_path: o.tickets.qrcodeImgPath
       };
     } else {
       x = {
@@ -120,8 +119,8 @@ export class ApplyService {
         legal: o.corporName,
         status: o.status,
         is_same: o.isCorporReal  === 0 ? true: false,
-        real_name: null,
-        real_cellphone: null,
+        real_name: o.realControlName,
+        real_cellphone: o.realControlMobile,
         pcfile: null,
         rpcfile: null,
         blfile: null,
@@ -135,37 +134,36 @@ export class ApplyService {
         wangba_id: null,
         cashier_dept_id: null,
         apply_id: null,
-        qrcode_path: null,
-        qrcodeImgPath: null
+        qrcode_path: null
       };
     }
 
     // 法人照片
-    if (o.wangbas && o.wangbas.corporIdPic) {
-      var pcfileArray = o.wangbas.corporIdPic.split(',');
+    if (o.corporIdPic) {
+      var pcfileArray = o.corporIdPic.split(',');
       x.pcfile = self.getFile(['正面', '反面'], pcfileArray, 2);
     } else {
       x.pcfile = self.getFile(['正面', '反面'], [], 2);
     }
 
     // 实际控制人照片
-    if (o.wangbas && o.wangbas.realControlPic) {
-      var rpcfileArray = o.wangbas.realControlPic.split(',');
+    if (o.realControlPic) {
+      var rpcfileArray = o.realControlPic.split(',');
       x.rpcfile = self.getFile(['正面', '反面'], rpcfileArray, 2);
     } else {
       x.rpcfile = self.getFile(['正面', '反面'], [], 2);
     }
 
     // 实际控制人照片
-    if (o.wangbas && o.wangbas.licencePic) {
-      var blfileArray = o.wangbas.licencePic.split(',');
+    if (o.licencePic) {
+      var blfileArray = o.licencePic.split(',');
       x.blfile = self.getFile([], blfileArray, 1);
     } else {
       x.blfile = self.getFile([], [], 1);
     }
 
-    if (o.wangbas && o.wangbas.dingCertifyPic) {
-      var affileArray = o.wangbas.dingCertifyPic.split(',');
+    if (o.dingCertifyPic) {
+      var affileArray = o.dingCertifyPic.split(',');
       x.affile = self.getFile([], affileArray, 1);
     } else {
       x.affile = self.getFile([], [], 1);
@@ -220,7 +218,7 @@ export class ApplyService {
         oo.file = {
           serverData: {
             name: fileArray[i],
-            url: self.cfg.uploadViewServer + '/' + fileArray[i]
+            url: self.cfg.uploadPath + '/' + fileArray[i]
           },
           noedit: true
         }
