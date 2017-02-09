@@ -27,12 +27,12 @@ var allCfg = {
     remoteServer: remoteServer
   },
   api: {
-    local: false,
+    local: true,
     localServer: 'app/components/data',
     remoteServer: remoteServer
   },
   upload: {
-    local: false,
+    local: true,
     localServer: location.protocol + '//' + location.host,
     remoteServer: uploadServer,
     localPath: '/assets/images/upload',
