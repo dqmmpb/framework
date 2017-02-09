@@ -24,7 +24,8 @@ export class ModalApplyController {
         wangba_id: self.info.id,
         cashier_dept_id: null,
         apply_id: null,
-        qrcode_path: null
+        qrcode_path: null,
+        name: self.info.name
       };
     }
 
@@ -42,7 +43,8 @@ export class ModalApplyController {
       wangba_id: $scope.info.id,
       cashier_dept_id: $scope.info.cashier_dept_id,
       apply_id: $scope.info.apply_id,
-      qrcode_path: $scope.info.qrcode_path
+      qrcode_path: $scope.info.qrcode_path,
+      name: $scope.info.name
     };
   }
 
@@ -81,7 +83,8 @@ export class ModalApplyController {
         wangbaId: params.wangba_id,
         cashierDeptId: params.cashier_dept_id,
         agentId: params.apply_id,
-        qrcodeImgPath: params.qrcode_path
+        qrcodeImgPath: params.qrcode_path,
+        corpName: params.name
       };
     } else if (type === 'edit') {
       return {
@@ -92,7 +95,8 @@ export class ModalApplyController {
         wangbaId: params.wangba_id,
         cashierDeptId: params.cashier_dept_id,
         agentId: params.apply_id,
-        qrcodeImgPath: params.qrcode_path
+        qrcodeImgPath: params.qrcode_path,
+        corpName: params.name
       };
     } else if (type === 'createQrcode') {
       return {
@@ -118,7 +122,7 @@ export class ModalApplyController {
       $log.log('create. isValid: ' + isValid);
 
       if (isValid) {
-        console.log(self.preParams('create', self.infoForm))
+        console.log(self.preParams('create', self.infoForm));
         self.$http({
           url: self.cfg.api.apply.save.url,
           method: self.cfg.api.apply.save.type,
@@ -165,14 +169,14 @@ export class ModalApplyController {
         id: self.info.id
       }));
       self.$http({
-        url: self.cfg.api.apply.newqrcode.url,
-        method: self.cfg.api.apply.newqrcode.type,
+        url: self.cfg.api.apply.qrcode.url,
+        method: self.cfg.api.apply.qrcode.type,
         params: self.preParams('createQrcode', {
           id: self.info.id
         })
       }).then((response) => {
         if (response.data.result === 0) {
-          self.infoForm.qrcode_path = response.data.data.codeImg;
+          self.infoForm.qrcode_path = response.data.data.quickPayQrcode;
           toastr.success('生成二维码成功！');
           //$scope.goview('apply');
         } else if (response.data.result === 1) {

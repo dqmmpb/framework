@@ -345,7 +345,8 @@ export class ApplyViewController {
       var modalInstance = $uibModal.open({
         animation: false,
         component: 'modalComponentConfirm',
-        backdrop: 'static'
+        backdrop: 'static',
+        windowClass: 'modal-tips'
       });
 
       modalInstance.result.then(function (result) {
@@ -381,14 +382,14 @@ export class ApplyViewController {
         id: $scope.id
       }));
       self.$http({
-        url: self.cfg.api.apply.newqrcode.url,
-        method: self.cfg.api.apply.newqrcode.type,
+        url: self.cfg.api.apply.qrcode.url,
+        method: self.cfg.api.apply.qrcode.type,
         params: self.preParams('createQrcode', {
           id: $scope.id
         })
       }).then((response) => {
         if(response.data.result === 0) {
-          $scope.info.qrcode_path = response.data.data.codeImg;
+          $scope.info.qrcode_path = response.data.data.quickPayQrcode;
           toastr.success('生成二维码成功！');
           //$scope.goview('apply');
         } else if(response.data.result === 1) {

@@ -121,7 +121,7 @@ export class UserViewController {
 
   getRoles($scope, $log, $timeout, role, deploy) {
     var self = this;
-    role.getAll().then((data)=> {
+    role.getUserAll().then((data)=> {
       if(data) {
         $scope.validator.role_string = $scope.info.roles.join(',');
 
@@ -290,7 +290,30 @@ export class UserViewController {
     $log.log('Js加密后：' + encrypted);
     $log.log('Js解密后：' + decrypted);*/
 
-    $log.log(encrypt);
+    $scope.keyUp = function($event) {
+      var keyCode = $event.keyCode;
+      if(keyCode === 13) {
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        mobileExists('#mobilephoneCheck');
+      } else {
+        var target = $event.currentTarget;
+        var cellphone = angular.element(target).val();
+        var isValid = /^1\d{10}$/.test(cellphone);
+        if(!isValid) {
+          $scope.flagMobile = false;
+        }
+      }
+    };
+
+    $scope.keyPress = function($event) {
+      var keyCode = $event.keyCode;
+      if(keyCode === 13) {
+        $event.preventDefault();
+        $event.stopPropagation();
+      }
+    };
 
     $scope.createSubmit = function(isValid) {
       $log.log('create. isValid: ' + isValid);
@@ -349,7 +372,8 @@ export class UserViewController {
       var modalInstance = $uibModal.open({
         animation: false,
         component: 'modalComponentConfirm',
-        backdrop: 'static'
+        backdrop: 'static',
+        windowClass: 'modal-tips'
       });
 
       modalInstance.result.then(function (result) {
@@ -398,14 +422,13 @@ export class UserViewController {
       });
     };
 
-    $scope.mobilephoneExists = function($event) {
 
+    function mobileExists(target) {
       var cellphone = $scope.info.cellphone;
       var isValid = /^1\d{10}$/.test(cellphone);
       if(isValid) {
         $log.log(self.preParams('mobilephoneExists', $scope.info, encrypt));
 
-        var target = $event.currentTarget;
         var element = angular.element(target);
 
         var counter = cfg.countDown({
@@ -420,13 +443,13 @@ export class UserViewController {
             }).then((response) => {
               if(response.data.result === 0) {
                 if(response.data.data) {
-                   toastr.success('手机号存在！');
-                   clearInterval(counter);
-                   element.attr('disabled', false);
-                   element.text('手机号验证');
-                   $scope.flagMobile = true;
-                   self.getRoles($scope, $log, $timeout, role, deploy);
-                   //element.removeClass('btn-warning').addClass('btn-danger').text('已验证存在');
+                  toastr.success('手机号存在！');
+                  clearInterval(counter);
+                  element.attr('disabled', false);
+                  element.text('手机号验证');
+                  $scope.flagMobile = true;
+                  self.getRoles($scope, $log, $timeout, role, deploy);
+                  //element.removeClass('btn-warning').addClass('btn-danger').text('已验证存在');
                 } else {
                   clearInterval(counter);
                   element.attr('disabled', false);
@@ -465,6 +488,12 @@ export class UserViewController {
 
 
       }
+    }
+
+    $scope.mobilephoneExists = function($event) {
+      //var target = $event.currentTarget;
+
+      mobileExists('#mobilephoneCheck');
     };
 
   }

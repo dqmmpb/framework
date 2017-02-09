@@ -173,6 +173,18 @@ export class UserController {
       }
     };
 
+    //$scope.getRoleToArrayWithFilter = function(roles, key, filters) {
+    //  if(angular.isArray(roles)) {
+    //    return roles.filter(function(item) {
+    //      return filters.indexOf(item['id']) !== -1;
+    //    }).map(function(item) {
+    //      return item[key];
+    //    });
+    //  } else {
+    //    return [];
+    //  }
+    //};
+
     $scope.operation = function(type, item) {
 
       if (type === 'delete') {
@@ -181,7 +193,8 @@ export class UserController {
         var modalInstance = $uibModal.open({
           animation: false,
           component: 'modalComponentConfirm',
-          backdrop: 'static'
+          backdrop: 'static',
+          windowClass: 'modal-tips'
         });
 
         modalInstance.result.then(function (result) {

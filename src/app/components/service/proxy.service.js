@@ -118,9 +118,9 @@ export class ProxyService {
 
     if (o.dingCertifyPic) {
       var affileArray = o.dingCertifyPic.split(',');
-      x.affile = self.getFile(['页1', '页2', '页3', '页4'], affileArray, 4);
+      x.affile = self.getFile(['页1', '页2', '页3', '页4', '页5', '页6'], affileArray, 6);
     } else {
-      x.affile = self.getFile(['页1', '页2', '页3', '页4'], [], 4);
+      x.affile = self.getFile(['页1', '页2', '页3', '页4', '页5', '页6'], [], 6);
     }
 
     return x;

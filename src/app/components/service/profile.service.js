@@ -37,7 +37,7 @@ export class ProfileService {
   restructResource(resourcesSet, resourceMap) {
     var self = this;
     for(var i in resourcesSet) {
-      resourceMap[resourcesSet[i].value] = resourcesSet[i];
+      resourceMap[resourcesSet[i].value] = true;
       if(resourcesSet[i].childSet) {
         self.restructResource(resourcesSet[i].childSet, resourceMap);
       }

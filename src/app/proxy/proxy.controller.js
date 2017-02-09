@@ -247,7 +247,8 @@ export class ProxyController {
         var modalInstance = $uibModal.open({
           animation: false,
           component: 'modalComponentConfirm',
-          backdrop: 'static'
+          backdrop: 'static',
+          windowClass: 'modal-tips'
         });
 
         modalInstance.result.then(function (result) {

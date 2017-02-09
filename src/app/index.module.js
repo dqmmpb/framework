@@ -21,6 +21,8 @@ import { RoleController } from './role/role.controller';
 import { RoleViewController } from './role/view/roleview.controller';
 import { UserController } from './user/user.controller';
 import { UserViewController } from './user/view/userview.controller';
+import { User2Controller } from './user2/user2.controller';
+import { User2ViewController } from './user2/view/user2view.controller';
 import { ProfileViewController } from './profile/view/profileview.controller';
 import { MainService } from '../app/components/service/main.service';
 import { SidebarGroupService } from '../app/components/sidebarGroup/sidebarGroup.service';
@@ -28,6 +30,7 @@ import { CityService } from '../app/components/service/city.service';
 import { AuthService } from '../app/components/service/auth.service';
 import { RoleService } from '../app/components/service/role.service';
 import { UserService } from '../app/components/service/user.service';
+import { User2Service } from '../app/components/service/user2.service';
 import { ProfitService } from '../app/components/service/profit.service';
 import { ProxyService } from '../app/components/service/proxy.service';
 import { DeployService } from '../app/components/service/deploy.service';
@@ -56,6 +59,7 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .service('auth', AuthService)
   .service('role', RoleService)
   .service('user', UserService)
+  .service('user2', User2Service)
   .service('proxy', ProxyService)
   .service('profit', ProfitService)
   .service('deploy', DeployService)
@@ -75,6 +79,8 @@ angular.module('framework', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 
   .controller('RoleViewController', RoleViewController)
   .controller('UserController', UserController)
   .controller('UserViewController', UserViewController)
+  .controller('User2Controller', User2Controller)
+  .controller('User2ViewController', User2ViewController)
   .controller('ModalProfitController', ModalProfitController)
   .controller('ModalApplyController', ModalApplyController)
   .controller('ProfileViewController', ProfileViewController)

@@ -16,7 +16,7 @@
     "remark": "北包包",
     "licencePic": "ABC.jpg",
     "corporIdPic": "ABC.jpg,jqueryapi.png",
-    "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png,ABC.jpg,",
+    "dingCertifyPic": "codeguide.png,ABC.jpg,jqueryapi.png,ABC.jpg,codeguide.png",
     "isDeleted": 0,
     "alipayAccount": null,
     "realControlName": "张三",

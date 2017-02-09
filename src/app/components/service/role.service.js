@@ -8,11 +8,25 @@ export class RoleService {
     this.toastr = toastr;
   }
 
-  getAll() {
+  getUserAll() {
     var self = this;
     return self.$http({
-      url: self.cfg.api.role.all.url,
-      method: self.cfg.api.role.all.type
+      url: self.cfg.api.role.userAll.url,
+      method: self.cfg.api.role.userAll.type
+    }).then((response) => {
+      if (response.data.result === 0) {
+        return response.data.data;
+      }
+    }).catch((error) => {
+      this.$log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
+    });
+  }
+
+  getWangbaUserAll() {
+    var self = this;
+    return self.$http({
+      url: self.cfg.api.role.wangbaUserAll.url,
+      method: self.cfg.api.role.wangbaUserAll.type
     }).then((response) => {
       if (response.data.result === 0) {
         return response.data.data;

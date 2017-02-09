@@ -14,6 +14,8 @@ export class ModalProfitController {
       name: $ctrl.info.name,
       code: $ctrl.info.code
     };
+
+    console.log(123);
     $ctrl.form.profits = {
       code: $ctrl.info.code,
       //pct_charge: null,
@@ -55,7 +57,9 @@ export class ModalProfitController {
 
     $scope.info.code = result.code;
 
-    var profitsSet = $scope.info.profitsSet;
+    $scope.info.profitsSet = result.profitsSet;
+
+ /*   var profitsSet = $scope.info.profitsSet;
 
     var profit, flag = true;
 
@@ -70,7 +74,7 @@ export class ModalProfitController {
       }
       if(flag) {
         profitsSet.push({
-          catagory: 1,
+          catagory: 0,
           percent: result.chargePercent
         })
       }
@@ -108,7 +112,7 @@ export class ModalProfitController {
           percent: result.quickPercent
         })
       }
-    }
+    }*/
 
 
   }
@@ -124,7 +128,6 @@ export class ModalProfitController {
   }
 
   preParams(type, params, info) {
-
     if (type === 'create') {
       return {
         agentId: info.id,
@@ -189,6 +192,7 @@ export class ModalProfitController {
           data: self.preParams('edit', self.form, self.info)
         }).then((response) => {
           if (response.data.result === 0) {
+            //self.form.profits.pct_quick = response.data.profitsSet.percent;
             toastr.success('处理成功！');
             self.ok(response.data.data);
           } else if (response.data.result === 1) {

@@ -67,6 +67,14 @@ export class ProxyViewController {
           {
             file: null,
             caption: '页4'
+          },
+          {
+            file: null,
+            caption: '页5'
+          },
+          {
+            file: null,
+            caption: '页6'
           }]
       };
 
@@ -611,7 +619,8 @@ export class ProxyViewController {
       var modalInstance = $uibModal.open({
         animation: false,
         component: 'modalComponentConfirm',
-        backdrop: 'static'
+        backdrop: 'static',
+        windowClass: 'modal-tips'
       });
 
       modalInstance.result.then(function (result) {

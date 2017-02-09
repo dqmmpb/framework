@@ -2,8 +2,63 @@
   "result": 0,
   "msg": "ok",
   "data": {
-    "code": 12031203,
-    "chargePercent": 1.2,
-    "waterbaPercent": 2
+    "id": 61,
+    "code": "123",
+    "name": "20170116是是",
+    "address": "凄凄切切",
+    "area": "北京市,北京市,西城区",
+    "areaCode": "110000,110000,110102",
+    "corporName": "是",
+    "corporMobile": "12232323232",
+    "status": 1,
+    "createdAt": 1484551401000,
+    "updatedAt": 1485051993000,
+    "remark": null,
+    "licencePic": "/upload/temp/5172024_113817996000_2201701161484551301467.jpg",
+    "corporIdPic": "/upload/temp/4-15012G52133201701161484551294965.jpg,/upload/temp/5172024_113817996000_2201701161484551298017.jpg",
+    "dingCertifyPic": "/upload/temp/4-15012G52133201701161484551305576.jpg,/upload/temp/4201701161484551395581.jpg,/upload/temp/4201701161484551397436.jpg,/upload/temp/4201701161484551424775.jpg",
+    "isDeleted": 0,
+    "alipayAccount": null,
+    "realControlName": null,
+    "realControlMobile": null,
+    "realControlPic": null,
+    "isCorporReal": 0,
+    "usersSet": null,
+    "wangbasSet": [],
+    "profitsSet": [
+      {
+        "id": 47,
+        "agentId": 61,
+        "percent": 0.0,
+        "catagory": 1,
+        "flag": 0,
+        "createdAt": null,
+        "updatedAt": 1485051993000,
+        "remark": null,
+        "agents": null
+      },
+      {
+        "id": 46,
+        "agentId": 61,
+        "percent": 0.0,
+        "catagory": 0,
+        "flag": 0,
+        "createdAt": null,
+        "updatedAt": 1485051993000,
+        "remark": null,
+        "agents": null
+      },
+      {
+        "id": 48,
+        "agentId": 61,
+        "percent": 0.41,
+        "catagory": 2,
+        "flag": 0,
+        "createdAt": null,
+        "updatedAt": 1485051993000,
+        "remark": null,
+        "agents": null
+      }
+    ]
   }
 }

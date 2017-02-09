@@ -750,6 +750,55 @@
                   "childSet": []
                 }
               ]
+            },
+            {
+              "id": 68,
+              "name": "网吧业主管理",
+              "value": "/wangbaUsers",
+              "pid": 81,
+              "roleSet": [],
+              "childSet": [
+                {
+                  "id": 69,
+                  "name": "用户删除",
+                  "value": "/wangbaUsers/delete.json",
+                  "pid": 68,
+                  "roleSet": [],
+                  "childSet": []
+                },
+                {
+                  "id": 73,
+                  "name": "用户更新",
+                  "value": "/wangbaUsers/update.json",
+                  "pid": 68,
+                  "roleSet": [],
+                  "childSet": []
+                },
+                {
+                  "id": 70,
+                  "name": "用户首页",
+                  "value": "/wangbaUsers/index.json",
+                  "pid": 68,
+                  "roleSet": [],
+                  "childSet": []
+                },
+                {
+                  "id": 72,
+                  "name": "用户搜索",
+                  "value": "/wangbaUsers/search.json",
+                  "pid": 68,
+                  "roleSet": [],
+                  "childSet": []
+                },
+                {
+                  "id": 71,
+                  "name": "用户保存",
+                  "value": "/wangbaUsers/save.json",
+                  "pid": 68,
+                  "roleSet": [],
+                  "childSet": []
+                }
+              ]
             }
           ]
         }

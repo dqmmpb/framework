@@ -313,7 +313,10 @@
                   <div class="form-group">
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>二维码地址:</label>
                     <div class="col-sm-10">
-                      <p class="form-control-static">{{info.qrcode_path}}</p>
+                      <p class="form-control-static qrcode-path">{{info.qrcode_path}} <a ng-if="info.qrcode_path" type="button" class="btn btn-danger btn-sm" href="{{info.qrcode_path}}" target="_blank">下载二维码</a></p>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-5">
+                      <p class="form-control-static qrcode-preview"><img class="img-qrcode" src="{{info.qrcode_path}}"></p>
                     </div>
                   </div>
                 </div>

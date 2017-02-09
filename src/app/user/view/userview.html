@@ -78,8 +78,8 @@
                     <label class="col-sm-2 control-label"><span class="span-danger">*</span>手机号:</label>
                     <div class="col-sm-10">
                       <div class="input-group input-group-warning">
-                        <input type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11" ng-pattern="/^1\d{10}$/">
-                        <span class="input-group-addon input-group-addon-btn"><button type="button" ng-click="mobilephoneExists($event)" class="btn btn-warning">手机号验证</button></span>
+                        <input ng-keypress="keyPress($event)" ng-keyup="keyUp($event)" type="text" ng-model="info.cellphone" name="cellphone" class="form-control" placeholder="手机号" required maxlength="11" minlength="11" ng-pattern="/^1\d{10}$/">
+                        <span class="input-group-addon input-group-addon-btn"><button id="mobilephoneCheck" type="button" ng-click="mobilephoneExists($event)" class="btn btn-warning">手机号验证</button></span>
                       </div>
                       <div class="error-messages" ng-messages="form.cellphone.$error">
                         <small class="error" ng-message="required">手机号（*必填）</small>
@@ -87,6 +87,10 @@
                         <small class="error" ng-message="maxlength">请输入11位手机号</small>
                         <small class="error" ng-message="pattern">请输入正确格式的手机号</small>
                       </div>
+                      <!--<input type="hidden" ng-model="validator.role_string" name="role_string" class="form-control" placeholder="用户角色" required></input>
+                      <div class="error-messages" ng-messages="form.role_string.$error">
+                        <small class="error" ng-message="required">验证手机号（*必填）</small>
+                      </div>-->
                     </div>
                   </div>
                   <!--<div class="form-group">-->

@@ -38,11 +38,13 @@ export class ProfileViewController {
 
         self.initForm($scope, $log, toastr, RSAKEY);
 
-        self.getRoles($scope, $log, $timeout, role);
+        //self.getRoles($scope, $log, $timeout, role);
 
         self.initValidation($scope, user);
 
         self.goView($scope, $state, $stateParams);
+
+        $scope.loading = false;
       }
 
     });
@@ -100,9 +102,9 @@ export class ProfileViewController {
     $scope.errorMessages = {};
 
   }
-
+/*
   getRoles($scope, $log, $timeout, role) {
-    role.getAll().then((data)=> {
+    role.getUserAll().then((data)=> {
       if(data) {
         $scope.validator.role_string = $scope.info.roles.join(',');
 
@@ -134,7 +136,7 @@ export class ProfileViewController {
         }, 10);
       }
     });
-  }
+  }*/
 
   getData($scope, $log, $timeout, $state, $stateParams, toastr, user, role, RSAKEY, id) {
     var self = this;
@@ -146,11 +148,14 @@ export class ProfileViewController {
 
         self.initForm($scope, $log, toastr, RSAKEY);
 
-        self.getRoles($scope, $log, $timeout, role);
+        //self.getRoles($scope, $log, $timeout, role);
 
         self.initValidation($scope, user);
 
         self.goView($scope, $state, $stateParams);
+
+        $scope.loading = false;
+
       }
     });
   }

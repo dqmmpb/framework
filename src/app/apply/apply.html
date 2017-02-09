@@ -87,7 +87,6 @@
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status != 3" type="button" class="btn btn-warning btn-sm" ng-click="goview('applyview', 'edit', row.id)">编辑</button>-->
                     <!--<button ng-if="cfg.hasAuth(profile, cfg.api.profit.update.url)" type="button" ng-if="row.profitsSet && row.profitsSet.length > 0" class="btn btn-warning btn-sm" ng-click="operation('edit', row)">编辑</button>-->
                     <button ng-if="cfg.hasAuth(profile, cfg.api.apply.update.url) && row.ticket_status !== 3 && (cfg.hasRoleId(profile.roles,'1') || cfg.hasRoleId(profile.roles,'8') || cfg.hasRoleId(profile.roles,'9') || cfg.hasRoleId(profile.roles,'10'))" type="button" class="btn btn-warning btn-sm" ng-click="operation('edit', row, row.id)">编辑</button>
-                    <!--<a ng-if="row.ticket_status != 3 && row.qrcodeImgPath" type="button" class="btn btn-danger btn-sm" href="{{row.qrcodeImgPath}}" target="_blank">下载二维码</a>-->
                     <a ng-if="row.ticket_status!== 3 && row.qrcode_path" type="button" class="btn btn-danger btn-sm" href="{{row.qrcode_path}}" target="_blank">下载二维码</a>
                   </div>
                   <div ng-if="row.empty" class="row-empty"></div>

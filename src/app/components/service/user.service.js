@@ -12,7 +12,10 @@ export class UserService {
     var self = this;
     return self.$http({
       url: self.cfg.api.user.all.url,
-      method: self.cfg.api.user.all.type
+      method: self.cfg.api.user.all.type,
+      data: {
+        type: 0
+      }
     }).then((response) => {
       if (response.data.result === 0) {
         return response.data.data;
@@ -78,14 +81,29 @@ export class UserService {
     });
   }
 
+  restructRoleSet(roleSet) {
+
+    var filters = [1, 8, 9, 10];
+
+    if(angular.isArray(roleSet)) {
+      return roleSet.filter(function(item) {
+        return filters.indexOf(item['id']) !== -1;
+      });
+    } else {
+      return [];
+    }
+  }
+
   wrapper(data) {
+
+    var self = this;
 
     var o = data;
     var x = {
       id: o.id,
       name: o.name,
       ding_id: o.dingId,
-      role: o.roleSet ? o.roleSet : [],
+      role: self.restructRoleSet(o.roleSet ? o.roleSet : []),
       cellphone: o.mobile,
       code: o.code,
       bossWangbas: o.bossWangbas ? o.bossWangbas : null

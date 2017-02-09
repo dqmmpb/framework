@@ -230,6 +230,7 @@ export class ProfitController {
           animation: false,
           component: 'modalComponent',
           backdrop: 'static',
+          windowClass: 'modal-profit',
           resolve: {
             type: function() {
               return type;
@@ -250,6 +251,7 @@ export class ProfitController {
           animation: false,
           component: 'modalComponent',
           backdrop: 'static',
+          windowClass: 'modal-profit',
           resolve: {
             type: function() {
               return type;

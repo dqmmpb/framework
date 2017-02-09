@@ -156,6 +156,30 @@ export function routerConfig ($stateProvider, $urlRouterProvider, $locationProvi
       templateUrl: 'app/user/view/userview.html',
       controller: 'UserViewController',
       controllerAs: 'userview'
+    })
+    .state('user2', {
+      url: '/user2',
+      templateUrl: 'app/user2/user2.html',
+      controller: 'User2Controller',
+      controllerAs: 'user2'
+    })
+    .state('user2.page', {
+      url: '/page?currentPage',
+      templateUrl: 'app/user2/user2.html',
+      controller: 'User2Controller',
+      controllerAs: 'user2'
+    })
+    .state('user2.search', {
+      url: '/search?keyWord&currentPage&doSearch',
+      templateUrl: 'app/user2/user2.html',
+      controller: 'User2Controller',
+      controllerAs: 'user2'
+    })
+    .state('user2view', {
+      url: '/user2view/*type?id&redirect_url',
+      templateUrl: 'app/user2/view/user2view.html',
+      controller: 'User2ViewController',
+      controllerAs: 'user2view'
     });
 
   $urlRouterProvider.otherwise('/');

@@ -10,12 +10,13 @@ var RSAKEY = {
 }
 
 //var remoteServer = 'http://172.16.0.251:8080';
-
-//var remoteServer = 'http://172.16.0.1:3000';
 //var uploadServer = remoteServer;
 
-var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
-var uploadServer = 'http://yfl2.taofairy.com';
+//var remoteServer = 'http://yfl2.taofairy.com/wangbacms';
+//var uploadServer = 'http://yfl2.taofairy.com';
+
+var remoteServer = 'http://s.taofairy.com/wangbacms';
+var uploadServer = 'http://s.taofairy.com/';
 
 
 var allCfg = {
@@ -125,8 +126,12 @@ api.localAPI = {
     }
   },
   role: {
-    all: {
+    userAll: {
       url: api.localServer + '/users/all.json',
+      type: HTTP_TYPE.GET
+    },
+    wangbaUserAll: {
+      url: api.localServer + '/wangbaUsers/all.json',
       type: HTTP_TYPE.GET
     },
     list: {
@@ -198,6 +203,44 @@ api.localAPI = {
       type: HTTP_TYPE.GET
     }
   },
+  wangbaUsers: {
+    all: {
+      url: api.localServer + '/wangbaUsers/all.json',
+      type: HTTP_TYPE.GET
+    },
+    list: {
+      url: api.localServer + '/wangbaUsers/index.json',
+      type: HTTP_TYPE.GET
+    },
+    detail: {
+      url: api.localServer + '/wangbaUsers/detail.json',
+      type: HTTP_TYPE.GET
+    },
+    save: {
+      url: api.localServer + '/wangbaUsers/save.json',
+      type: HTTP_TYPE.POST
+    },
+    update: {
+      url: api.localServer + '/wangbaUsers/update.json',
+      type: HTTP_TYPE.POST
+    },
+    delete: {
+      url: api.localServer + '/wangbaUsers/delete.json',
+      type: HTTP_TYPE.GET
+    },
+    reset: {
+      url: api.localServer + '/wangbaUsers/reset.json',
+      type: HTTP_TYPE.POST
+    },
+    search: {
+      url: api.localServer + '/wangbaUsers/search.json',
+      type: HTTP_TYPE.POST
+    },
+    mobilephone: {
+      url: api.localServer + '/wangbaUsers/checkMobile.json',
+      type: HTTP_TYPE.GET
+    }
+  },
   deploy: {
     list: {
       url: api.localServer + '/wangbas/index.json',
@@ -261,8 +304,8 @@ api.localAPI = {
       url: api.localServer + '/tickets/active.json',
       type: HTTP_TYPE.GET
     },
-    newqrcode: {
-      url: api.localServer + '/tickets/newqrcode.json',
+    qrcode: {
+      url: api.localServer + '/tickets/qrcode.json',
       type: HTTP_TYPE.GET
     }
   },
@@ -364,8 +407,12 @@ api.remoteAPI = {
     }
   },
   role: {
-    all: {
+    userAll: {
       url: api.remoteServer + '/users/all.json',
+      type: HTTP_TYPE.GET
+    },
+    wangbaUserAll: {
+      url: api.remoteServer + '/wangbaUsers/all.json',
       type: HTTP_TYPE.GET
     },
     list: {
@@ -437,6 +484,44 @@ api.remoteAPI = {
       type: HTTP_TYPE.GET
     }
   },
+  wangbaUsers: {
+    all: {
+      url: api.remoteServer + '/wangbaUsers/all.json',
+      type: HTTP_TYPE.GET
+    },
+    list: {
+      url: api.remoteServer + '/wangbaUsers/index.json',
+      type: HTTP_TYPE.GET
+    },
+    detail: {
+      url: api.remoteServer + '/wangbaUsers/detail.json',
+      type: HTTP_TYPE.GET
+    },
+    save: {
+      url: api.remoteServer + '/wangbaUsers/save.json',
+      type: HTTP_TYPE.POST
+    },
+    update: {
+      url: api.remoteServer + '/wangbaUsers/update.json',
+      type: HTTP_TYPE.POST
+    },
+    delete: {
+      url: api.remoteServer + '/wangbaUsers/delete.json',
+      type: HTTP_TYPE.GET
+    },
+    search: {
+      url: api.remoteServer + '/wangbaUsers/search.json',
+      type: HTTP_TYPE.GET
+    },
+    reset: {
+      url: api.remoteServer + '/wangbaUsers/changePasswordForOther.json',
+      type: HTTP_TYPE.POST
+    },
+    mobilephone: {
+      url: api.remoteServer + '/wangbaUsers/checkMobile.json',
+      type: HTTP_TYPE.GET
+    }
+  },
   deploy: {
     list: {
       url: api.remoteServer + '/wangbas/index.json',
@@ -500,7 +585,7 @@ api.remoteAPI = {
       url: api.remoteServer + '/tickets/active.json',
       type: HTTP_TYPE.GET
     },
-    newqrcode: {
+    qrcode: {
       url: api.remoteServer + '/tickets/qrcode.json',
       type: HTTP_TYPE.GET
     }
@@ -618,6 +703,13 @@ cfg.sidebarData = [
         sref: 'user',
         resource: '/users',
         leaf: true
+      },
+      {
+        title: '网吧用户管理',
+        icon: 'fa-grav',
+        sref: 'user2',
+        resource: '/wangbaUsers',
+        leaf: true
       }/*,
        {
        title: '数据字典',
@@ -647,11 +739,22 @@ cfg.hasAuth = function(profile, url) {
   return false;
 };
 
-cfg.hasRoleId = function(roles, id) {
-  if(angular.isArray(roles))
-    return roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1  ? true : false;
-  else
-    return false;
+cfg.hasRoleId = function(roles, ids) {
+
+  if(angular.isArray(roles)) {
+    if (angular.isArray(ids)) {
+      var flags = ids.map(function (id) {
+        return roles.indexOf(id) !== -1 ? true : roles.indexOf(Number(id)) !== -1 ? true : false;
+      });
+      if (flags && flags.length > 0)
+        return flags.reduce(function (prev, next) {
+          return prev && next;
+        });
+    } else if (angular.isString(ids) || angular.isNumber(ids))
+      return roles.indexOf(ids) !== -1 ? true : roles.indexOf(Number(ids)) !== -1 ? true : false;
+  }
+
+  return false;
 };
 
 cfg.countDown = function(options) {

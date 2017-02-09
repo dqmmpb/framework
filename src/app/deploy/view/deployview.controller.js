@@ -498,10 +498,10 @@ export class DeployViewController {
         corporName: params.legal,
         corporMobile: params.cellphone,
         isCorporReal: params.is_same ? 0 : 1,
-        realControlName: params.real_name,
-        realControlMobile: params.real_cellphone,
+        realControlName: params.is_same ? null : params.real_name,
+        realControlMobile: params.is_same ? null : params.real_cellphone,
         corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
-        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
+        realControlPic: params.is_same ? null : self.restructureFile(self.getFiles(params.rpcfile)),
         licencePic: self.restructureFile(self.getFiles(params.blfile)),
         dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
       };
@@ -519,10 +519,10 @@ export class DeployViewController {
         corporName: params.legal,
         corporMobile: params.cellphone,
         isCorporReal: params.is_same ? 0 : 1,
-        realControlName: params.real_name,
-        realControlMobile: params.real_cellphone,
+        realControlName: params.is_same ? null : params.real_name,
+        realControlMobile: params.is_same ? null : params.real_cellphone,
         corporIdPic: self.restructureFile(self.getFiles(params.pcfile)),
-        realControlPic: self.restructureFile(self.getFiles(params.rpcfile)),
+        realControlPic: params.is_same ? null : self.restructureFile(self.getFiles(params.rpcfile)),
         licencePic: self.restructureFile(self.getFiles(params.blfile)),
         dingCertifyPic: self.restructureFile(self.getFiles(params.affile))
       };
@@ -580,9 +580,13 @@ export class DeployViewController {
         }).then((response) => {
           if(response.data.result === 0) {
             toastr.success('编辑成功！');
-            $scope.goview('deploy');
+            if ($scope.redirect_url) {
+              location.href = $scope.redirect_url;
+            } else {
+              $scope.goview('deploy');
+            }
           } else if(response.data.result === 1) {
-            toastr.error('处理失败，请重试');
+            toastr.error(response.data.msg);
           }
         }).catch((error) => {
           $log.error('XHR Failed for getContributors.\n' + angular.toJson(error.data, true));
@@ -598,7 +602,8 @@ export class DeployViewController {
       var modalInstance = $uibModal.open({
         animation: false,
         component: 'modalComponentConfirm',
-        backdrop: 'static'
+        backdrop: 'static',
+        windowClass: 'modal-tips'
       });
 
       modalInstance.result.then(function (result) {
